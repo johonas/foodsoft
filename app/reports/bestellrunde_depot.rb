@@ -4,10 +4,9 @@ module Reports
 
   class BestellrundeDepot < Reports::BestellrundeBase
     class SupplierSheet < ProductSheet
-      SHOW_PRODUCER = false
-      def initialize(sheet, producer, depot, articles, ordergroups, bestellrunde)
+      def initialize(sheet, supplier, depot, articles, ordergroups, bestellrunde)
         @depot = depot
-        @producer = producer
+        @supplier = supplier
 
         data = { ordergroups: ordergroups, articles: articles}
         super(sheet, data, bestellrunde)
@@ -29,11 +28,11 @@ module Reports
 
       def header
         super
-        sheet.add_row ["Produzent: #{@producer}"], style: styles.subtitle
+        sheet.add_row ["Produzent: #{@supplier}"], style: styles.subtitle
       end
 
       def subtitle
-        "Depot: #{@depot.name}"
+        ["Depot: #{@depot.name}"]
       end
     end
 
@@ -55,8 +54,8 @@ module Reports
       raw_data = data[@depot]
       raise Reports::NoDataException unless raw_data
 
-      # Group by producers
-      raw_data[:articles] = raw_data[:articles].group_by { |d| d[:producer] }
+      # Group by suppliers
+      raw_data[:articles] = raw_data[:articles].group_by { |d| d[:supplier] }
       raw_data[:articles] = raw_data[:articles].sort.to_h
       @processed_data = raw_data
     end
@@ -74,15 +73,15 @@ module Reports
         header_footer: { different_first: false, odd_header: header, odd_footer: footer}
       }
 
-      @processed_data[:articles].each do |producer, articles|
-        sheet_name = producer.gsub(/\s+/, '')
+      @processed_data[:articles].each do |supplier, articles|
+        sheet_name = supplier.gsub(/\s+/, '')
 
         with_sheet sheet_name, 9, :landscape, options do |sheet|
           sheet.sheet_view.zoom_scale = 100
           sheet.sheet_view.show_white_space = true
           sheet.page_setup.scale = 70
 
-          SupplierSheet.new(sheet, producer, @depot, articles, @processed_data[:ordergroups], @bestellrunde).render
+          SupplierSheet.new(sheet, supplier, @depot, articles, @processed_data[:ordergroups], @bestellrunde).render
 
           package.workbook.add_defined_name(
             "#{sheet_name}!$1:$4",

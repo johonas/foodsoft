@@ -22,6 +22,17 @@ class BestellrundenController < InheritedResources::Base
     end
   end
 
+  def supplier_export
+    supplier = Supplier.find(params[:supplier_id])
+    filename = "bestellrunde_#{bestellrunde.starts}_lieferant_#{supplier.name.downcase.gsub(' ', '_')}.xlsx"
+
+    begin
+      Reports::BestellrundeSupplier.new(bestellrunde, supplier, filename).generate.send(self)
+    rescue Reports::NoDataException
+      redirect_to bestellrunden_path, flash: { error: I18n.t('report.no_data') }
+    end
+  end
+
   def for_depot
     @bestellrunde = Bestellrunde.find(params[:id])
     @ordergroup = current_user.ordergroup

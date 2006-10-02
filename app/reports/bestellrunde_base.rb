@@ -1,6 +1,11 @@
 module Reports
   class BestellrundeBase < Reporting::BaseExcelReport
 
+    def initialize(supplier=nil)
+      @supplier = supplier
+      super()
+    end
+
     def filename
       @filename
     end
@@ -29,6 +34,10 @@ module Reports
           group_order.group_order_articles.each do |group_order_article|
             article = group_order_article.order_article.article
 
+            if !@supplier.nil? && article.supplier != @supplier
+              next
+            end
+
             article.stock = order.stockit?
 
             raw_data[depot][article] ||= {}
@@ -46,7 +55,9 @@ module Reports
           article_row = {}
           article_row[:product] = article.name
           article_row[:stock] = article.stock ? 'x' : ''
-          article_row[:producer] = article.supplier.name
+          if @supplier.nil?
+            article_row[:supplier] = article.supplier.name
+          end
           article_row[:unit] = article.unit
 
           ordergroups.each do |ordergroup, amount|

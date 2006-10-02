@@ -91,11 +91,10 @@ Foodsoft::Application.routes.draw do
       member do
         get :for_depot
         get :depot_export
+        get :supplier_export
         get :distribution_export
       end
     end
-
-
 
     ########### Article management
 

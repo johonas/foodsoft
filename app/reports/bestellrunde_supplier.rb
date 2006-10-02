@@ -1,15 +1,24 @@
 module Reports
-  class Bestellrunde < Reports::BestellrundeBase
+  class BestellrundeSupplier < Reports::BestellrundeBase
     class DepotSheet < ProductSheet
+      def initialize(supplier, sheet, data, bestellrunde, hide)
+        @supplier = supplier
+        super(sheet, data, bestellrunde, hide)
+      end
+
       def subtitle
-        ["QD: #{sheet.name}"]
+        [
+          "Produzent: #{@supplier.name}",
+          "QD: #{sheet.name}"
+        ]
       end
     end
 
-    def initialize(bestellrunde, filename)
+    def initialize(bestellrunde, supplier, filename)
       @bestellrunde = bestellrunde
+      @supplier = supplier
       @filename = filename
-      super()
+      super(@supplier)
     end
 
     protected
@@ -25,7 +34,7 @@ module Reports
           sheet.sheet_view.show_white_space = true
           sheet.page_setup.scale = 70
 
-          DepotSheet.new(sheet, depot_data, @bestellrunde).render
+          DepotSheet.new(@supplier,sheet, depot_data, @bestellrunde, hide: [:supplier]).render
 
           package.workbook.add_defined_name(
             "&apos;0#{sheet.index + 1}&apos;!$1:$3",

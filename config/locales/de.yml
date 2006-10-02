@@ -598,6 +598,7 @@ de:
       title: Bestellrunden
       global_export: Übersicht
       depots_export: Depots
+      supplier_export: Produzenten
   deliveries:
     add_stock_change:
       how_many_units: Wie viele Einheiten (%{unit}) des Artikels »%{name}« liefern?

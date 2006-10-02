@@ -6,6 +6,7 @@
       %th= t 'bestellrunden.end'
       %th= t '.global_export'
       %th= t '.depots_export'
+      %th= t '.supplier_export'
 
   %tbody
     - @bestellrunden.each do |bestellrunde|
@@ -14,5 +15,10 @@
         %td= format_date(bestellrunde.ends)
         %td= link_to I18n.t('report.export'), distribution_export_bestellrunde_path(bestellrunde), class: 'btn btn-mini'
         %td
-          - Depot.natural_order.each do |depot|
-            = link_to depot.name, depot_export_bestellrunde_path(bestellrunde, depot_id: depot.id), class: 'btn btn-mini'
+          = form_tag depot_export_bestellrunde_path(bestellrunde), :method => :get, :style => 'margin: 0' do
+            = select_tag :depot_id, options_for_select(Depot.natural_order.map{ |d| [d.name, d.id]})
+            = submit_tag t('report.export')
+        %td
+          = form_tag supplier_export_bestellrunde_path(bestellrunde), :method => :get, :style => 'margin: 0' do
+            = select_tag :supplier_id, options_for_select(Supplier.undeleted.order(:name).map{ |s| [s.name, s.id]})
+            = submit_tag t('report.export')
