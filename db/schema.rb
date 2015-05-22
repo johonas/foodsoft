@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150923190747) do
+ActiveRecord::Schema.define(version: 20150522143655) do
 
   create_table "article_categories", force: :cascade do |t|
     t.string "name",        limit: 255, default: "", null: false
@@ -74,6 +74,12 @@ ActiveRecord::Schema.define(version: 20150923190747) do
   end
 
   add_index "deliveries", ["supplier_id"], name: "index_deliveries_on_supplier_id", using: :btree
+
+  create_table "depots", force: :cascade do |t|
+    t.string   "name",       limit: 255, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
 
   create_table "financial_transactions", force: :cascade do |t|
     t.integer  "ordergroup_id", limit: 4,                             default: 0, null: false

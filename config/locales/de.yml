@@ -265,6 +265,15 @@ de:
         edit: Gruppe/Mitglieder bearbeiten
         send_message: Nachricht senden
         title: Bestellgruppe %{name}
+    depots:
+      edit:
+        title: Depot bearbeiten
+      index:
+        new_depot: neues Depot
+        title: Depots
+      show:
+        confirm: Bist Du sicher?
+        title: Depot %{name}
     search_placeholder: Name ...
     users:
       controller:
@@ -797,6 +806,9 @@ de:
         only_active: Nur aktive
         only_active_desc: "(mindestens einmal in den letzten 3 Monaten bestellt)"
         title: Bestellgruppen
+    depots:
+      index:
+        name: Name ...
     users:
       index:
         body: "<p>Hier kannst Du den Mitgliedern Deiner Foodcoop eine Nachricht schreiben. Damit Deine Kontaktdaten einzusehen sind, musst Du sie unter %{profile_link} freigeben.</p>"
@@ -1175,6 +1187,7 @@ de:
       config: Einstellungen
       home: "Übersicht"
       ordergroups: Bestellgruppen
+      depots: Depots
       title: Administration
       users: Benutzer/innen
       workgroups: Arbeitsgruppen
@@ -1194,6 +1207,7 @@ de:
     members: Mitglieder
     messages: Nachrichten
     ordergroups: Bestellgruppen
+    depots: Depots
     orders:
       archive: Meine Bestellungen
       manage: Bestellverwaltung

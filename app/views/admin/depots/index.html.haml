@@ -1,0 +1,12 @@
+- title t('.title')
+
+- content_for :actionbar do
+  = link_to t('.new_depot'), new_admin_depot_path, class: 'btn btn-primary'
+
+.well.well-small
+  = form_tag admin_depots_path, :method => :get, :remote => true,
+    'data-submit-onchange' => true, class: 'form-search' do
+    = text_field_tag :query, params[:query], class: 'input-medium search-query',
+      placeholder: t('admin.search_placeholder')
+#depots
+  = render "depots"
