@@ -1,0 +1,13 @@
+//- if Depot.count > 20
+//  = items_per_page
+//= pagination_links_remote @depots
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th= heading_helper Depot, :name
+  %tbody
+    - for ordergroup in @depots
+      %tr
+        %td= ordergroup.name
+

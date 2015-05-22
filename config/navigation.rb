@@ -16,6 +16,7 @@ SimpleNavigation::Configuration.run do |navigation|
     primary.item :foodcoop, I18n.t('navigation.foodcoop'), '#' do |subnav|
       subnav.item :members, I18n.t('navigation.members'), foodcoop_users_path
       subnav.item :workgroups, I18n.t('navigation.workgroups'), foodcoop_workgroups_path
+      subnav.item :ordergroups, I18n.t('navigation.depots'), foodcoop_depots_path
       subnav.item :ordergroups, I18n.t('navigation.ordergroups'), foodcoop_ordergroups_path
       subnav.item :tasks, I18n.t('navigation.tasks'), tasks_path
     end
@@ -44,6 +45,7 @@ SimpleNavigation::Configuration.run do |navigation|
       subnav.item :admin_home, I18n.t('navigation.admin.home'), admin_root_path
       subnav.item :users, I18n.t('navigation.admin.users'), admin_users_path
       subnav.item :ordergroups, I18n.t('navigation.admin.ordergroups'), admin_ordergroups_path
+      subnav.item :depots, I18n.t('navigation.admin.depots'), admin_depots_path
       subnav.item :workgroups, I18n.t('navigation.admin.workgroups'), admin_workgroups_path
       subnav.item :config, I18n.t('navigation.admin.config'), admin_config_path
     end

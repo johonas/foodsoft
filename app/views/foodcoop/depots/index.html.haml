@@ -1,0 +1,9 @@
+- title t('.title')
+
+.well
+  = form_tag foodcoop_depots_path, :method => :get, :remote => true, 'data-submit-onchange' => true,
+    class: 'form-search' do
+    = text_field_tag :name, params[:name], class: 'input-medium search-query', placeholder: t('.name')
+
+#depots
+  = render :partial => "depots"

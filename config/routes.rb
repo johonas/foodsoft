@@ -83,6 +83,8 @@ Foodsoft::Application.routes.draw do
       resources :ordergroups, only: [:index]
 
       resources :workgroups, only: [:index, :edit, :update]
+
+      resources :depots, only: [:index]
     end
 
     ########### Article management
@@ -177,6 +179,10 @@ Foodsoft::Application.routes.draw do
       end
 
       resources :workgroups do
+        get :memberships, on: :member
+      end
+
+      resources :depots do
         get :memberships, on: :member
       end
 

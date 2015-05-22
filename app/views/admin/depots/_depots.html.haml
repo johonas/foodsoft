@@ -1,0 +1,13 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th= heading_helper Depot, :name
+      %th= t 'ui.actions'
+  %tbody
+    - for depot in @depots
+      %tr{:class => cycle('even','odd', :name => 'groups')}
+        %td= link_to depot.name, [:admin, depot]
+        %td
+          = link_to t('ui.edit'), edit_admin_depot_path(depot), class: 'btn btn-mini'
+          = link_to t('ui.delete'), [:admin, depot], :data => {:confirm => t('admin.confirm', name: depot.name)},
+            :method => :delete, class: 'btn btn-mini btn-danger'
