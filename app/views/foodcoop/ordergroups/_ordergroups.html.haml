@@ -7,6 +7,7 @@
     %tr
       %th= heading_helper Ordergroup, :name
       %th= heading_helper Ordergroup, :user_tokens
+      %th= heading_helper Ordergroup, :depot
       %th= heading_helper Ordergroup, :last_order
 
   %tbody
@@ -14,5 +15,6 @@
       %tr
         %td= ordergroup.name
         %td=h ordergroup.users.collect { |u| show_user(u) }.join(", ")
+        %td=h ordergroup.depot.name
         %td= format_date ordergroup.last_order.try(:starts)
 

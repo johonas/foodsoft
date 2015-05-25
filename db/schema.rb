@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150522143655) do
+ActiveRecord::Schema.define(version: 20150522153936) do
 
   create_table "article_categories", force: :cascade do |t|
     t.string "name",        limit: 255, default: "", null: false
@@ -144,7 +144,8 @@ ActiveRecord::Schema.define(version: 20150522143655) do
     t.string   "contact_address",          limit: 255
     t.text     "stats",                    limit: 65535
     t.integer  "next_weekly_tasks_number", limit: 4,                              default: 8
-    t.boolean  "ignore_apple_restriction",                                        default: false
+    t.boolean  "ignore_apple_restriction", limit: 1,                              default: false
+    t.integer  "depot_id",                 limit: 4,                                              null: false
   end
 
   add_index "groups", ["name"], name: "index_groups_on_name", unique: true, using: :btree
