@@ -14,8 +14,11 @@ class Ordergroup < Group
   has_many :group_orders
   has_many :orders, :through => :group_orders
 
+  belongs_to :depot
+
   validates_numericality_of :account_balance, :message => I18n.t('ordergroups.model.invalid_balance')
   validate :uniqueness_of_name, :uniqueness_of_members
+  validates :depot_id, :presence => true
 
   after_create :update_stats!
 

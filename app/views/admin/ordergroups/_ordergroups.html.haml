@@ -8,6 +8,7 @@
       %th= heading_helper Ordergroup, :contact
       %th= heading_helper Ordergroup, :contact_address
       %th= heading_helper Ordergroup, :user_tokens
+      %th= heading_helper Ordergroup, :depot
       %th= t 'ui.actions'
   %tbody
     - for ordergroup in @ordergroups
@@ -16,6 +17,7 @@
         %td= ordergroup.contact
         %td= link_to_gmaps ordergroup.contact_address
         %td= ordergroup.users.size
+        %td= ordergroup.depot.name
         %td
           = link_to t('ui.edit'), edit_admin_ordergroup_path(ordergroup), class: 'btn btn-mini'
           = link_to t('ui.delete'), [:admin, ordergroup], :data => {:confirm => t('admin.confirm', name: ordergroup.name)},
