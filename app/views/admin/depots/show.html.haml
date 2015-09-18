@@ -1,4 +1,20 @@
 - title t '.title', name: @depot.name
 
+.row-fluid
+  .span3
+    .well
+      %h4= t '.depot'
+      %dl
+        %dt= heading_helper Depot, :street
+        %dd= h @depot.street
+        %dt= heading_helper Depot, :zip
+        %dd= h @depot.zip
+        %dt= heading_helper Depot, :place
+        %dd= h @depot.place
+        %dt= heading_helper Depot, :remark
+        %dd= simple_format h @depot.remark
+
+
+
 = link_to t('ui.edit'), edit_admin_depot_path(@depot), class: 'btn'
 = link_to t('ui.delete'), [:admin, @depot], :data => {:confirm => t('.confirm')}, :method => :delete, class: 'btn btn-danger'

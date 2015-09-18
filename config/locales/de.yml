@@ -37,6 +37,12 @@ de:
         delivered_on: Lieferdatum
         note: Notiz
         supplier: Lieferantin
+      depot:
+        name: Name
+        street: Strasse
+        zip: PLZ
+        place: Ort
+        remark: Bemerkungen
       financial_transaction:
         amount: Betrag
         created_on: Datum
