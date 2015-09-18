@@ -1,4 +1,4 @@
-# encoding: utf-8
+  # encoding: utf-8
 class Workgroup < Group
   
   has_many :tasks

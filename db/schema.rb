@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150918084643) do
+ActiveRecord::Schema.define(version: 20150918090959) do
 
   create_table "article_categories", force: :cascade do |t|
     t.string "name",        limit: 255, default: "", null: false
@@ -353,6 +353,7 @@ ActiveRecord::Schema.define(version: 20150918084643) do
     t.datetime "reset_password_expires"
     t.datetime "last_login"
     t.datetime "last_activity"
+    t.integer  "depot_id",               limit: 4
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

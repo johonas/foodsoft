@@ -43,6 +43,7 @@ de:
         zip: PLZ
         place: Ort
         remark: Bemerkungen
+        user_tokens: Benutzer
       financial_transaction:
         amount: Betrag
         created_on: Datum
@@ -272,6 +273,9 @@ de:
         send_message: Nachricht senden
         title: Bestellgruppe %{name}
     depots:
+      form:
+        search_user: Nach Nutzerin suchen
+        search: suche...
       edit:
         title: Depot bearbeiten
       index:
