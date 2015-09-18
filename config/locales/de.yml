@@ -33,6 +33,9 @@ de:
         price: Nettopreis
         tax: MwSt
         unit_quantity: Gebindegröße
+      bestellrunde:
+        season: Jahreszeit
+        year: Jahr
       delivery:
         delivered_on: Lieferdatum
         note: Notiz
@@ -284,6 +287,18 @@ de:
       show:
         confirm: Bist Du sicher?
         title: Depot %{name}
+    bestellrunden:
+      form:
+        search_user: Nach Nutzerin suchen
+        search: suche...
+      edit:
+        title: Bestellrunde bearbeiten
+      index:
+        new_depot: neue Bestellrunde
+        title: Bestellrunden
+      show:
+        confirm: Bist Du sicher?
+        title: Bestellrunde %{name}
     search_placeholder: Name ...
     users:
       controller:
@@ -1193,6 +1208,7 @@ de:
       home: "Übersicht"
       ordergroups: Bestellgruppen
       depots: Depots
+      bestellrunden: Bestellrunden
       title: Administration
       users: Benutzer/innen
       workgroups: Arbeitsgruppen
@@ -1224,6 +1240,10 @@ de:
       home: Startseite
       title: Wiki
     workgroups: Arbeitsgruppen
+    distribute:
+      title: Verteilen
+    bestellrunden:
+      home: Bestellrunden
   number:
     percentage:
       format:

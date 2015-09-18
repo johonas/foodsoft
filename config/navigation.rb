@@ -16,7 +16,7 @@ SimpleNavigation::Configuration.run do |navigation|
     primary.item :foodcoop, I18n.t('navigation.foodcoop'), '#' do |subnav|
       subnav.item :members, I18n.t('navigation.members'), foodcoop_users_path
       subnav.item :workgroups, I18n.t('navigation.workgroups'), foodcoop_workgroups_path
-      subnav.item :ordergroups, I18n.t('navigation.depots'), foodcoop_depots_path
+      subnav.item :depots, I18n.t('navigation.depots'), foodcoop_depots_path
       subnav.item :ordergroups, I18n.t('navigation.ordergroups'), foodcoop_ordergroups_path
       subnav.item :tasks, I18n.t('navigation.tasks'), tasks_path
     end
@@ -39,6 +39,10 @@ SimpleNavigation::Configuration.run do |navigation|
       subnav.item :accounts, I18n.t('navigation.finances.accounts'), finance_ordergroups_path
       subnav.item :balancing, I18n.t('navigation.finances.balancing'), finance_order_index_path
       subnav.item :invoices, I18n.t('navigation.finances.invoices'), finance_invoices_path
+                         end
+
+    primary.item :distribute, I18n.t('navigation.distribute.title'), '#', if: Proc.new { current_user.role_admin? } do |subnav|
+      subnav.item :bestellrunden, I18n.t('navigation.bestellrunden.home'), bestellrunden_path
     end
 
     primary.item :admin, I18n.t('navigation.admin.title'), '#', if: Proc.new { current_user.role_admin? } do |subnav|
@@ -47,6 +51,7 @@ SimpleNavigation::Configuration.run do |navigation|
       subnav.item :ordergroups, I18n.t('navigation.admin.ordergroups'), admin_ordergroups_path
       subnav.item :depots, I18n.t('navigation.admin.depots'), admin_depots_path
       subnav.item :workgroups, I18n.t('navigation.admin.workgroups'), admin_workgroups_path
+      subnav.item :bestellrunden, I18n.t('navigation.admin.bestellrunden'), admin_bestellrunden_path
       subnav.item :config, I18n.t('navigation.admin.config'), admin_config_path
     end
 

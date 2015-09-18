@@ -1,0 +1,14 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th= heading_helper Bestellrunde, :year
+      %th= heading_helper Bestellrunde, :season
+  %tbody
+    - for bestellrunde in @bestellrunden
+      %tr{:class => cycle('even','odd', :name => 'bestellrunden')}
+        %td= link_to bestellrunde.year, [:admin, bestellrunde]
+        %td= bestellrunde.season
+        %td
+          = link_to t('ui.edit'), edit_admin_bestellrunde_path(bestellrunde), class: 'btn btn-mini'
+          = link_to t('ui.delete'), [:admin, bestellrunde], :data => {:confirm => t('admin.confirm', name: "#{bestellrunde.season} #{bestellrunde.year}")},
+            :method => :delete, class: 'btn btn-mini btn-danger'
