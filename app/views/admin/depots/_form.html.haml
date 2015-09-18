@@ -1,7 +1,9 @@
-- unless @depot.new_record?
-  %p= t('.first_paragraph', url: link_to(t('.here'), new_invite_path(id: @depot.id), remote: true)).html_safe
 = simple_form_for [:admin, @depot] do |f|
   = f.input :name
+  = f.input :street
+  = f.input :zip
+  = f.input :place
+  = f.input :remark
   .form-actions
     = f.button :submit
     = link_to t('ui.or_cancel'), :back
