@@ -1,0 +1,19 @@
+%h1 Listing bestellrundes
+
+%table
+  %thead
+    %tr
+      %th
+      %th
+      %th
+
+  %tbody
+    - @bestellrundes.each do |bestellrunde|
+      %tr
+        %td= link_to 'Show', bestellrunde
+        %td= link_to 'Edit', edit_bestellrunde_path(bestellrunde)
+        %td= link_to 'Destroy', bestellrunde, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Bestellrunde', new_bestellrunde_path

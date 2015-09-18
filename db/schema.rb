@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150918090959) do
+ActiveRecord::Schema.define(version: 20150918093525) do
 
   create_table "article_categories", force: :cascade do |t|
     t.string "name",        limit: 255, default: "", null: false
@@ -65,6 +65,15 @@ ActiveRecord::Schema.define(version: 20150918090959) do
   end
 
   add_index "assignments", ["user_id", "task_id"], name: "index_assignments_on_user_id_and_task_id", unique: true, using: :btree
+
+  create_table "bestellrunden", force: :cascade do |t|
+    t.string   "season",     limit: 255, null: false
+    t.integer  "year",       limit: 4,   null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "bestellrunden", ["season", "year"], name: "index_bestellrunden_on_season_and_year", unique: true, using: :btree
 
   create_table "deliveries", force: :cascade do |t|
     t.integer  "supplier_id",  limit: 4

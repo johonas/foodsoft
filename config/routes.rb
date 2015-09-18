@@ -87,6 +87,10 @@ Foodsoft::Application.routes.draw do
       resources :depots, only: [:index]
     end
 
+    resources :bestellrunden
+
+
+
     ########### Article management
 
     resources :stock_takings do
@@ -187,6 +191,10 @@ Foodsoft::Application.routes.draw do
       end
 
       resources :ordergroups do
+        get :memberships, on: :member
+      end
+
+      resources :bestellrunden do
         get :memberships, on: :member
       end
 
