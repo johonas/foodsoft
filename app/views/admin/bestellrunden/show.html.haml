@@ -1,4 +1,4 @@
-- title t '.title', name: "#{@bestellrunde.season} #{@bestellrunde.year}"
+- title t '.title', name: @bestellrunde.label
 
 .row-fluid
   .span3
@@ -6,7 +6,7 @@
       %h4= t '.bestellrunde'
       %dl
         %dt= heading_helper Bestellrunde, :season
-        %dd= h @bestellrunde.season
+        %dd= h @bestellrunde.season_label
         %dt= heading_helper Bestellrunde, :year
         %dd= h @bestellrunde.year
 

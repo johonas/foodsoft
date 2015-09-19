@@ -1,6 +1,6 @@
 = simple_form_for [:admin, @bestellrunde] do |f|
   = f.input :season, :collection => Bestellrunde.seasons
-  = f.input :year, :collection => (2014..(Date.today + 2.years).year)
+  = f.input :year, :collection => ((Date.today).year..(Date.today + 2.years).year)
   .form-actions
     = f.button :submit
     = link_to t('ui.or_cancel'), :back

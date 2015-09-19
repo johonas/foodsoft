@@ -14,13 +14,11 @@ class OrdersController < ApplicationController
     @per_page = 15
     if params['sort']
       sort = case params['sort']
-               when "supplier"         then "suppliers.name, ends DESC"
-               when "ends"             then "ends DESC"
+               when "supplier"         then "suppliers.name DESC"
                when "supplier_reverse" then "suppliers.name DESC"
-               when "ends_reverse"     then "ends"
                end
     else
-      sort = "ends DESC"
+      sort = "id DESC"
     end
     @suppliers = Supplier.having_articles.order('suppliers.name')
     @orders = Order.closed.includes(:supplier).reorder(sort).page(params[:page]).per(@per_page)
@@ -63,14 +61,17 @@ class OrdersController < ApplicationController
 
   # Page to create a new order.
   def new
-    @order = Order.new(supplier_id: params[:supplier_id]).init_dates
+    @order = Order.new(supplier_id: params[:supplier_id])
     @order.article_ids = Order.find(params[:order_id]).article_ids if params[:order_id]
   end
 
   # Save a new order.
   # order_articles will be saved in Order.article_ids=()
   def create
+    bestellrunden_id = params['order'].delete('bestellrunde')
+
     @order = Order.new(params[:order])
+    @order.bestellrunde = Bestellrunde.find(bestellrunden_id)
     @order.created_by = current_user
     if @order.save
       flash[:notice] = I18n.t('orders.create.notice')

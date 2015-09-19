@@ -15,27 +15,26 @@ class Order < ActiveRecord::Base
   belongs_to :supplier
   belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_user_id'
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_user_id'
+  belongs_to :bestellrunde
 
   # Validations
-  validates_presence_of :starts
-  validate :starts_before_ends, :include_articles
+  validate :include_articles
   validate :keep_ordered_articles
+  validates :bestellrunde, :presence => true
 
   # Callbacks
   after_save :save_order_articles, :update_price_of_group_orders
 
   # Finders
-  scope :open, -> { where(state: 'open').order('ends DESC') }
-  scope :finished, -> { where("orders.state = 'finished' OR orders.state = 'closed'").order('ends DESC') }
-  scope :finished_not_closed, -> { where(state: 'finished').order('ends DESC') }
-  scope :closed, -> { where(state: 'closed').order('ends DESC') }
-  scope :stockit, -> { where(supplier_id: 0).order('ends DESC') }
+  scope :open, -> { where(state: 'open') }
+  scope :finished, -> { where("orders.state = 'finished' OR orders.state = 'closed'") }
+  scope :finished_not_closed, -> { where(state: 'finished') }
+  scope :closed, -> { where(state: 'closed') }
+  scope :stockit, -> { where(supplier_id: 0) }
   scope :recent, -> { order('starts DESC').limit(10) }
 
-  # Allow separate inputs for date and time
-  #   with workaround for https://github.com/einzige/date_time_attribute/issues/14
-  include DateTimeAttributeValidate
-  date_time_attribute :starts, :boxfill, :ends
+  delegate :starts, to: :bestellrunde, :allow_nil => true
+  delegate :ends, to: :bestellrunde, :allow_nil => true
 
   def stockit?
     supplier_id == 0
@@ -102,22 +101,6 @@ class Order < ActiveRecord::Base
 
   def expired?
     ends.present? && ends < Time.now
-  end
-
-  # sets up first guess of dates when initializing a new object
-  # I guess `def initialize` would work, but it's tricky http://stackoverflow.com/questions/1186400
-  def init_dates
-    self.starts ||= Time.now
-    if FoodsoftConfig[:order_schedule]
-      # try to be smart when picking a reference day
-      last = (DateTime.parse(FoodsoftConfig[:order_schedule][:initial]) rescue nil)
-      last ||= Order.finished.reorder(:starts).first.try(:starts)
-      last ||= self.starts
-      # adjust boxfill and end date
-      self.boxfill ||= FoodsoftDateUtil.next_occurrence last, self.starts, FoodsoftConfig[:order_schedule][:boxfill] if is_boxfill_useful?
-      self.ends ||= FoodsoftDateUtil.next_occurrence last, self.starts, FoodsoftConfig[:order_schedule][:ends]
-    end
-    self
   end
 
   # search GroupOrder of given Ordergroup
@@ -257,13 +240,6 @@ class Order < ActiveRecord::Base
   end
 
   protected
-
-  def starts_before_ends
-    delta = Rails.env.test? ? 1 : 0 # since Rails 4.2 tests appear to have time differences, with this validation failing
-    errors.add(:ends, I18n.t('orders.model.error_starts_before_ends')) if ends && starts && ends <= (starts-delta)
-    errors.add(:ends, I18n.t('orders.model.error_boxfill_before_ends')) if ends && boxfill && ends <= (boxfill-delta)
-    errors.add(:boxfill, I18n.t('orders.model.error_starts_before_boxfill')) if boxfill && starts && boxfill <= (starts-delta)
-  end
 
   def include_articles
     errors.add(:articles, I18n.t('orders.model.error_nosel')) if article_ids.empty?

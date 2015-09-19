@@ -4,13 +4,8 @@
   = f.input :zip
   = f.input :place
 
-
+  = f.association :owner
   = f.input :user_tokens, :as => :string, :input_html => { 'data-pre' => f.object.users.map(&:token_attributes).to_json }
-
-
-
-
-
 
   = f.input :remark
   .form-actions

@@ -6,8 +6,16 @@
   %thead
     %tr
       %th= heading_helper Depot, :name
+      %th= heading_helper Depot, :owner
+      %th= heading_helper Depot, :owner
   %tbody
     - for ordergroup in @depots
       %tr
         %td= ordergroup.name
+        %td
+          - if ordergroup.owner
+            = ordergroup.owner.display
+        %td
+          - if ordergroup.owner
+            = link_to_new_message(message_params: {mail_to: ordergroup.owner})
 

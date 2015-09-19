@@ -1,4 +1,5 @@
 = simple_form_for @supplier do |f|
+
   - if @supplier.shared_supplier
     .alert.alert-info
       = t 'suppliers.shared_supplier_note'

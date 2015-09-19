@@ -8,7 +8,7 @@ administrators = Workgroup.create(
     :role_finance => true,
     :role_article_meta => true,
     :role_suppliers => true,
-    :role_orders => true
+    :role_orders => true,
 )
 
 # Create admin user
