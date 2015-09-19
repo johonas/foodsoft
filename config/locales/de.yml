@@ -47,6 +47,7 @@ de:
         place: Ort
         remark: Bemerkungen
         user_tokens: Benutzer
+        owner: Kontaktperson
       financial_transaction:
         amount: Betrag
         created_on: Datum
@@ -299,7 +300,9 @@ de:
       show:
         confirm: Bist Du sicher?
         title: Bestellrunde %{name}
-    search_placeholder: Name ...
+      new:
+        title: Neue Bestellrunde anlegen
+    search_placeholder: Suche ...
     users:
       controller:
         sudo_done: Du bist jetzt als Benutzer %{user} angemeldet. Sei vorsichtig und melde dich ab, wenn du fertig bist!

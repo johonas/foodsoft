@@ -7,7 +7,7 @@
     - for bestellrunde in @bestellrunden
       %tr{:class => cycle('even','odd', :name => 'bestellrunden')}
         %td= link_to bestellrunde.year, [:admin, bestellrunde]
-        %td= bestellrunde.season
+        %td= bestellrunde.season_label
         %td
           = link_to t('ui.edit'), edit_admin_bestellrunde_path(bestellrunde), class: 'btn btn-mini'
           = link_to t('ui.delete'), [:admin, bestellrunde], :data => {:confirm => t('admin.confirm', name: "#{bestellrunde.season} #{bestellrunde.year}")},

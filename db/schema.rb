@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150918093525) do
+ActiveRecord::Schema.define(version: 20150919134807) do
 
   create_table "article_categories", force: :cascade do |t|
     t.string "name",        limit: 255, default: "", null: false
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(version: 20150918093525) do
     t.integer  "zip",        limit: 4
     t.string   "place",      limit: 255
     t.text     "remark",     limit: 65535
+    t.integer  "owner_id",   limit: 4
   end
 
   create_table "financial_transactions", force: :cascade do |t|
@@ -235,15 +236,14 @@ ActiveRecord::Schema.define(version: 20150918093525) do
   add_index "order_comments", ["order_id"], name: "index_order_comments_on_order_id", using: :btree
 
   create_table "orders", force: :cascade do |t|
-    t.integer  "supplier_id",        limit: 4
-    t.text     "note",               limit: 65535
-    t.datetime "starts"
-    t.datetime "ends"
-    t.string   "state",              limit: 255,                           default: "open"
-    t.integer  "lock_version",       limit: 4,                             default: 0,      null: false
-    t.integer  "updated_by_user_id", limit: 4
-    t.decimal  "foodcoop_result",                  precision: 8, scale: 2
-    t.integer  "created_by_user_id", limit: 4
+    t.integer "supplier_id",        limit: 4
+    t.text    "note",               limit: 65535
+    t.string  "state",              limit: 255,                           default: "open"
+    t.integer "lock_version",       limit: 4,                             default: 0,      null: false
+    t.integer "updated_by_user_id", limit: 4
+    t.decimal "foodcoop_result",                  precision: 8, scale: 2
+    t.integer "created_by_user_id", limit: 4
+    t.integer "bestellrunde_id",    limit: 4,                                              null: false
   end
 
   add_index "orders", ["state"], name: "index_orders_on_state", using: :btree

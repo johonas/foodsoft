@@ -8,7 +8,7 @@
       %th
 
   %tbody
-    - @bestellrundes.each do |bestellrunde|
+    - @bestellrunden.each do |bestellrunde|
       %tr
         %td= link_to 'Show', bestellrunde
         %td= link_to 'Edit', edit_bestellrunde_path(bestellrunde)

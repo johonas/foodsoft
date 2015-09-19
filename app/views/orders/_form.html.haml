@@ -1,8 +1,7 @@
 = simple_form_for @order do |f|
   = f.hidden_field :supplier_id
-  .fold-line
-    = f.input :starts, as: :date_picker_time
-    = f.input :ends, as: :date_picker_time
+  = f.input :bestellrunde, :collection => Bestellrunde.selectable, :label_method => :label, :value_method => :id
+
   = f.input :note, input_html: {rows: 2, class: 'input-xxlarge'}
 
   %h2= t '.title'

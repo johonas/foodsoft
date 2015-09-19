@@ -9,6 +9,11 @@ class Supplier < ActiveRecord::Base
   has_many :invoices
   belongs_to :shared_supplier  # for the sharedLists-App
 
+  def shared_supplier
+    # todo remove
+    nil
+  end
+
   include ActiveModel::MassAssignmentSecurity
   attr_accessible :name, :address, :phone, :phone2, :fax, :email, :url, :contact_person, :customer_number,
                   :delivery_days, :order_howto, :note, :shared_supplier_id, :min_order_quantity, :shared_sync_method

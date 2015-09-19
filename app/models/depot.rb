@@ -1,5 +1,6 @@
 class Depot < ActiveRecord::Base
   has_many :users
+  belongs_to :owner, class_name: 'User', foreign_key: 'owner_id'
 
   attr_reader :user_tokens
 
