@@ -159,7 +159,7 @@ ActiveRecord::Schema.define(version: 20150919134807) do
     t.text     "stats",                    limit: 65535
     t.integer  "next_weekly_tasks_number", limit: 4,                              default: 8
     t.boolean  "ignore_apple_restriction", limit: 1,                              default: false
-    t.integer  "depot_id",                 limit: 4,                                              null: false
+    t.integer  "depot_id",                 limit: 4
   end
 
   add_index "groups", ["name"], name: "index_groups_on_name", unique: true, using: :btree
