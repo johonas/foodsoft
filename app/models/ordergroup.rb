@@ -64,10 +64,17 @@ class Ordergroup < Group
   end
 
   def update_stats!
+    return # TODO fix this method
     # Get hours for every job of each user in period
     jobs = users.to_a.sum { |u| u.tasks.done.where('updated_on > ?', APPLE_MONTH_AGO.month.ago).sum(:duration) }
     # Get group_order.price for every finished order in this period
-    orders_sum = group_orders.includes(:order).merge(Order.finished).where('orders.ends >= ?', APPLE_MONTH_AGO.month.ago).references(:orders).sum(:price)
+
+    # orders_sum = group_orders.includes(:order).merge(Order.finished).where('orders.ends >= ?', APPLE_MONTH_AGO.month.ago).references(:orders).sum(:price)
+
+    group_orders = group_orders.includes(:order).merge(Order.finished).references(:orders).sum(:price)
+    group_orders = group_orders.collect{ |gu| og.bestellrunde.ends >= APPLE_MONTH_AGO.month.ago}
+
+    orders_sum = group_orders.inject(0){|sum,g| sum += g.price }
 
     @readonly = false # Dirty hack, avoid getting RecordReadOnly exception when called in task after_save callback. A rails bug?
     update_attribute(:stats, {:jobs_size => jobs, :orders_sum => orders_sum})
