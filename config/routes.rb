@@ -87,7 +87,11 @@ Foodsoft::Application.routes.draw do
       resources :depots, only: [:index]
     end
 
-    resources :bestellrunden
+    resources :bestellrunden do
+      member do
+        get :export
+      end
+    end
 
 
 

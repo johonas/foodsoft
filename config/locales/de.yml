@@ -34,8 +34,8 @@ de:
         tax: MwSt
         unit_quantity: Gebindegröße
       bestellrunde:
-        season: Jahreszeit
-        year: Jahr
+        starts: Von
+        ends: Bis
       delivery:
         delivered_on: Lieferdatum
         note: Notiz
@@ -178,6 +178,7 @@ de:
         role_admin: Administration
         role_article_meta: Artikeldatenbank
         role_finance: Finanzen
+        role_verteilen: Verteilem
         role_orders: Bestellverwaltung
         role_suppliers: Lieferanten
         user_tokens: Mitglieder
@@ -938,6 +939,7 @@ de:
       role_admin: Admin
       role_article_meta: Artikel
       role_finance: Finanzen
+      role_verteilen: Verteilem
       role_orders: Bestellung
       role_suppliers: Lieferanten
       show_google_maps: Show it on Google maps
@@ -1688,6 +1690,7 @@ de:
       done_q: Erledigt?
       mark_done: Aufgabe als erledigt markieren
       reject_task: Aufgabe ablehnen
+      delete: Willst du diese Aufgabe wirklich als erledigt markieren?
       who: Wer machts?
       who_hint: "(Wie viele werden noch benötigt?)"
     nav:

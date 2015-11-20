@@ -4,12 +4,8 @@ class Admin::BestellrundenController < Admin::BaseController
 
 
   def index
-    @bestellrunden = Bestellrunde.order('year ASC')
+    @bestellrunden = Bestellrunde.order('starts ASC')
 
-    # if somebody uses the search field:
-    unless params[:query].blank?
-      @bestellrunden = @bestellrunden.where('year LIKE ?', "%#{params[:query]}%")
-    end
 
     @bestellrunden = @bestellrunden.page(params[:page]).per(@per_page)
   end

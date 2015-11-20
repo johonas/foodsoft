@@ -94,6 +94,7 @@ class TasksController < ApplicationController
   end
 
   def set_done
+    raise "no allowed" unless current_user.can_finish_task?
     Task.find(params[:id]).update_attribute :done, true
     redirect_to tasks_url, :notice => I18n.t('tasks.set_done.notice')
   end

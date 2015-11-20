@@ -59,6 +59,7 @@ class ApplicationController < ActionController::Base
       when "article_meta" then current_user.role_article_meta?
       when "suppliers"  then current_user.role_suppliers?
       when "orders" then current_user.role_orders?
+      when "verteilen" then current_user.role_verteilen?
       when "finance_or_orders" then (current_user.role_finance? || current_user.role_orders?)
       when "any" then true        # no role required
       else false                  # any unknown role will always fail
@@ -78,7 +79,11 @@ class ApplicationController < ActionController::Base
   def authenticate_finance
     authenticate('finance')
   end
-    
+
+  def authenticate_verteilen
+    authenticate('verteilen')
+  end
+
   def authenticate_article_meta
     authenticate('article_meta')
   end

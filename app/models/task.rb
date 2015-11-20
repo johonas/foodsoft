@@ -52,7 +52,11 @@ class Task < ActiveRecord::Base
   end
 
   def periodic?
-    not periodic_task_group.nil?
+    begin
+      !periodic_task_group.nil?
+    rescue
+      return false
+    end
   end
 
   def is_assigned?(user)

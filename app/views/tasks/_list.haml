@@ -24,8 +24,12 @@
             = link_to t('.accept_task'), accept_task_path(task), method: :post, class: 'btn btn-small'
             = link_to t('.reject_task'), reject_task_path(task), method: :post, class: 'btn btn-small' if task.is_assigned?(current_user)
           - elsif !task.done
-            = link_to set_done_task_path(task), method: :post, class: 'btn btn-small',
-              title: t('.mark_done') do
-              %i.icon-ok= t '.done_q'
-          - else
+            - if current_user.can_finish_task?
+              = link_to set_done_task_path(task), method: :post, class: "btn btn-small",
+                title: t('.mark_done'), data: { confirm: t('.delete')} do
+                %i.icon-ok= t '.done_q'
+            - else
+              = link_to '#', class: "btn btn-small disabled", title: t('.mark_done') do
+                %i.icon-ok= t '.done_q'
+          - elsif
             %i.icon-ok= t '.done'
