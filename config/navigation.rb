@@ -41,7 +41,7 @@ SimpleNavigation::Configuration.run do |navigation|
       subnav.item :invoices, I18n.t('navigation.finances.invoices'), finance_invoices_path
                          end
 
-    primary.item :distribute, I18n.t('navigation.distribute.title'), '#', if: Proc.new { current_user.role_admin? } do |subnav|
+    primary.item :distribute, I18n.t('navigation.distribute.title'), '#', if: Proc.new { current_user.role_verteilen? } do |subnav|
       subnav.item :bestellrunden, I18n.t('navigation.bestellrunden.home'), bestellrunden_path
     end
 

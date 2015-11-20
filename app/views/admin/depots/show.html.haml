@@ -15,14 +15,6 @@
         %dd= h @depot.place
         %dt= heading_helper Depot, :remark
         %dd= simple_format h @depot.remark
-  .span5
-    .well
-      %h4= t '.Benutzer'
-      %table.table
-        - @depot.users.each do |user|
-          %tr
-            %td= user.display
-
 
 = link_to t('ui.edit'), edit_admin_depot_path(@depot), class: 'btn'
 = link_to t('ui.delete'), [:admin, @depot], :data => {:confirm => t('.confirm')}, :method => :delete, class: 'btn btn-danger'

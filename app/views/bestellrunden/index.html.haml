@@ -1,19 +1,16 @@
-%h1 Listing bestellrundes
+%h1 Bestellrunden
 
-%table
+%table.table.table-striped
   %thead
     %tr
-      %th
-      %th
-      %th
+      %th Start
+      %th Ende
+      %th Export
 
   %tbody
     - @bestellrunden.each do |bestellrunde|
       %tr
-        %td= link_to 'Show', bestellrunde
-        %td= link_to 'Edit', edit_bestellrunde_path(bestellrunde)
-        %td= link_to 'Destroy', bestellrunde, :method => :delete, :data => { :confirm => 'Are you sure?' }
+        %td= format_date(bestellrunde.starts)
+        %td= format_date(bestellrunde.ends)
+        %td= link_to 'export', export_bestellrunde_path(bestellrunde), class: 'btn btn-mini'
 
-%br
-
-= link_to 'New Bestellrunde', new_bestellrunde_path

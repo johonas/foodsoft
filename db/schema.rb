@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150919134807) do
+ActiveRecord::Schema.define(version: 20151120130649) do
 
   create_table "article_categories", force: :cascade do |t|
     t.string "name",        limit: 255, default: "", null: false
@@ -67,13 +67,11 @@ ActiveRecord::Schema.define(version: 20150919134807) do
   add_index "assignments", ["user_id", "task_id"], name: "index_assignments_on_user_id_and_task_id", unique: true, using: :btree
 
   create_table "bestellrunden", force: :cascade do |t|
-    t.string   "season",     limit: 255, null: false
-    t.integer  "year",       limit: 4,   null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.date     "starts"
+    t.date     "ends"
   end
-
-  add_index "bestellrunden", ["season", "year"], name: "index_bestellrunden_on_season_and_year", unique: true, using: :btree
 
   create_table "deliveries", force: :cascade do |t|
     t.integer  "supplier_id",  limit: 4
@@ -160,6 +158,7 @@ ActiveRecord::Schema.define(version: 20150919134807) do
     t.integer  "next_weekly_tasks_number", limit: 4,                              default: 8
     t.boolean  "ignore_apple_restriction", limit: 1,                              default: false
     t.integer  "depot_id",                 limit: 4
+    t.boolean  "role_verteilen",           limit: 1,                                              null: false
   end
 
   add_index "groups", ["name"], name: "index_groups_on_name", unique: true, using: :btree
@@ -362,7 +361,6 @@ ActiveRecord::Schema.define(version: 20150919134807) do
     t.datetime "reset_password_expires"
     t.datetime "last_login"
     t.datetime "last_activity"
-    t.integer  "depot_id",               limit: 4
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

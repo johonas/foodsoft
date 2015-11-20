@@ -18,7 +18,6 @@ class User < ActiveRecord::Base
   has_many :tasks, :through => :assignments
   has_many :send_messages, :class_name => "Message", :foreign_key => "sender_id"
   has_many :created_orders, :class_name => 'Order', :foreign_key => 'created_by_user_id', :dependent => :nullify
-  belongs_to :depot
 
   attr_accessor :password, :settings_attributes
   
@@ -159,7 +158,16 @@ class User < ActiveRecord::Base
   def role_orders?
     groups.detect {|group| group.role_orders?}
   end
-  
+
+  # Checks the orders role
+  def role_verteilen?
+    groups.detect {|group| group.role_verteilen?}
+  end
+
+  def can_finish_task?
+    role_verteilen? || role_admin? || role_orders? || role_finance?
+  end
+
   def ordergroup_name
     ordergroup ? ordergroup.name : I18n.t('model.user.no_ordergroup')
   end
