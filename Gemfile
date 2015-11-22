@@ -108,9 +108,11 @@ group :test do
   gem 'connection_pool'
   # need to include rspec components before i18n-spec or rake fails in test environment
   gem 'rspec-core', '~> 3.2'
-  gem 'rspec-rerun'
   gem 'i18n-spec'
   # code coverage
   gem 'simplecov', require: false
   gem 'coveralls', require: false
 end
+
+# belongs to group :test, but outside for heroku
+gem 'rspec-rerun'
