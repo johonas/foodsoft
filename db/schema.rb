@@ -156,9 +156,9 @@ ActiveRecord::Schema.define(version: 20151120130649) do
     t.string   "contact_address",          limit: 255
     t.text     "stats",                    limit: 65535
     t.integer  "next_weekly_tasks_number", limit: 4,                              default: 8
-    t.boolean  "ignore_apple_restriction", limit: 1,                              default: false
+    t.boolean  "ignore_apple_restriction",                                        default: false
     t.integer  "depot_id",                 limit: 4
-    t.boolean  "role_verteilen",           limit: 1,                                              null: false
+    t.boolean  "role_verteilen",                                                                  null: false
   end
 
   add_index "groups", ["name"], name: "index_groups_on_name", unique: true, using: :btree
@@ -235,14 +235,14 @@ ActiveRecord::Schema.define(version: 20151120130649) do
   add_index "order_comments", ["order_id"], name: "index_order_comments_on_order_id", using: :btree
 
   create_table "orders", force: :cascade do |t|
-    t.integer "supplier_id",        limit: 4
-    t.text    "note",               limit: 65535
-    t.string  "state",              limit: 255,                           default: "open"
-    t.integer "lock_version",       limit: 4,                             default: 0,      null: false
-    t.integer "updated_by_user_id", limit: 4
-    t.decimal "foodcoop_result",                  precision: 8, scale: 2
-    t.integer "created_by_user_id", limit: 4
-    t.integer "bestellrunde_id",    limit: 4,                                              null: false
+    t.integer  "supplier_id",        limit: 4
+    t.text     "note",               limit: 65535
+    t.string   "state",              limit: 255,                           default: "open"
+    t.integer  "lock_version",       limit: 4,                             default: 0,      null: false
+    t.integer  "updated_by_user_id", limit: 4
+    t.decimal  "foodcoop_result",                  precision: 8, scale: 2
+    t.integer  "created_by_user_id", limit: 4
+    t.integer  "bestellrunde_id",    limit: 4,                                              null: false
     t.datetime "boxfill"
   end
 
