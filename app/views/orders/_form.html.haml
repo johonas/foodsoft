@@ -1,6 +1,6 @@
 = simple_form_for @order do |f|
   = f.hidden_field :supplier_id
-  = f.input :bestellrunde, :collection => Bestellrunde.selectable, :label_method => :label, :value_method => :id
+  = f.input :bestellrunde_id, :collection => Bestellrunde.selectable, :label_method => :label, :value_method => :id
 
   = f.input :note, input_html: {rows: 2, class: 'input-xxlarge'}
 

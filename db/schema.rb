@@ -69,8 +69,8 @@ ActiveRecord::Schema.define(version: 20151120130649) do
   create_table "bestellrunden", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.date     "starts"
-    t.date     "ends"
+    t.date     "starts",     null: false
+    t.date     "ends",       null: false
   end
 
   create_table "deliveries", force: :cascade do |t|

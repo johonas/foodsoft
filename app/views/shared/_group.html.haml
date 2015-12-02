@@ -7,7 +7,8 @@
     %dt= heading_helper(Ordergroup, :contact_address) + ':'
     %dd= link_to_gmaps group.contact_address
     %dt= heading_helper(Ordergroup, :depot) + ':'
-    %dd= h group.depot.name
+    %dd
+      = h group.depot.name if group.depot
   %dt= t('.access') + ':'
   %dd= format_roles(group)
   %dt= heading_helper(Ordergroup, :user_tokens) + ':'

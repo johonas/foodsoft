@@ -17,7 +17,8 @@
         %td= ordergroup.contact
         %td= link_to_gmaps ordergroup.contact_address
         %td= ordergroup.users.size
-        %td= ordergroup.depot.name
+        %td
+          = ordergroup.depot.name if ordergroup.depot
         %td
           = link_to t('ui.edit'), edit_admin_ordergroup_path(ordergroup), class: 'btn btn-mini'
           = link_to t('ui.delete'), [:admin, ordergroup], :data => {:confirm => t('admin.confirm', name: ordergroup.name)},

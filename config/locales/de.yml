@@ -289,6 +289,8 @@ de:
       show:
         confirm: Bist Du sicher?
         title: Depot %{name}
+      new:
+        title: Depot erstellen
     bestellrunden:
       form:
         search_user: Nach Nutzerin suchen
