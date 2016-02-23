@@ -3,12 +3,14 @@ require 'action_view'
 class BestellrundeXls
   include ApplicationHelper
 
+  attr_reader :data
+
   def initialize(bestellrunde)
     @bestellrunde = bestellrunde
     @data = collect_data(bestellrunde)
   end
 
-  def data
+  def spreadsheet_data
     default_format = Spreadsheet::Format.new :size => 13
     overview_format = Spreadsheet::Format.new :weight => :bold, :size => 10, :pattern_fg_color => :white, :pattern => 1
     header_format = Spreadsheet::Format.new :weight => :bold, :size => 15, :pattern_fg_color => :grey, :pattern => 1

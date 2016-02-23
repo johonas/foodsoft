@@ -9,9 +9,9 @@ class Bestellrunde < ActiveRecord::Base
     "#{self.starts}"
   end
 
-  def self.selectable
+  def self.selectable(order=nil)
     Bestellrunde.all.select do |bestelrunde|
-      bestelrunde.starts > Date.today
+      bestelrunde.starts > Date.today || (order && order.bestellrunde == bestelrunde)
     end.map
   end
 
