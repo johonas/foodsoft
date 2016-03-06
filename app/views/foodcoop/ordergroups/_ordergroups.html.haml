@@ -15,6 +15,7 @@
       %tr
         %td= ordergroup.name
         %td=h ordergroup.users.collect { |u| show_user(u) }.join(", ")
-        %td=h ordergroup.depot.name
+        %td
+          =h ordergroup.depot.name if ordergroup.depot
         %td= format_date ordergroup.last_order.try(:starts)
 
