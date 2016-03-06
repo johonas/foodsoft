@@ -4,9 +4,23 @@
   = f.input :zip
   = f.input :place
 
-  = f.association :owner
+  = f.input :owner_id, :as => :string, :input_html => { 'data-pre' => [f.object.owner.try(:token_attributes)].to_json }
 
   = f.input :remark
   .form-actions
     = f.button :submit
     = link_to t('ui.or_cancel'), :back
+
+- content_for :javascript do
+  :javascript
+    $(function() {
+      $("#depot_owner_id").tokenInput("#{users_path(:format => :json)}", {
+          tokenLimit: 1,
+          hintText: '#{t('.search_user')}',
+          noResultText: '#{t('.user_not_found')}',
+          searchingText: '#{t('.search')}',
+          theme: 'facebook',
+          prePopulate: $("#depot_owner_id").data("pre"),
+        }
+      );
+    });
