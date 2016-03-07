@@ -31,7 +31,7 @@ class Ordergroup < Group
 
   # the most recent order this ordergroup was participating in
   def last_order
-    orders.order('orders.starts DESC').first
+    orders.joins(:bestellrunde).order('bestellrunden.starts DESC').first
   end
 
   def value_of_open_orders(exclude = nil)
