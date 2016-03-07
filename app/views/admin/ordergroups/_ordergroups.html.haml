@@ -4,11 +4,11 @@
 %table.table.table-striped
   %thead
     %tr
-      %th= heading_helper Ordergroup, :name
-      %th= heading_helper Ordergroup, :contact
-      %th= heading_helper Ordergroup, :contact_address
+      %th= sort_link(@q, :name)
+      %th= sort_link(@q, :contact_person)
+      %th= sort_link(@q, :contact_address)
       %th= heading_helper Ordergroup, :user_tokens
-      %th= heading_helper Ordergroup, :depot
+      %th= sort_link(@q, :depot_name, t('Depot'))
       %th= t 'ui.actions'
   %tbody
     - for ordergroup in @ordergroups

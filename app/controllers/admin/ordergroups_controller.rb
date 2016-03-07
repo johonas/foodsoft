@@ -3,7 +3,9 @@ class Admin::OrdergroupsController < Admin::BaseController
   inherit_resources
   
   def index
-    @ordergroups = Ordergroup.undeleted.order('name ASC')
+
+    @q = Ordergroup.undeleted.ransack(params[:q])
+    @ordergroups = @q.result.page(params[:page]).per(@per_page)
 
     # if somebody uses the search field:
     unless params[:query].blank?

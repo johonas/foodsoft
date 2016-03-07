@@ -4,12 +4,12 @@
 %table.table.table-striped
   %thead
     %tr
+      %th= sort_link(@q, :first_name, [:first_name, 'last_name asc'], t('User.name'))
       - if FoodsoftConfig[:use_nick]
-        %th= heading_helper User, :nick
-      %th= heading_helper User, :name
-      %th= heading_helper User, :email
+        %th= sort_link(@q, :nick)
+      %th= sort_link(@q, :email)
       %th= t 'admin.access_to'
-      %th= heading_helper User, :last_activity
+      %th= sort_link(@q, :last_activity)
       %th(colspan="2")= t 'ui.actions'
   %tbody
     - for user in @users
