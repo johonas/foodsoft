@@ -3,7 +3,10 @@ class TasksController < ApplicationController
   #auto_complete_for :user, :nick
 
   def index
-    @non_group_tasks = Task.non_group.includes(assignments: :user)
+    @q = Task.non_group.includes(assignments: :user).ransack(params[:q])
+    @q.sorts = 'due_date asc' if @q.sorts.empty?
+    @non_group_tasks = @q.result.page(params[:page]).per(@per_page)
+
     @groups = Workgroup.includes(open_tasks: {assignments: :user})
   end
 

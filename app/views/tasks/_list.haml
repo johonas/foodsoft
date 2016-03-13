@@ -1,7 +1,7 @@
 %table.table.table-striped
   %thead
     %tr
-      %th= heading_helper Task, :due_date
+      %th= sort_link(@q, :due_date)
       %th
       %th= heading_helper Task, :name
       %th{:colspan => '2'}
