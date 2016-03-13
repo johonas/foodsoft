@@ -28,7 +28,12 @@
     - if @task.is_assigned?(current_user)
       = link_to t('.reject_task'), reject_task_path(@task), method: :post, class: 'btn'
   - unless @task.done?
-    = link_to t('.mark_done'), set_done_task_path(@task), method: :post, class: 'btn'
+
+    - if current_user.can_finish_task?
+      = link_to t('.mark_done'), set_done_task_path(@task), method: :post, class: 'btn'
+    - else
+      = link_to t('.mark_done'), '#', class: 'btn disabled'
+
   = link_to t('ui.edit'), edit_task_path(@task), class: 'btn'
   - if @task.periodic?
     = link_to edit_task_path(@task, periodic: true), class: 'btn' do
