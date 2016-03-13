@@ -12,7 +12,7 @@ class Bestellrunde < ActiveRecord::Base
   def self.selectable(order=nil)
     Bestellrunde.all.select do |bestelrunde|
       bestelrunde.ends >= Date.today || (order && order.bestellrunde == bestelrunde)
-    end.map
+    end.map{ |b| [b.label, b.id]}
   end
 
 end

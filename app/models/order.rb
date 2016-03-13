@@ -21,6 +21,7 @@ class Order < ActiveRecord::Base
   validate :include_articles
   validate :keep_ordered_articles
   validates :bestellrunde, :presence => true
+  validates :bestellrunde_id, :presence => true
 
   # Callbacks
   after_save :save_order_articles, :update_price_of_group_orders
