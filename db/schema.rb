@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160306154751) do
+ActiveRecord::Schema.define(version: 20160313122223) do
 
   create_table "article_categories", force: :cascade do |t|
     t.string "name",        limit: 255, default: "", null: false
@@ -244,6 +244,7 @@ ActiveRecord::Schema.define(version: 20160306154751) do
     t.integer  "created_by_user_id", limit: 4
     t.integer  "bestellrunde_id",    limit: 4,                                              null: false
     t.datetime "boxfill"
+    t.date     "end_date"
   end
 
   add_index "orders", ["state"], name: "index_orders_on_state", using: :btree

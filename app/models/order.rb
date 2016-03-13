@@ -34,7 +34,6 @@ class Order < ActiveRecord::Base
   scope :recent, -> { order('starts DESC').limit(10) }
 
   delegate :starts, to: :bestellrunde, :allow_nil => true
-  delegate :ends, to: :bestellrunde, :allow_nil => true
 
   def stockit?
     supplier_id == 0
@@ -237,6 +236,18 @@ class Order < ActiveRecord::Base
     raise I18n.t('orders.model.error_closed') if closed?
     comments.create(user: user, text: I18n.t('orders.model.close_direct_message'))
     update_attributes! state: 'closed', updated_by: user
+  end
+
+  def ends
+    if end_date
+      return end_date
+    elsif bestellrunde
+      return bestellrunde.ends
+    end
+  end
+
+  def ends=(value)
+    self.end_date = value
   end
 
   protected
