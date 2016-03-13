@@ -6,11 +6,11 @@
       %h4= t '.bestellrunde'
       %dl
         %dt= heading_helper Bestellrunde, :starts
-        %dd= h @bestellrunde.starts
+        %dd= h format_date @bestellrunde.starts
         %dt= heading_helper Bestellrunde, :ends
-        %dd= h @bestellrunde.ends
+        %dd= h format_date @bestellrunde.ends
 
 
-
+= link_to t('ui.back'), admin_bestellrunden_path
 = link_to t('ui.edit'), edit_admin_bestellrunde_path(@bestellrunde), class: 'btn'
 = link_to t('ui.delete'), [:admin, @bestellrunde], :data => {:confirm => t('.confirm')}, :method => :delete, class: 'btn btn-danger'
