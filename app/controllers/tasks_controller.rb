@@ -11,8 +11,11 @@ class TasksController < ApplicationController
   end
 
   def user
-    @unaccepted_tasks = Task.unaccepted_tasks_for(current_user)
-    @accepted_tasks = Task.accepted_tasks_for(current_user)
+    @unaccepted_tasks_q = Task.unaccepted_tasks_for(current_user).ransack(params[:q])
+    @accepted_tasks_q = Task.accepted_tasks_for(current_user).ransack(params[:q])
+
+    @unaccepted_tasks = @unaccepted_tasks_q.result.page(params[:page]).per(@per_page)
+    @accepted_tasks = @accepted_tasks_q.result.page(params[:page]).per(@per_page)
   end
 
   def new
