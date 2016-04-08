@@ -102,7 +102,7 @@ class BestellrundeXls
             data[group_order.ordergroup.depot][group_order_article.order_article.article] = {}
           end
 
-          data[group_order.ordergroup.depot][group_order_article.order_article.article][group_order.ordergroup] = group_order_article.quantity
+          data[group_order.ordergroup.depot][group_order_article.order_article.article][group_order.ordergroup] = group_order_article.result
 
         end
 
