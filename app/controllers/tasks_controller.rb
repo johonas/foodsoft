@@ -5,7 +5,7 @@ class TasksController < ApplicationController
   def index
     @q = Task.non_group.includes(assignments: :user).ransack(params[:q])
     @q.sorts = 'due_date asc' if @q.sorts.empty?
-    @non_group_tasks = @q.result.page(params[:page]).per(@per_page)
+    @non_group_tasks = @q.result
 
     @groups = Workgroup.includes(open_tasks: {assignments: :user})
   end
@@ -14,8 +14,11 @@ class TasksController < ApplicationController
     @unaccepted_tasks_q = Task.unaccepted_tasks_for(current_user).ransack(params[:q])
     @accepted_tasks_q = Task.accepted_tasks_for(current_user).ransack(params[:q])
 
-    @unaccepted_tasks = @unaccepted_tasks_q.result.page(params[:page]).per(@per_page)
-    @accepted_tasks = @accepted_tasks_q.result.page(params[:page]).per(@per_page)
+    @unaccepted_tasks_q.sorts = 'due_date asc' if @unaccepted_tasks_q.sorts.empty?
+    @accepted_tasks_q.sorts = 'due_date asc' if @accepted_tasks_q.sorts.empty?
+
+    @unaccepted_tasks = @unaccepted_tasks_q.result
+    @accepted_tasks = @accepted_tasks_q.result
   end
 
   def new
@@ -113,6 +116,10 @@ class TasksController < ApplicationController
   # shows workgroup (normal group) to edit weekly_tasks_template
   def workgroup
     @group = Group.find(params[:workgroup_id])
+    @q = @group.open_tasks.ransack(params[:q])
+    @q.sorts = 'due_date asc' if @q.sorts.empty?
+    @tasks = @q.result
+
     if @group.is_a? Ordergroup
       redirect_to tasks_url, :alert => I18n.t('tasks.error_not_found')
     end
