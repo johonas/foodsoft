@@ -2,7 +2,9 @@
 class Finance::BalancingController < Finance::BaseController
 
   def index
-    @orders = Order.finished.page(params[:page]).per(@per_page)
+    @orders = Order.finished.
+        joins('LEFT JOIN bestellrunden ON bestellrunden.id = orders.bestellrunde_id').
+        order('bestellrunden.ends desc').page(params[:page]).per(@per_page)
   end
 
   def new
