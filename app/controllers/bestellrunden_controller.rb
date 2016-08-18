@@ -7,14 +7,13 @@ class BestellrundenController < InheritedResources::Base
   end
 
   def export
-    bestellrunde = Bestellrunde.find(params[:id])
-    xls = BestellrundeXls.new(bestellrunde)
+    bestellrunde = Bestellrunde.includes(
+      :orders => { :group_orders => [ { :ordergroup => :depot }, { :order_articles => { :article => :supplier }}]}
+    ).find(params[:id])
 
-    if xls.data.length > 0
-      send_data(xls.spreadsheet_data.string.force_encoding('binary'), :filename => "export.xlsx", :type => "application/vnd.ms-excel" )
-    else
-      redirect_to bestellrunden_path, :alert => 'Es gibt keine Daten zu exportieren.'
-    end
+    filename = "bestellrunde_#{bestellrunde.starts}.xlsx"
+
+    Reports::Bestellrunde.new(bestellrunde, filename).generate.send(self)
   end
 
   private

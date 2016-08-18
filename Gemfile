@@ -48,6 +48,9 @@ gem 'roo-xls'
 gem 'spreadsheet'
 gem 'gaffe'
 
+gem 'axlsx', '2.1.0.pre'
+gem 'axlsx_rails', '>= 0.4'
+
 # we use the git version of acts_as_versioned, and need to include it in this Gemfile
 gem 'acts_as_versioned', github: 'technoweenie/acts_as_versioned'
 gem 'foodsoft_wiki', path: 'plugins/wiki'
