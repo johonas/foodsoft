@@ -3,9 +3,12 @@ class Depot < ActiveRecord::Base
 
   attr_reader :user_tokens
 
-
   validates_presence_of :name
   validates_presence_of :owner
+
+  def self.natural_order
+    order(:name)
+  end
 
   def self.collection
     Depot.all.map{ |depot| [depot.name, depot.id]}

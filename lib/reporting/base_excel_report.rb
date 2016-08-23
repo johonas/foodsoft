@@ -43,6 +43,10 @@ module Reporting
 
     protected
 
+    def cm2in(cm)
+      (cm.to_f * 0.393701).round(4)
+    end
+
     attr_reader :package
   end
 end

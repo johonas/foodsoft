@@ -6,11 +6,15 @@
       %th Start
       %th Ende
       %th Export
+      %th Depots
 
   %tbody
     - @bestellrunden.each do |bestellrunde|
       %tr
         %td= format_date(bestellrunde.starts)
         %td= format_date(bestellrunde.ends)
-        %td= link_to 'export', export_bestellrunde_path(bestellrunde), class: 'btn btn-mini'
+        %td= link_to 'export', distribution_export_bestellrunde_path(bestellrunde), class: 'btn btn-mini'
+        %td
+          - Depot.natural_order.each do |depot|
+            = link_to depot.name, depot_export_bestellrunde_path(bestellrunde, depot_id: depot.id), class: 'btn btn-mini'
 
