@@ -54,7 +54,7 @@ class GroupOrdersController < ApplicationController
   # if selected, it shows all orders of the foodcoop
   def archive
     # get only orders belonging to the ordergroup
-    @closed_orders = Order.closed.page(params[:page]).per(10)
+    @closed_orders = Order.closed.order('id desc').page(params[:page]).per(10)
 
     respond_to do |format|
       format.html # archive.html.haml
