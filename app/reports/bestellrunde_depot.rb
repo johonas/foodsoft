@@ -1,4 +1,7 @@
 module Reports
+  class NoDataException < StandardError
+  end
+
   class BestellrundeDepot < Reports::BestellrundeBase
     class SupplierSheet < ProductSheet
       SHOW_PRODUCER = false
@@ -49,14 +52,12 @@ module Reports
 
     def process_data
       raw_data = data[@depot]
-      if raw_data
-        # Group by producers
-        raw_data[:articles] = raw_data[:articles].group_by { |d| d[:producer] }
-        raw_data[:articles] = raw_data[:articles].sort.to_h
-        @processed_data = raw_data
-      else
-        @processed_data = { articles: { 'blank' => [] }, ordergroups: [] }
-      end
+      raise Reports::NoDataException unless raw_data
+
+      # Group by producers
+      raw_data[:articles] = raw_data[:articles].group_by { |d| d[:producer] }
+      raw_data[:articles] = raw_data[:articles].sort.to_h
+      @processed_data = raw_data
     end
 
     def generate_xls

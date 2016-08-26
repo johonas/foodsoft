@@ -7,16 +7,18 @@ class BestellrundenController < InheritedResources::Base
 
   def distribution_export
     filename = "bestellrunde_#{bestellrunde.starts}.xlsx"
-
     Reports::Bestellrunde.new(bestellrunde, filename).generate.send(self)
   end
 
   def depot_export
     depot = Depot.find(params[:depot_id])
-
     filename = "bestellrunde_#{bestellrunde.starts}_depot_#{depot.name.downcase.gsub(' ', '_')}.xlsx"
 
-    Reports::BestellrundeDepot.new(bestellrunde, depot, filename).generate.send(self)
+    begin
+      Reports::BestellrundeDepot.new(bestellrunde, depot, filename).generate.send(self)
+    rescue Reports::NoDataException
+      redirect_to bestellrunden_path, flash: { error: I18n.t('report.no_data') }
+    end
   end
 
   private
