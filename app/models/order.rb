@@ -32,7 +32,7 @@ class Order < ActiveRecord::Base
   scope :finished_not_closed, -> { where(state: 'finished') }
   scope :closed, -> { where(state: 'closed') }
   scope :stockit, -> { where(supplier_id: 0) }
-  scope :recent, -> { order('starts DESC').limit(10) }
+  scope :recent, -> { joins(:bestellrunde).order('bestellrunden.starts DESC').limit(10) }
 
   delegate :starts, to: :bestellrunde, :allow_nil => true
 
@@ -248,6 +248,7 @@ class Order < ActiveRecord::Base
   end
 
   def ends=(value)
+    raise 'No longer supported'
     self.end_date = value
   end
 
