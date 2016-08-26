@@ -1,20 +1,18 @@
-%h1 Bestellrunden
-
+- title t('.title')
 %table.table.table-striped
   %thead
     %tr
-      %th Start
-      %th Ende
-      %th Export
-      %th Depots
+      %th= t 'bestellrunden.start'
+      %th= t 'bestellrunden.end'
+      %th= t '.global_export'
+      %th= t '.depots_export'
 
   %tbody
     - @bestellrunden.each do |bestellrunde|
       %tr
         %td= format_date(bestellrunde.starts)
         %td= format_date(bestellrunde.ends)
-        %td= link_to 'export', distribution_export_bestellrunde_path(bestellrunde), class: 'btn btn-mini'
+        %td= link_to I18n.t('report.export'), distribution_export_bestellrunde_path(bestellrunde), class: 'btn btn-mini'
         %td
           - Depot.natural_order.each do |depot|
             = link_to depot.name, depot_export_bestellrunde_path(bestellrunde, depot_id: depot.id), class: 'btn btn-mini'
-

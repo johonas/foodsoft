@@ -560,6 +560,13 @@ en:
       others: Other
       payment: Finances
       tasks: Tasks
+  bestellrunden:
+    start: Start
+    end:  End
+    index:
+      title: Bestellrunden
+      global_export: Overview
+      depots_export: Depots
   deliveries:
     add_stock_change:
       how_many_units: 'How many units (%{unit}) to deliver? Stock article name: %{name}.'
@@ -828,6 +835,9 @@ en:
       workgroup:
         edit: Edit group
         show_tasks: Show all tasks
+  report:
+    no_data: This report contains no data
+    export: Export
   group_order_articles:
     form:
       amount_change_for: Change amount for %{article}
