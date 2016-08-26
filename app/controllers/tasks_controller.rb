@@ -49,6 +49,7 @@ class TasksController < ApplicationController
 
   def update
     @task = Task.find(params[:id])
+    raise 'no allowed' unless current_user.can_update_task?(@task)
     task_group = @task.periodic_task_group
     was_periodic = @task.periodic?
     prev_due_date = @task.due_date
@@ -71,6 +72,7 @@ class TasksController < ApplicationController
 
   def destroy
     task = Task.find(params[:id])
+    raise 'no allowed' unless current_user.can_update_task?(task)
     # Save user_ids to update apple statistics after destroy
     user_ids = task.user_ids
     if params[:periodic]
@@ -103,8 +105,9 @@ class TasksController < ApplicationController
   end
 
   def set_done
-    raise "no allowed" unless current_user.can_finish_task?
-    Task.find(params[:id]).update_attribute :done, true
+    task = Task.find(params[:id])
+    raise 'no allowed' unless current_user.can_update_task?(task)
+    task.update_attribute :done, true
     redirect_to tasks_url, :notice => I18n.t('tasks.set_done.notice')
   end
 

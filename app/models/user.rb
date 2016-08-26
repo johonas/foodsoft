@@ -165,8 +165,13 @@ class User < ActiveRecord::Base
   end
 
   def can_finish_task?
-    role_verteilen? || role_admin? || role_orders? || role_finance?
+
   end
+
+  def can_update_task?(task)
+    role_admin? || (task.workgroup && member_of?(task.workgroup))
+  end
+
 
   def ordergroup_name
     ordergroup ? ordergroup.name : I18n.t('model.user.no_ordergroup')
