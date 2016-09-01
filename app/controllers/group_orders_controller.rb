@@ -56,6 +56,8 @@ class GroupOrdersController < ApplicationController
     # get only orders belonging to the ordergroup
     @closed_orders = Order.closed.order('id desc').page(params[:page]).per(10)
 
+    @bestellrunden = Bestellrunde.all.order('id desc').page(params[:page]).per(10)
+
     respond_to do |format|
       format.html # archive.html.haml
       format.js   # archive.js.erb

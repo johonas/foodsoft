@@ -1,0 +1,9 @@
+.modal.fade
+  .modal-header
+    %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+    %h3 Title
+  .modal-body
+    Body
+  .modal-footer
+    %button.btn{"aria-hidden" => "true", "data-dismiss" => "modal"} Abbrechen
+    = link_to 'Export', for_depot_bestellrunde_path(@bestellrunde, :depot_id => current_user.ordergroup.depot.id, :format => :xlsx), :class => "btn btn-primary"

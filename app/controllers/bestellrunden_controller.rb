@@ -1,5 +1,6 @@
 class BestellrundenController < InheritedResources::Base
-  before_filter :authenticate_verteilen
+  before_filter :authenticate_verteilen, :except => :for_depot
+
 
   def index
     @bestellrunden = Bestellrunde.all
@@ -19,6 +20,18 @@ class BestellrundenController < InheritedResources::Base
     rescue Reports::NoDataException
       redirect_to bestellrunden_path, flash: { error: I18n.t('report.no_data') }
     end
+  end
+
+  def for_depot
+    @bestellrunde = Bestellrunde.find(params[:id])
+
+    respond_to do |format|
+      format.html { render partial: 'for_depot' }
+      format.xlsx do
+        # TODO export data as xls
+      end
+    end
+
   end
 
   private

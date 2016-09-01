@@ -1,0 +1,32 @@
+- title t('.title')
+%table.table.table-striped
+  %thead
+    %tr
+      %th= t 'bestellrunden.start'
+      %th= t 'bestellrunden.end'
+      %th.min
+
+  %tbody
+    - @bestellrunden.each do |bestellrunde|
+      %tr
+        %td= format_date(bestellrunde.starts)
+        %td= format_date(bestellrunde.ends)
+        %td
+          = link_to '', for_depot_bestellrunde_path(bestellrunde, :depot_id => current_user.ordergroup.depot.id), :class => [:'icon-search', :show_ordergroup]
+
+
+
+:javascript
+  $( document ).ready(function() {
+    $('.show_ordergroup').bind('click', function(event) {
+      event.preventDefault();
+
+      var target = $(event.currentTarget);
+
+      $.get(target.attr('href'), function(response) {
+        $(response).modal("show");
+      });
+
+      return false;
+    });
+  });

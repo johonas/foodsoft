@@ -7,6 +7,9 @@
     %h2= t '.title_open'
     = render :partial => "orders", :locals => {:orders => Order.finished_not_closed, :pagination => false}
 
+    %h2= t '.title_bestellrunden'
+    = render :partial => "bestellrunden"
+
   .span6
     %h2= t '.title_closed'
     #closed_orders

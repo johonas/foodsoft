@@ -34,6 +34,7 @@ de:
         tax: MwSt
         unit_quantity: Gebindegröße
       bestellrunde:
+        date: Datum
         starts: Von
         ends: Bis
       delivery:
@@ -879,6 +880,7 @@ de:
       title: Bestellungen der %{group}
       title_closed: abgerechnet
       title_open: beendet/nicht abgerechnet
+      title_bestellrunden: Bestellrunden
     create:
       error_general: Die Bestellung konnte nicht aktualisiert werden, da ein Fehler auftrat.
       error_stale: In der Zwischenzeit hat jemand anderes auch bestellt, daher konnte die Bestellung nicht aktualisiert werden.
