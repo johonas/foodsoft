@@ -3,7 +3,7 @@ class BestellrundenController < InheritedResources::Base
 
 
   def index
-    @bestellrunden = Bestellrunde.all
+    @bestellrunden = Bestellrunde.order('id desc').all
   end
 
   def distribution_export
@@ -24,11 +24,14 @@ class BestellrundenController < InheritedResources::Base
 
   def for_depot
     @bestellrunde = Bestellrunde.find(params[:id])
+    @ordergroup = current_user.ordergroup
 
     respond_to do |format|
       format.html { render partial: 'for_depot' }
       format.xlsx do
-        # TODO export data as xls
+
+        filename = "#{I18n.t('bestellrunde.show.title') % { :label => @bestellrunde.label }}.xlsx".gsub(' ', '')
+        Reports::BestellrundeDepotOverview.new(@bestellrunde, @ordergroup, filename).generate.send(self)
       end
     end
 

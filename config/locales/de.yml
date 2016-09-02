@@ -361,6 +361,9 @@ de:
       error_members_only: Diese Aktion ist nur für Mitglieder der Gruppe erlaubt!
       error_plugin_disabled: Diese Funktion ist derzeit nicht aktiviert.
       error_token: Zugriff verweigert (ungültiger Token)!
+  bestellrunde:
+    show:
+      title: 'Bestellrunde: %{label}'
   article_categories:
     create:
       notice: Die Kategorie wurde gespeichert
