@@ -248,7 +248,9 @@ class Order < ActiveRecord::Base
   end
 
   def ends=(value)
-    raise 'No longer supported'
+    # TODO clean this up, order.ends is no longer needed as we have 'bestellrunden' now.
+    # e.g. clean up finish!-method
+    # raise 'No longer supported'
     self.end_date = value
   end
 
