@@ -24,8 +24,7 @@
           - suppliers.each do |supplier, order_articles|
 
             %tr.article-category
-            %td
-              %h3= supplier.name
+            %td{ style: 'font-weight: bold'}= supplier.name
             %td{colspan: "9"}
 
             - order_articles.each do |oa|
@@ -33,7 +32,7 @@
               - r = get_order_results(oa, group_order.id)
               - next unless r[:quantity] + r[:tolerance] > 0
 
-              %tr{class: cycle('even', 'odd', name: 'articles') + " " + order_article_class_name(r[:quantity], r[:tolerance], r[:result])}
+              %tr
                 %td{style: "width:40%"}
                   = oa.article.name
                 %td= "#{oa.price.unit_quantity} x #{oa.article.unit}"
@@ -53,9 +52,9 @@
 
         %tr{class: cycle('even', 'odd', name: 'articles')}
           %th{colspan: "5"}
-            %h3= heading_helper GroupOrder, :price
+            %h4= heading_helper GroupOrder, :price
           %th
-            %h3= number_to_currency(overall_total)
+            %h4= number_to_currency(overall_total)
 
 
   .modal-footer
