@@ -87,4 +87,15 @@ class GroupOrder < ActiveRecord::Base
     end
   end
 
+  def order_articles_by_suppliers
+    articles = {}
+
+    order_articles.each do |order_article|
+      articles[order_article.article.supplier] ||= []
+      articles[order_article.article.supplier] << order_article
+    end
+
+    return articles
+  end
+
 end

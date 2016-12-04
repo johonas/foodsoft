@@ -21,6 +21,8 @@ module Reporting
       set_style :date,          { :format_code => 'dd.mm.yyyy' }, :bordered
       set_style :integer,       { :format_code => '#,##0' },      :bordered
 
+      set_style :currency,       { :format_code => '#,##0.00' },  :bordered
+
       set_style :group_sum,     { :bg_color => BG_COLOR_GROUP_SUM, :b => true },                                  :bordered
       set_style :total_sum,     { :bg_color => BG_COLOR_TOTAL_SUM, :b => true, :fg_color => FG_COLOR_TOTAL_SUM }, :bordered
       set_style :footnote, { :sz => 8 }
