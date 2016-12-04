@@ -18,7 +18,6 @@ class Task < ActiveRecord::Base
   validates :name, :presence => true, :length => { :minimum => 3 }
   validates :required_users, :presence => true
   validates_numericality_of :duration, :required_users, :only_integer => true, :greater_than => 0
-  validates_length_of :description, maximum: 250
   validates :done, exclusion: { in: [true] }, if: :periodic?, on: :create
 
   before_save :exclude_from_periodic_task_group, if: :changed?, unless: :new_record?
