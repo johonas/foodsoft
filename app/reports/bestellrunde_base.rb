@@ -20,6 +20,7 @@ module Reports
       data = {}
 
       @bestellrunde.orders.each do |order|
+
         order.group_orders.each do |group_order|
 
           depot = group_order.ordergroup.depot
@@ -27,6 +28,8 @@ module Reports
           raw_data[depot] ||= {}
           group_order.group_order_articles.each do |group_order_article|
             article = group_order_article.order_article.article
+
+            article.stock = order.stockit?
 
             raw_data[depot][article] ||= {}
             raw_data[depot][article][group_order.ordergroup] = group_order_article.result
@@ -42,6 +45,7 @@ module Reports
         articles.each do |article, ordergroups|
           article_row = {}
           article_row[:product] = article.name
+          article_row[:stock] = article.stock ? 'x' : ''
           article_row[:producer] = article.supplier.name
           article_row[:unit] = article.unit
 

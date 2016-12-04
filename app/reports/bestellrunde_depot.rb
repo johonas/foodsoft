@@ -11,12 +11,13 @@ module Reports
 
         data = { ordergroups: ordergroups, articles: articles}
         super(sheet, data, bestellrunde)
-        @fixed_cols = 2
+        @fixed_cols = 3
         @first_data_row = 4
       end
 
       def define_columns
         column :product, 'Produkt', width: 35
+        column :stock, 'Lager', width: 3
         column :unit, 'Einheit', width: 8
 
         @ordergroups.each do |ordergroup|

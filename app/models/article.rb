@@ -67,6 +67,8 @@ class Article < ActiveRecord::Base
   before_save :update_price_history
   before_destroy :check_article_in_use
 
+  attr_accessor :stock
+
   # The financial gross, net plus tax and deposti
   def gross_price
     ((price + deposit) * (tax / 100 + 1)).round(2)
