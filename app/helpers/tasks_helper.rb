@@ -15,6 +15,10 @@ module TasksHelper
   end
 
   def task_title(task)
-    I18n.t('helpers.tasks.task_title', name: task.name, duration: task.duration)
+    if task.duration
+      return I18n.t('helpers.tasks.task_title', name: task.name, duration: task.duration)
+    else
+      return task.name
+    end
   end
 end

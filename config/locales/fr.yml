@@ -1477,7 +1477,7 @@ fr:
       supplier:
         min_order_quantity: Ce prix minimum sera affiché avec la liste de commande et permet de motiver les membres
       task:
-        duration: Combien de temps dure le boulot, 1 à 3 heures
+        duration: Combien de temps dure le boulot, 1 à 6 heures
         required_users: De combien de personnes avons-nous besoin au total?
       tax: En pourcentage, le standard est de 7,0
     labels:

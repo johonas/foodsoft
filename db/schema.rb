@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161204135438) do
+ActiveRecord::Schema.define(version: 20170523134308) do
 
   create_table "article_categories", force: :cascade do |t|
     t.string "name",        limit: 255, default: "", null: false
@@ -342,7 +342,7 @@ ActiveRecord::Schema.define(version: 20161204135438) do
     t.datetime "created_on",                                           null: false
     t.datetime "updated_on",                                           null: false
     t.integer  "required_users",         limit: 4,     default: 1
-    t.integer  "duration",               limit: 4,     default: 1
+    t.integer  "duration",               limit: 4
     t.integer  "periodic_task_group_id", limit: 4
   end
 
