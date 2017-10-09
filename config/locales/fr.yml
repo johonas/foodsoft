@@ -146,6 +146,7 @@ fr:
         required_users: Nombre de personnes nécessaires
         user_list: Responsables inscritEs
         workgroup: "Équipe"
+        copy:
       user:
         email: Email
         first_name: Prénom

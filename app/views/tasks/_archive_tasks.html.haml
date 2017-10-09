@@ -8,6 +8,7 @@
       %th= heading_helper Task, :due_date
       %th= heading_helper Task, :name
       %th= heading_helper Task, :user_list
+      %th= heading_helper Task, :copy
       %th
   %tbody
     - @tasks.each do |task|
@@ -15,3 +16,4 @@
         %td= task.due_date unless task.due_date.nil?
         %td= link_to task_title(task), task_path(task)
         %td= task_assignments task
+        %td= link_to '', new_task_path(:clone => task.id ), class: 'btn btn-md icon icon-copy'

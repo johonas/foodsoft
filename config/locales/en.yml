@@ -147,6 +147,7 @@ en:
         required_users: People required
         user_list: Responsible users
         workgroup: Workgroup
+        copy: Copy
       user:
         email: Email
         first_name: First name

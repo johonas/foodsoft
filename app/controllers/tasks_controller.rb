@@ -1,7 +1,5 @@
 # encoding: utf-8
 class TasksController < ApplicationController
-  #auto_complete_for :user, :nick
-
   def index
     @q = Task.non_group.includes(assignments: :user).ransack(params[:q])
     @q.sorts = 'due_date asc' if @q.sorts.empty?
@@ -22,7 +20,14 @@ class TasksController < ApplicationController
   end
 
   def new
-    @task = Task.new(current_user_id: current_user.id)
+    if params[:clone]
+      @task = Task.find(params[:clone]).dup
+      @task.current_user_id = current_user.id
+      @task.due_date = nil
+      @task.done = false
+    else
+      @task = Task.new(current_user_id: current_user.id)
+    end
   end
 
   def create

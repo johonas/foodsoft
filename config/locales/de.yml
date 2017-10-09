@@ -158,6 +158,7 @@ de:
         required_users: Anzahl
         user_list: Verantwortlichen
         workgroup: Arbeitsgruppe
+        copy: Kopieren
       user:
         email: E-Mail
         first_name: Vorname

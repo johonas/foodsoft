@@ -34,7 +34,6 @@ class Task < ActiveRecord::Base
     user.tasks.undone.where(assignments: {accepted: true})
   end
 
-
   # find all tasks in the period (or another number of days)
   def self.next_assigned_tasks_for(user, number = FoodsoftConfig[:tasks_period_days].to_i)
     user.tasks.undone.where(assignments: {accepted: true}).

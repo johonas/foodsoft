@@ -8,7 +8,6 @@ class ApplicationController < ActionController::Base
   after_filter  :remove_controller
   around_filter :set_time_zone, :set_currency
 
-  
   # Returns the controller handling the current request.
   def self.current
     Thread.current[:application_controller]

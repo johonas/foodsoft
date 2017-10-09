@@ -146,6 +146,7 @@ nl:
         required_users: Aantal mensen
         user_list: Verantwoordelijken
         workgroup: Werkgroep
+        copy:
       user:
         email: Email
         first_name: Voornaam
