@@ -14,9 +14,9 @@ module Reporting
       @style_definitions = {}
       @global_options = {}
 
-      set_style :bordered,      { :sz => 9, :border => { :style => :thin, :color => '000000', :edges => [:top, :bottom] } }
+      set_style :bordered,      { :sz => 8, :border => { :style => :thin, :color => '000000', :edges => [:top, :right, :bottom, :left] } }
       set_style :title,         { :sz => 15 }
-      set_style :column_header, { :b => true }
+      set_style :column_header, { :sz => 8, :b => true, :bg_color => '4F81BD', :fg_color => 'FFFFFF' }, :bordered
       set_style :percentage,    { :format_code => '0.0 \%' },     :bordered
       set_style :date,          { :format_code => 'dd.mm.yyyy' }, :bordered
       set_style :integer,       { :format_code => '#,##0' },      :bordered

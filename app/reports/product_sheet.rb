@@ -2,6 +2,8 @@ module Reports
   class ProductSheet < Reporting::TableXlsReport
     include ApplicationHelper
 
+    ODD_COLOR = 'DCE6F1'
+
     def initialize(sheet, data, bestellrunde, hide: [])
       super(sheet)
 
@@ -23,20 +25,26 @@ module Reports
         end
       end
 
-
       @ordergroups_count = @ordergroups.count
 
-      set_style :tbl_bordered, { :sz => 9, :border => { :style => :thin, :color => '000000', :edges => [:top, :bottom, :left] } }
+      set_style :column_header_vertical, { :alignment => { :textRotation => 90, :horizontal => :right } }, :column_header
 
-      set_style :column_header_vertical_nb, { :alignment => { :textRotation => 90, :horizontal => :center } }, :column_header
-      set_style :column_header_vertical, { :border => { :style => :thin, :color => '000000', :edges => [ :left] }}, :column_header_vertical_nb
+      set_style :quantity, { :alignment => { :horizontal => :right } }, :bordered
+      set_style :total, { :b => true }, :quantity
+      set_style :total_odd, { :b => true, :bg_color => ODD_COLOR }, :quantity
 
-      set_style :quantity, { :alignment => { :horizontal => :left } }, :tbl_bordered
+      set_style :stock_header, { :alignment => { :horizontal => :left } }, :column_header_vertical
+      set_style :stock, { :alignment => { :horizontal => :left } }, :bordered
 
-      set_style :stock, { :alignment => { :horizontal => :center } }, :bordered
+      set_style :stock_active, { :bg_color => 'E2E2E2' }, :bordered
+      set_style :total_stock_active, { :b => true }, :stock_active
+
 
       set_style :title, { b: true }
       set_style :subtitle, {}, :title
+
+      set_style :row_odd, { :bg_color => ODD_COLOR }, :bordered
+
     end
 
     def define_columns
@@ -49,7 +57,7 @@ module Reports
         column ordergroup, ordergroup, :style => :quantity, :width => 3
       end
 
-      column :sum, 'Total Depot', :style => :quantity, :width => 3
+      column :sum, 'Total Depot', :style => :total, :width => 3
     end
 
     def data
@@ -73,7 +81,7 @@ module Reports
 
     def post_process
       # set column headers
-      sheet.rows[@first_data_row - 1].cells[1].style = styles.column_header_vertical_nb
+      sheet.rows[@first_data_row - 1].cells[1].style = styles.stock_header
 
       (@ordergroups_count + 1).times do |ordergroup_index|
         cell_index = @fixed_cols + ordergroup_index
@@ -88,7 +96,23 @@ module Reports
 
         value = "=SUM(#{from}#{row_index + 1}:#{to}#{row_index + 1})"
         sheet.rows[row_index].cells[@fixed_cols + @ordergroups_count].value = value
+
+        # Set background color
+        if (row_index % 2 != 0)
+          colorize_row(row_index,styles.row_odd, styles.total_odd)
+        end
+
+        if sheet.rows[row_index].cells[1].value == 'x'
+          colorize_row(row_index,styles.stock_active, styles.total_stock_active)
+        end
       end
+    end
+
+    def colorize_row(row_index, odd_style, total_style)
+      (@fixed_cols + @ordergroups_count).times do |c_index|
+        sheet.rows[row_index].cells[c_index].style = odd_style
+      end
+      sheet.rows[row_index].cells[@fixed_cols + @ordergroups_count].style = total_style
     end
   end
 end
