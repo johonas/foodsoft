@@ -103,6 +103,7 @@ nl:
         description: Omschrijving
         ignore_apple_restriction: Bestelstop vanwege appelpunten negeren
         last_order: Laatste bestelling
+        done_tasks:
         name: Naam
         user_tokens: Leden
       page:

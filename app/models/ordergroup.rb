@@ -25,6 +25,7 @@ class Ordergroup < Group
   def contact
     "#{contact_phone} (#{contact_person})"
   end
+
   def non_members
     User.natural_order.all.reject { |u| (users.include?(u) || u.ordergroup) }
   end
@@ -32,6 +33,17 @@ class Ordergroup < Group
   # the most recent order this ordergroup was participating in
   def last_order
     orders.joins(:bestellrunde).order('bestellrunden.starts DESC').first
+  end
+
+  def tasks_done_for(bestellrunde)
+    count = 0
+    users.each do |user|
+      tasks = user.tasks.done.where(assignments: {accepted: true}).
+        where(["tasks.due_date >= ? AND tasks.due_date <= ?", (bestellrunde.starts - 3.month), (bestellrunde.ends + 3.month)])
+      count += tasks.count
+    end
+
+    return count
   end
 
   def value_of_open_orders(exclude = nil)
