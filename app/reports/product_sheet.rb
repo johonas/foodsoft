@@ -14,7 +14,7 @@ module Reports
 
       set_global_options header_height: 90
 
-      @articles     = data[:articles]
+      @articles     = data[:articles].sort_by { |a| a[:supplier] }
       @bestellrunde = bestellrunde
       @hide = hide
 
