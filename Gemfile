@@ -76,8 +76,7 @@ group :development do
   
   # Better error output
   gem 'better_errors'
-  gem 'binding_of_caller'
-  # gem "rails-i18n-debug"
+  #gem 'binding_of_caller'
   # chrome debugging extension https://github.com/dejan/rails_panel
   gem 'meta_request'
   
