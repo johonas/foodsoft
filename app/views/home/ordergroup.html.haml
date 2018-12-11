@@ -7,12 +7,17 @@
       - unless @ordergroup.description.blank?
         %p= @ordergroup.description
       %p
-        %b= heading_helper(Ordergroup, :available_funds) + ':'
-        = number_to_currency(@ordergroup.get_available_funds())
+        %b= heading_helper(Ordergroup, :account_balance) + ':'
+        = number_to_currency(@ordergroup.account_balance)
+      - unless FoodsoftConfig[:charge_members_manually]
+        %p
+          %b= heading_helper(Ordergroup, :available_funds) + ':'
+          = number_to_currency(@ordergroup.get_available_funds())
       %p
         %b= heading_helper(Ordergroup, :user_tokens) + ':'
         = @ordergroup.memberships.map{|m| show_user m.user}.join(', ')
-      = link_to t('.invite'), new_invite_path(:id => @ordergroup), :remote => true, class: 'btn btn-primary'
+      - unless FoodsoftConfig[:disable_invite]
+        = link_to t('.invite'), new_invite_path(:id => @ordergroup), :remote => true, class: 'btn btn-primary'
   .span8
     %h2= t('.account_summary')
     .well.well-small

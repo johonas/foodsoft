@@ -1,3 +1,7 @@
+# Foodsoft production configuration.
+#
+# This file is in the public domain.
+
 Foodsoft::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -20,7 +24,7 @@ Foodsoft::Application.configure do
   # config.action_dispatch.rack_cache = true
 
   # Disable Rails's static asset server (Apache or nginx will already do this).
-  config.serve_static_files = false
+  config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
@@ -40,7 +44,7 @@ Foodsoft::Application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  config.force_ssl = ENV["RAILS_FORCE_SSL"] != "false"
 
   # Set to :debug to see everything in the log.
   config.log_level = :info
@@ -49,7 +53,13 @@ Foodsoft::Application.configure do
   # config.log_tags = [ :subdomain, :uuid ]
 
   # Use a different logger for distributed setups.
-  # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
+  # https://github.com/heroku/rails_12factor/issues/25#issuecomment-231103483
+  if ENV["RAILS_LOG_TO_STDOUT"].present?
+    STDOUT.sync      = true
+    logger           = ActiveSupport::Logger.new(STDOUT)
+    logger.formatter = config.log_formatter
+    config.logger    = ActiveSupport::TaggedLogging.new(logger)
+  end
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -78,8 +88,20 @@ Foodsoft::Application.configure do
   # Configure hostname for action mailer (can be overridden in foodcoop config)
   config.action_mailer.default_url_options = { host: `hostname -f`, protocol: 'https' }
 
-  # Use sendmail to avoid ssl cert problems
-  config.action_mailer.delivery_method = :sendmail
+  if ENV['SMTP_ADDRESS'].present?
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = { address: ENV['SMTP_ADDRESS'] }
+    config.action_mailer.smtp_settings[:port] = ENV['SMTP_PORT'] if ENV['SMTP_PORT'].present?
+    config.action_mailer.smtp_settings[:domain] = ENV['SMTP_DOMAIN'] if ENV['SMTP_DOMAIN'].present?
+    config.action_mailer.smtp_settings[:user_name] = ENV['SMTP_USER_NAME'] if ENV['SMTP_USER_NAME'].present?
+    config.action_mailer.smtp_settings[:password] = ENV['SMTP_PASSWORD'] if ENV['SMTP_PASSWORD'].present?
+    config.action_mailer.smtp_settings[:authentication] = ENV['SMTP_AUTHENTICATION'] if ENV['SMTP_AUTHENTICATION'].present?
+    config.action_mailer.smtp_settings[:enable_starttls_auto] = ENV['SMTP_ENABLE_STARTTLS_AUTO'] == 'true' if ENV['SMTP_ENABLE_STARTTLS_AUTO'].present?
+    config.action_mailer.smtp_settings[:openssl_verify_mode] = ENV['SMTP_OPENSSL_VERIFY_MODE'] if ENV['SMTP_OPENSSL_VERIFY_MODE'].present?
+  else
+    # Use sendmail as default to avoid ssl cert problems
+    config.action_mailer.delivery_method = :sendmail
+  end
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new

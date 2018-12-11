@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
     # check if there is a valid session and return the logged-in user (its object)
     if session[:user_id] && params[:foodcoop]
       # for shared-host installations. check if the cookie-subdomain fits to request.
-      @current_user ||= User.find_by_id(session[:user_id]) if session[:scope] == FoodsoftConfig.scope
+      @current_user ||= User.undeleted.find_by_id(session[:user_id]) if session[:scope] == FoodsoftConfig.scope
     end
   end
   helper_method :current_user
@@ -35,6 +35,17 @@ class ApplicationController < ActionController::Base
     session[:user_id] = user.id
     session[:scope] = FoodsoftConfig.scope  # Save scope in session to not allow switching between foodcoops with one account
     session[:locale] = user.locale
+  end
+
+  def login_and_redirect_to_return_to(user, *args)
+    login user
+    if session[:return_to].present?
+      redirect_to_url = session[:return_to]
+      session[:return_to] = nil
+    else
+      redirect_to_url = root_url
+    end
+    redirect_to redirect_to_url, *args
   end
 
   def logout
@@ -135,9 +146,19 @@ class ApplicationController < ActionController::Base
   #     end
   #
   def require_plugin_enabled(plugin)
-    unless plugin.enabled?
-      redirect_to root_path, alert: I18n.t('application.controller.error_plugin_disabled')
-    end
+    redirect_to_root_with_feature_disabled_alert unless plugin.enabled?
+  end
+
+  def require_config_enabled(config)
+    redirect_to_root_with_feature_disabled_alert unless FoodsoftConfig[config]
+  end
+
+  def require_config_disabled(config)
+    redirect_to_root_with_feature_disabled_alert if FoodsoftConfig[config]
+  end
+
+  def redirect_to_root_with_feature_disabled_alert
+    redirect_to root_path, alert: I18n.t('application.controller.error_feature_disabled')
   end
 
   # Redirect to the login page, used in authenticate, plugins can override this.
@@ -164,17 +185,16 @@ class ApplicationController < ActionController::Base
   # It uses the subdomain to select the appropriate section in the config files
   # Use this method as a before filter (first filter!) in ApplicationController
   def select_foodcoop
-    if FoodsoftConfig[:multi_coop_install]
-      if params[:foodcoop].present?
-        begin
-          # Set Config and database connection
-          FoodsoftConfig.select_foodcoop params[:foodcoop]
-        rescue => error
-          redirect_to root_url, alert: error.message
-        end
-      else
-        redirect_to root_url
-      end
+    return unless FoodsoftConfig[:multi_coop_install]
+
+    foodcoop = params[:foodcoop]
+    if foodcoop.blank?
+      FoodsoftConfig.select_default_foodcoop
+      redirect_to root_url
+    elsif FoodsoftConfig.allowed_foodcoop? foodcoop
+      FoodsoftConfig.select_foodcoop foodcoop
+    else
+      raise ActionController::RoutingError.new 'Foodcoop Not Found'
     end
   end
 

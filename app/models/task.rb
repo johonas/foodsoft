@@ -19,6 +19,7 @@ class Task < ActiveRecord::Base
   validates :required_users, :presence => true
   validates_numericality_of :duration, :required_users, :only_integer => true, :greater_than => 0, :allow_nil => true
   validates :done, exclusion: { in: [true] }, if: :periodic?, on: :create
+  validates_presence_of :due_date, if: :periodic?
 
   before_save :exclude_from_periodic_task_group, if: :changed?, unless: :new_record?
   after_save :update_ordergroup_stats
@@ -49,6 +50,16 @@ class Task < ActiveRecord::Base
     end
   end
 
+  def self.next_unassigned_tasks_for(user, max = 2)
+    periodic_task_group_count = {}
+    self.unassigned_tasks_for(user).reject do |item|
+      next false unless item.periodic_task_group
+      count = periodic_task_group_count[item.periodic_task_group] || 0
+      periodic_task_group_count[item.periodic_task_group] = count + 1
+      count >= max
+    end
+  end
+
   def periodic?
     begin
       !periodic_task_group.nil?
@@ -60,11 +71,11 @@ class Task < ActiveRecord::Base
   def is_assigned?(user)
     self.assignments.detect {|ass| ass.user_id == user.id }
   end
-  
+
   def is_accepted?(user)
     self.assignments.detect {|ass| ass.user_id == user.id && ass.accepted }
   end
-  
+
   def enough_users_assigned?
     assignments.to_a.count(&:accepted) >= required_users ? true : false
   end

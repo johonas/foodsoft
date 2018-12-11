@@ -1,15 +1,15 @@
-- if User.count > 20
+- if User.undeleted.count > 20
   = items_per_page
 = pagination_links_remote @users
 %table.table.table-striped
   %thead
     %tr
-      %th= sort_link(@q, :first_name, [:first_name, 'last_name asc'], t('User.name'))
       - if FoodsoftConfig[:use_nick]
-        %th= sort_link(@q, :nick)
-      %th= sort_link(@q, :email)
+        %th= heading_helper User, :nick
+      %th= heading_helper User, :name
+      %th= heading_helper User, :email
       %th= t 'admin.access_to'
-      %th= sort_link(@q, :last_activity)
+      %th= heading_helper User, :last_activity
       %th(colspan="2")= t 'ui.actions'
   %tbody
     - for user in @users
@@ -17,9 +17,17 @@
         %td= link_to show_user(user), [:admin, user]
         - if FoodsoftConfig[:use_nick]
           %td= user.name
-        %td= user.email
+        %td
+          = user.email
+          - if user.mail_delivery_status.any?
+            = link_to t('.show_email_problems'), admin_mail_delivery_status_index_path(email: user.email), class: 'btn btn-warning btn-mini'
         %td= format_roles(user, true)
         %td= format_time(user.last_activity)
         %td= link_to t('ui.edit'), edit_admin_user_path(user), class: 'btn btn-mini'
-        %td= link_to t('ui.delete'), [:admin, user], :data => {:confirm => t('admin.confirm', name: user.name)},
-            :method => :delete, class: 'btn btn-danger btn-mini'
+        %td
+          - if user.deleted?
+            = link_to t('ui.restore'), restore_admin_user_path(user), :data => {:confirm => t('ui.confirm_restore', name: user.name)},
+                :method => :post, class: 'btn btn-success btn-mini'
+          - else
+            = link_to t('ui.delete'), [:admin, user], :data => {:confirm => t('ui.confirm_delete', name: user.name)},
+                :method => :delete, class: 'btn btn-danger btn-mini'

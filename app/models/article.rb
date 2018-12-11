@@ -1,5 +1,6 @@
 # encoding: utf-8
 class Article < ActiveRecord::Base
+  include PriceCalculation
 
   # @!attribute name
   #   @return [String] Article name

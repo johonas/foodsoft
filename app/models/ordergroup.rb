@@ -5,6 +5,7 @@
 # Ordergroup have the following attributes, in addition to Group
 # * account_balance (decimal)
 class Ordergroup < Group
+  include CustomFields
 
   APPLE_MONTH_AGO = 6                 # How many month back we will count tasks and orders sum
 
@@ -28,6 +29,13 @@ class Ordergroup < Group
 
   def non_members
     User.natural_order.all.reject { |u| (users.include?(u) || u.ordergroup) }
+  end
+
+  def last_user_activity
+    last_active_user = users.order('users.last_activity DESC').first
+    if last_active_user
+      last_active_user.last_activity
+    end
   end
 
   # the most recent order this ordergroup was participating in
@@ -62,9 +70,9 @@ class Ordergroup < Group
 
   # Creates a new FinancialTransaction for this Ordergroup and updates the account_balance accordingly.
   # Throws an exception if it fails.
-  def add_financial_transaction!(amount, note, user)
-    transaction do      
-      t = FinancialTransaction.new(:ordergroup => self, :amount => amount, :note => note, :user => user)
+  def add_financial_transaction!(amount, note, user, link = nil)
+    transaction do
+      t = FinancialTransaction.new(ordergroup: self, amount: amount, note: note, user: user, financial_link: link)
       t.save!
       self.account_balance = financial_transactions.sum('amount')
       save!

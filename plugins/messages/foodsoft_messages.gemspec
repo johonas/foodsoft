@@ -17,7 +17,10 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "rails"
-  s.add_dependency "deface", "~> 1.0.0"
+  s.add_dependency "base32"
+  s.add_dependency "deface", "~> 1.0"
+  s.add_dependency "email_reply_trimmer"
+  s.add_dependency "mail"
 
   s.add_development_dependency "sqlite3"
 end

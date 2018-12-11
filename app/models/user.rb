@@ -3,9 +3,9 @@
 require 'digest/sha1'
 # specific user rights through memberships (see Group)
 class User < ActiveRecord::Base
-  include RailsSettings::Extend
+  include CustomFields
   #TODO: acts_as_paraniod ??
-  
+
   has_many :memberships, :dependent => :destroy
   has_many :groups, :through => :memberships
   #has_one :ordergroup, :through => :memberships, :source => :group, :class_name => "Ordergroup"
@@ -18,9 +18,13 @@ class User < ActiveRecord::Base
   has_many :tasks, :through => :assignments
   has_many :send_messages, :class_name => "Message", :foreign_key => "sender_id"
   has_many :created_orders, :class_name => 'Order', :foreign_key => 'created_by_user_id', :dependent => :nullify
-
-  attr_accessor :password, :settings_attributes
+  has_many :mail_delivery_status, :class_name => 'MailDeliveryStatus', :foreign_key => 'email', :primary_key => 'email'
   
+  attr_accessor :password, :settings_attributes
+
+  scope :deleted, -> { where.not(deleted_at: nil) }
+  scope :undeleted, -> { where(deleted_at: nil) }
+
   # makes the current_user (logged-in-user) available in models
   cattr_accessor :current_user
   
@@ -38,6 +42,8 @@ class User < ActiveRecord::Base
   validates_length_of :nick, :in => 2..25, :allow_nil => true, :unless => Proc.new { FoodsoftConfig[:use_nick] }
   validates_length_of :nick, :in => 2..25, :allow_nil => false, :if => Proc.new { FoodsoftConfig[:use_nick] }
   validates_uniqueness_of :nick, :case_sensitive => false, :allow_nil => true # allow_nil in length validation
+  validates_format_of :iban, :with => /\A[A-Z]{2}[0-9]{2}[0-9A-Z]{,30}\z/, :allow_blank => true
+  validates_uniqueness_of :iban, :case_sensitive => false, :allow_blank => true
 
   before_validation :set_password
   after_initialize do
@@ -143,7 +149,12 @@ class User < ActiveRecord::Base
   def role_finance?
     groups.detect {|group| group.role_finance?}
   end
-  
+
+  # Checks the invoices role
+  def role_invoices?
+    groups.detect {|group| group.role_invoices?}
+  end
+
   # Checks the article_meta role
   def role_article_meta?
     groups.detect {|group| group.role_article_meta?}
@@ -185,6 +196,18 @@ class User < ActiveRecord::Base
   #Returns an array with the users groups (but without the Ordergroups -> because tpye=>"")
   def member_of_groups()
      self.groups.where(type: '')
+  end
+
+  def deleted?
+    deleted_at.present?
+  end
+
+  def mark_as_deleted
+    update_column :deleted_at, Time.now
+  end
+
+  def restore
+    update_column :deleted_at, nil
   end
 
   def self.authenticate(login, password)

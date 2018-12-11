@@ -28,8 +28,8 @@ class Page < ActiveRecord::Base
     permalink == "Home"
   end
 
-  def public_front_page?
-    permalink == "Public_frontpage"
+  def self.dashboard
+    where(permalink: "Dashboard").first
   end
 
   def self.public_front_page
@@ -41,11 +41,11 @@ class Page < ActiveRecord::Base
       self.permalink = Page.count == 0 ? "Home" : Page.permalink(title)
     end
   end
-  
+
   def diff
     current = versions.latest
     old = versions.where(["page_id = ? and lock_version < ?", current.page_id, current.lock_version]).order('lock_version DESC').first
-    
+
     if old
       o = ''
       Diffy::Diff.new(old.body, current.body).each do |line|
@@ -79,4 +79,3 @@ class Page < ActiveRecord::Base
     end
   end
 end
-

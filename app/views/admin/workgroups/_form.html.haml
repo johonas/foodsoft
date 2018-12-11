@@ -1,12 +1,15 @@
-%p= t('.first_paragraph', url: link_to(t('.here'), new_invite_path(id: @workgroup.id), remote: true)).html_safe
+- unless FoodsoftConfig[:disable_invite]
+  %p= t('.first_paragraph', url: link_to(t('.here'), new_invite_path(id: @workgroup.id), remote: true)).html_safe
 = simple_form_for [:admin, @workgroup] do |f|
   - captured = capture do
+    = render 'shared/custom_form_fields', f: f, type: :workgroup
     %h4= t 'admin.access_to'
     = f.input :role_suppliers
     = f.input :role_article_meta
     = f.input :role_orders
     = f.input :role_finance
     = f.input :role_verteilen
+    = f.input :role_invoices
     = f.input :role_admin
   = render 'shared/group_form_fields', :f => f, captured: captured
   .form-actions

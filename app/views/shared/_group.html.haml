@@ -11,6 +11,12 @@
       = h group.depot.name if group.depot
   %dt= t('.access') + ':'
   %dd= format_roles(group)
+  - if group.break_start? or group.break_end?
+    %dt= heading_helper(Ordergroup, :break) + ':'
+    %dd= raw t '.break', start: format_date(group.break_start), end: format_date(group.break_end)
+  - if group.is_a?(Workgroup)
+    %dt= t('.access') + ':'
+    %dd= format_roles(group)
   %dt= heading_helper(Ordergroup, :user_tokens) + ':'
   %dd
     - members = group.users

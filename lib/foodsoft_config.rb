@@ -60,7 +60,7 @@ class FoodsoftConfig
     # @param filename [String] Override configuration file
     def init(filename = APP_CONFIG_FILE)
       Rails.logger.info "Loading app configuration from #{APP_CONFIG_FILE}"
-      APP_CONFIG.clear.merge! YAML.load(File.read(File.expand_path(filename, Rails.root)))
+      APP_CONFIG.clear.merge! YAML.load(ERB.new(File.read(File.expand_path(filename, Rails.root))).result)
       # Gather program-default configuration
       self.default_config = get_default_config
       # Load initial config from development or production
@@ -78,6 +78,15 @@ class FoodsoftConfig
     def select_foodcoop(foodcoop)
       set_config foodcoop
       setup_database
+      setup_mailing
+    end
+
+    def select_default_foodcoop
+      select_foodcoop config[:default_scope]
+    end
+
+    def select_multifoodcoop(foodcoop)
+      select_foodcoop foodcoop if config[:multi_coop_install]
     end
 
     # Return configuration value for the currently selected foodcoop.
@@ -134,16 +143,25 @@ class FoodsoftConfig
       keys.map(&:to_s).uniq
     end
 
+    # @return [Array<String>] Valid names of foodcoops.
+    def foodcoops
+      if config[:multi_coop_install]
+        APP_CONFIG.keys.reject { |coop| coop =~ /^(default|development|test|production)$/ }
+      else
+        [config[:default_scope]]
+      end
+    end
+
     # Loop through each foodcoop and executes the given block after setup config and database
     def each_coop
-      if config[:multi_coop_install]
-        APP_CONFIG.keys.reject { |coop| coop =~ /^(default|development|test|production)$/ }.each do |coop|
-          select_foodcoop coop
-          yield coop
-        end
-      else
-        yield config[:default_scope]
+      foodcoops.each do |coop|
+        select_multifoodcoop coop
+        yield coop
       end
+    end
+
+    def allowed_foodcoop?(foodcoop)
+      foodcoops.include? foodcoop
     end
 
     # @return [Boolean] Whether this key may be set in the database
@@ -201,6 +219,13 @@ class FoodsoftConfig
       database_config = ActiveRecord::Base.configurations[Rails.env]
       database_config = database_config.merge(config[:database]) if config[:database].present?
       ActiveRecord::Base.establish_connection(database_config)
+    end
+
+    def setup_mailing
+      [:protocol, :host, :port, :script_name].each do |k|
+        ActionMailer::Base.default_url_options[k] = self[k] if self[k]
+      end
+      ActionMailer::Base.default_url_options[:foodcoop] = scope
     end
 
     # Completes foodcoop configuration with program defaults.

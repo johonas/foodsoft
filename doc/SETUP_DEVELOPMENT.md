@@ -1,15 +1,14 @@
-Getting foodsoft running for development
-========================================
+# Getting Foodsoft running for development
 
 Gratulations, if you read this file locally, you have successfully cloned the
 foodsoft project from the git repository. Now you are only a few steps away
 from trying it out and then jumping into development.
 
-This document describes how to setup Foodsoft for development on your local system.
-Alternatively, you [run Foodsoft using Docker](SETUP_DOCKER.md). Or if you just want to
-run Foodsoft without changing its code, the
-[Turnkey Linux Foodsoft appliance](http://www.turnkeylinux.org/foodsoft) may be useful.
-
+This document describes how to setup Foodsoft for development within your local
+system. Another option is to use [docker for development](SETUP_DEVELOPMENT_DOCKER.md).
+If instead you just want to run Foodsoft without changing its code, please refer to
+[hosting](https://foodcoops.github.io/foodsoft-hosting/) or
+[deployment](https://github.com/foodcoops/foodsoft/wiki/Deployment-notes).
 
 **System requirements**:
 [RVM](https://rvm.io/rvm/install),
@@ -20,8 +19,7 @@ run Foodsoft without changing its code, the
 **Optional**:
 [Redis](http://redis.io/).
 
-Getting started
----------------
+### Getting started
 
 0. Clone the repository from GitHub:
 
@@ -48,10 +46,11 @@ Getting started
    [libxml2-dev](https://packages.debian.org/stable/libxml2-dev)
    [libxslt1-dev](https://packages.debian.org/stable/libxslt1-dev)
    [libffi-dev](https://packages.debian.org/stable/libffi-dev)
-   [libreadline-dev](https://packages.debian.org/stable/libreadline-dev):
+   [libreadline-dev](https://packages.debian.org/stable/libreadline-dev)
+   [libmagic-dev](https://packages.debian.org/stable/libmagic-dev):
 
         # Debian/Ubuntu
-        sudo apt-get install libv8-dev libmysqlclient-dev libxml2-dev libxslt1-dev libffi-dev libreadline-dev
+        sudo apt-get install libv8-dev libmysqlclient-dev libxml2-dev libxslt1-dev libffi-dev libreadline-dev libmagic-dev
 
    For CentOS/Redhat you need
    [v8](https://apps.fedoraproject.org/packages/v8)
@@ -59,10 +58,11 @@ Getting started
    [libxml2-devel](https://apps.fedoraproject.org/packages/libxml2-devel)
    [libxslt-devel](https://apps.fedoraproject.org/packages/libxslt-devel)
    [libffi-devel](https://apps.fedoraproject.org/packages/libffi-devel)
-   [readline-devel](https://apps.fedoraproject.org/packages/readline-devel):
+   [readline-devel](https://apps.fedoraproject.org/packages/readline-devel)
+   [file-devel](https://apps.fedoraproject.org/packages/file-devel):
 
         # CentOS/Redhat
-        sudo yum install v8 community-mysql-devel libxml2-devel libxslt-devel libffi-devel readline-devel
+        sudo yum install v8 community-mysql-devel libxml2-devel libxslt-devel libffi-devel readline-devel file-devel
 
 3. Install Ruby dependencies:
 
@@ -98,9 +98,7 @@ Getting started
 9. Have phun!
 
 
-
-Manual configuration
---------------------
+### Manual configuration
 
 The rake task `foodsoft:setup_development` helps you to setup foodsoft.
 If you want to have more control, you can do these steps manually as
@@ -139,18 +137,7 @@ explained here.
    Edit `app_config.yml` to suit your needs or just keep the defaults for now.
 
 
-4. **Secret token**
-
-   The user session are stored in cookies. Do avoid misusing the cookies and
-   its sensitive information, rails will encrypt it with a token. So copy the
-   config file
-
-        cp config/initializers/secret_token.rb.SAMPLE config/initializers/secret_token.rb
-
-   and modify the token!! You can run `bundle exec rake secret`
-
-
-5. **Create database (schema) and load defaults**
+4. **Create database (schema) and load defaults**
 
         rake db:setup
 
@@ -158,7 +145,7 @@ explained here.
    password 'secret'.
 
 
-6. (optional) Get **background jobs** done
+5. (optional) Get **background jobs** done
 
    Time intensive tasks may block the web request. To run these in a separate
    task, you can install Redis and enable Resque:
@@ -171,7 +158,7 @@ explained here.
    `resque-web`.
 
 
-7. (optional) **View mails in browser** instead in your logs
+6. (optional) **View mails in browser** instead in your logs
 
    We use mailcatcher in development mode to view all delivered mails in a
    browser interface.  Just install mailcatcher with gem install mailcatcher
@@ -182,3 +169,13 @@ explained here.
    From now on you have a smtp server listening on 1025. To see the emails go to
 
         http://localhost:1080
+
+
+## Docker
+
+To avoid having to go through setting up all dependencies, you can also run Foodsoft
+within a docker image. While the default [`Dockerfile`](../Dockerfile) is setup for production,
+[`Dockerfile.dev`](../Dockerfile.dev) is meant for development. Even better, you can
+use docker-compose (using [`docker-compose.dev.yml`](../docker-compose.dev.yml)) to
+setup the whole stack at once.
+

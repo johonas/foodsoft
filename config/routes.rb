@@ -39,6 +39,7 @@ Foodsoft::Application.routes.draw do
       member do
         post :finish
         post :add_comment
+        post :send_result_to_supplier
 
         get :receive
         post :receive
@@ -167,7 +168,13 @@ Foodsoft::Application.routes.draw do
         end
       end
 
-      resources :invoices
+      resources :invoices do
+        get :attachment
+        get :form_on_supplier_id_change, on: :collection
+        get :unpaid, on: :collection
+      end
+
+      resources :links, controller: 'financial_links', only: [:show]
 
       resources :ordergroups, only: [:index] do
         resources :financial_transactions, as: :transactions
@@ -184,6 +191,7 @@ Foodsoft::Application.routes.draw do
       root to: 'base#index'
 
       resources :users do
+        post :restore, on: :member
         post :sudo, on: :member
       end
 
@@ -201,6 +209,10 @@ Foodsoft::Application.routes.draw do
 
       resources :bestellrunden do
         get :memberships, on: :member
+      end
+
+      resources :mail_delivery_status, only: [:index, :show, :destroy] do
+        delete :index, on: :collection, action: :destroy_all
       end
 
       resource :config, only: [:show, :update] do

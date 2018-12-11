@@ -8,6 +8,8 @@
       %th= heading_helper Ordergroup, :name
       %th= heading_helper Ordergroup, :user_tokens
       %th= heading_helper Ordergroup, :depot
+      %th= heading_helper Ordergroup, :break
+      %th= heading_helper Ordergroup, :last_user_activity
       %th= heading_helper Ordergroup, :last_order
       %th= (heading_helper(Ordergroup, :done_tasks) + tag(:br) + " (#{format_date(Bestellrunde.last.starts)} - #{format_date(Bestellrunde.last.ends)})").html_safe
 
@@ -21,3 +23,9 @@
         %td= format_date ordergroup.last_order.try(:starts)
         %td= ordergroup.tasks_done_for(Bestellrunde.last)
 
+        - if ordergroup.break_start? or ordergroup.break_end?
+          %td= raw t '.break', start: format_date(ordergroup.break_start), end: format_date(ordergroup.break_end)
+        - else
+          %td
+        %td= format_date ordergroup.last_user_activity
+        %td= format_date ordergroup.last_order.try(:starts)

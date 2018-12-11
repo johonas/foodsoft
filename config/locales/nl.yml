@@ -37,6 +37,12 @@ nl:
         delivered_on: Leverdatum
         note: Notitie
         supplier: Leverancier
+      document:
+        created_at: Upload op
+        created_by_user_id: Upload door
+        data: Data
+        mime: MIME-type
+        name: Naam
       financial_transaction:
         amount: Bedrag
         created_on: Datum
@@ -54,28 +60,60 @@ nl:
         total_price: Som
       invoice:
         amount: Bedrag
+        attachment: Bijlage
+        created_at: Gemaakt op
+        created_by: Gemaakt door
         date: Factuurdatum
-        delivery: Levering
+        delete_attachment: Verwijder bijlage
+        deliveries: Levering
         deposit: Statiegeld in rekening gebracht
         deposit_credit: Statiegeld teruggekregen
+        net_amount: Bedrag gecorrigeerd voor statiegeld
         note: Notitie
         number: Nummer
-        order: Bestelling
+        orders: Bestelling
         paid_on: Betaald op
         supplier: Leverancier
+      mail_delivery_status:
+        created_at: Tijd
+        email: Email
+        message: Bericht
       message:
         body: Bericht
         group_id: Groep
+        messagegroup_id: Berichtengroep
+        order_id: Bestelling
+        ordergroup_id: Bestelgroep
         private: Privé
         recipient_tokens: Geadresseerden
-        sent_to_all: Aan alle leden sturen
+        send_method:
+          all: Verzenden naar alle leden
+          messagegroup: Verzenden naar leden van een berichtengroep
+          order: Verzenden naar leden die besteld hebben
+          ordergroup: Verzenden naar leden van een bestelgroep
+          recipients: Verzenden naar specifieke leden
+          workgroup: Verzenden naar leden van een werkgroep
+        send_to_all: Aan alle leden sturen
         subject: Onderwerp
+        workgroup_id: Werkgroep
+      messagegroup:
+        description: Omschrijving
+        name: Naam
+        user_tokens: Leden
       order:
+        boxfill: Dozen vullen na
         closed_by: Afgerekend door
         created_by: Geopend door
+        end_action: Sluitingsactie
+        end_actions:
+          auto_close: Bestelling sluiten
+          auto_close_and_send: Sluit de bestelling en verzend het naar de leverancier
+          auto_close_and_send_min_quantity: Sluit de bestelling en verzend het naar de leverancier als de minimum bestelhoeveelheid gehaald is
+          no_end_action: Geen automatische actie
         ends: sluit op
         name: Leverancier
         note: Notitie
+        pickup: Ophaaldag
         starts: Start op
         status: Status
         supplier: Leverancier
@@ -96,6 +134,8 @@ nl:
       ordergroup:
         account_balance: Tegoed
         available_funds: Beschikbaar tegoed
+        break: "(Laatste) pauze"
+        break_until: tot
         contact: Contact
         contact_address: Adres
         contact_person: Contactpersoon
@@ -104,6 +144,7 @@ nl:
         ignore_apple_restriction: Bestelstop vanwege appelpunten negeren
         last_order: Laatste bestelling
         done_tasks:
+        last_user_activity: Laatst actief
         name: Naam
         user_tokens: Leden
       page:
@@ -128,6 +169,7 @@ nl:
         delivery_days: Bezorgdagen
         email: Email
         fax: Fax
+        iban: IBAN
         is_subscribed: geabonneerd?
         min_order_quantity: Minimale bestelhoeveelheid
         min_order_quantity_short: Min. bestelling
@@ -151,6 +193,7 @@ nl:
       user:
         email: Email
         first_name: Voornaam
+        iban: IBAN
         last_activity: Laatst actief
         last_login: Laatste login
         last_name: Achternaam
@@ -169,6 +212,7 @@ nl:
         role_admin: Beheer
         role_article_meta: Artikelen
         role_finance: Financiën
+        role_invoices: Facturen
         role_orders: Bestellingen
         role_suppliers: Leveranciers
         user_tokens: Leden
@@ -195,6 +239,7 @@ nl:
       financial_transaction: Financiële transactie
       invoice: Factuur
       message: Bericht
+      messagegroup: Berichtengroep
       order: Bestelling
       order_article: Bestellingsartikel
       order_comment: Commentaar
@@ -237,13 +282,38 @@ nl:
         pdf_title: PDF documenten
       tab_messages:
         emails_title: Emailinstellingen
+      tab_payment:
+        schedule_title: Bestelrooster
       tab_tasks:
         periodic_title: Periodieke taken
       tabs:
         title: Configuratie
       update:
         notice: Configuratie opgeslagen.
-    confirm: Wil je %{name} daadwerkelijk wissen?
+    confirm: Weet je het zeker?
+    mail_delivery_status:
+      destroy_all:
+        notice: Alle emailproblemen zijn verwijderd
+      index:
+        destroy_all: Alle emailproblemen verwijderen
+        title: Emailproblemen
+    messagegroups:
+      destroy:
+        error: 'Berichtengroep kon niet verwijderd worden: %{error}'
+        notice: Berichtengroep is verwijderd
+      edit:
+        title: Bewerk berichtengroep
+      index:
+        first_paragraph: Hier kun je %{url} aanmaken, aanpassen en verwijderen.
+        new_messagegroup: Nieuwe berichtengroep maken
+        new_messagegroups: nieuwe berichtengroepen
+        second_paragraph: Een berichtengroep is als een mailing-lijst. Leden kunnen zich aan- en afmelden voor groepen waar ze in geïnteresseerd zijn vanuit hun profiel.
+        title: Berichtengroepen
+      new:
+        title: Berichtengroep aanmaken
+      show:
+        send_message: Bericht verzenden
+        title: Berichtengroep %{name}
     ordergroups:
       destroy:
         error: 'Huishouden kon niet als verwijderd gemarkeerd worden: %{error}'
@@ -271,24 +341,33 @@ nl:
     users:
       controller:
         sudo_done: Je bent nu ingelogd als %{user}. Wees voorzichtig, en vergeet niet uit te loggen als je klaar bent!
+      destroy:
+        error: 'Gebruiker kon niet verwijderd worden: %{error}'
+        notice: Gebruiker is verwijderd
       edit:
         title: Lid bewerken
       index:
         first_paragraph: Hier kun je gebruikers %{url}, bewerken en wissen.
         new_user: Nieuwe gebruiker
         new_users: toevoegen
+        show_deleted: Verwijderde gebruikers tonen
         title: Gebruikers admin
       new:
         title: Nieuwe gebruiker toevoegen
+      restore:
+        error: 'Gebruiker kon niet opnieuw actief gemaakt worden: %{error}'
+        notice: Gebruiker is opnieuw actief
       show:
-        confirm_delete: Wil je %{user} daadwerkelijk verwijderen?
         confirm_sudo: Als je doorgaat, neem je de identiteit aan van gebruiker %{user}. Vergeet hierna niet uit te loggen!
         groupabos: Groepslidmaatschappen
         member_since: Lid sinds %{time}
         person: Persoon
         preference: Voorkeuren
         send_message: Bericht versturen
+        show_email_problems: Bekijk emailproblemen
         sudo: Inloggen als
+      users:
+        show_email_problems: Bekijk emailproblemen
     workgroups:
       destroy:
         error: 'Werkgroep kon niet verwijderd worden: %{error}'
@@ -319,8 +398,8 @@ nl:
       error_authn: Inloggen vereist.
       error_denied: Je hebt geen toegang tot de gevraagde pagina. Als je denkt dat je dat wel zou moeten hebben, vraag dan een beheerder je die rechten te geven. Als je meerdere accounts hebt, wil je mogelijk %{sign_in}.
       error_denied_sign_in: inloggen als een andere gebruiker
+      error_feature_disabled: Deze optie is momenteel niet actief.
       error_members_only: Deze actie is alleen beschikbaar voor leden van de groep!
-      error_plugin_disabled: Deze optie is momenteel uitgeschakeld.
       error_token: Geen toegang (ongeldig token)!
   article_categories:
     create:
@@ -330,7 +409,6 @@ nl:
     edit:
       title: Categorie bewerken
     index:
-      confirm_delete: Weet je het zeker?
       new: Nieuwe categorie
       title: Categoriën
     new:
@@ -339,7 +417,6 @@ nl:
       notice: Categorie is bijgewerkt.
   articles:
     article:
-      confirm_delete: Weet je het zeker?
       last_update: 'laatst bijgewerkt: %{last_update} | bruto: %{gross_price}'
     articles:
       confirm_delete: Weet je zeker dat je alle artikelen wilt verwijderen?
@@ -458,12 +535,14 @@ nl:
   config:
     hints:
       applepear_url: Website waar het appelpunten systeem wordt uitgelegd.
+      charge_members_manually: Kies deze optie als je elders bijhoudt wie welke producten heeft gekregen (bijvoorbeeld op papier), en dat ook niet naderhand in Foodsoft invoert. Na het afrekenen van bestellingen moet je dan iedere keer bij leden handmatig het in rekening te brengen bedrag afschrijven (gebruik "Nieuwe transacties toevoegen"). Het blijft wel nodig bestellingen af te rekenen, maar dat brengt dan niets in rekening bij leden.
       contact:
         email: Algemeen contactadres, zowel voor op de website als in formulieren.
         street: Adres, meestal is dit het aflever- en ophaaladres.
       currency_space: Spatie toevoegen na valutasymbool.
       currency_unit: Valutasymbool voor het tonen van prijzen.
       custom_css: De layout van deze site kan gewijzigd worden door hier cascading stylesheets (CSS) in te voeren. Laat het leeg voor de standaardstijl.
+      documents_allowed_extension: Lijst van toegestane bestandsextensies, gescheiden door spaties.
       email_from: Emails zullen lijken verzonden te zijn vanaf dit email adres. Laat het veld leeg om het contactadres van de foodcoop te gebruiken.
       email_replyto: Vul dit in als je antwoord op mails van Foodsoft wilt ontvangen op een ander adres dan het bovenstaande.
       email_sender: Emails worden verzonden vanaf dit emailadres. Om te voorkomen dat emails als spam worden tegengehouden, is het te adviseren het adres van de webserver op te nemen in het SPF record van het email domein.
@@ -475,6 +554,9 @@ nl:
       minimum_balance: Leden kunnen slechts bestellen wanneer hun tegoed groter of gelijk is aan dit bedrag.
       name: De naam van de foodcoop.
       order_schedule:
+        boxfill:
+          recurr: Standaard rooster voor wanneer dozen vullen begint.
+          time: Standaard tijd voor wanneer dozen vullen begint.
         ends:
           recurr: Schema voor datum waarop de bestelling sluit.
           time: Standaard tijd wanneer de bestelling sluit.
@@ -492,12 +574,17 @@ nl:
       tax_default: Standaard BTW percentage voor nieuwe artikelen.
       tolerance_is_costly: Bestel zoveel artikelen als mogelijk in de tolerantie (in plaats van net genoeg om de laatste doos te vullen). Dit zorgt er ook voor dat de tolerantie in de prijs van open ledenbestellingen wordt meegenomen.
       use_apple_points: Wanneer het appelpunten systeem is geactiveerd, kunnen leden slechts bestellen wanneer ze meewerken aan taken.
+      use_boxfill: Wanneer dit aan staat, kunnen gebruikers aan het einde van de bestelfase hun bestelling alleen wijzigen als het de totale bestelling vergroot. Dit helpt om dozen te vullen. Bij de bestelling moet nog wel de dozen-vul-datum ingevuld worden.
+      use_current_orders: De current_orders plugin aanzetten. Hiermee kunnen leden met bestelling-toegang bestelaantallen van leden aanpassen in meerdere bestellingen tegelijk. Hiervoor zijn drie nieuwe items in het Bestellingen-menu. Bedoeld voor gebruik op een ophaaldag.
+      use_documents: Geeft een simpele manier om documenten te delen in het foodcoop menu.
+      use_iban: Om leverancier en gebruiker een extra veld te geven voor het internationale bankrekeningnummer (IBAN).
       use_messages: Laat leden met elkaar communiceren door middel van berichten binnen Foodsoft.
       use_nick: Toon bijnamen in plaats van volledige naam. Controleer dat iedereen een bijnaam heeft wanneer je dit aanzet.
       use_wiki: Gebruik wiki pagina's.
       webstats_tracking_code: Tracking code voor bezoeker statistieken (zoals Piwik of Google analytics). Leeg laten als geen tracking gewenst is.
     keys:
       applepear_url: Appelsysteem uitleg URL
+      charge_members_manually: Leden handmatig afrekenen
       contact:
         city: Stad
         country: Land
@@ -509,6 +596,8 @@ nl:
       currency_unit: Valuta
       custom_css: Aangepaste CSS
       default_locale: Standaardtaal
+      disable_invite: Uitnodigingen deactiveren
+      documents_allowed_extension: Toegestane extensies
       email_from: From adres
       email_replyto: Reply-to adres
       email_sender: Sender adres
@@ -520,6 +609,9 @@ nl:
       minimum_balance: Minimum tegoed
       name: Naam
       order_schedule:
+        boxfill:
+          recurr: Dozen vullen na
+          time: tijd
         ends:
           recurr: Bestelling sluit
           time: tijd
@@ -536,6 +628,10 @@ nl:
       time_zone: Tijdzone
       tolerance_is_costly: Tolerantie is duur
       use_apple_points: Appelpunten
+      use_boxfill: Dozen vullen fase
+      use_current_orders: Extra verdeelschermen
+      use_documents: Documenten delen
+      use_iban: IBAN gebruiken
       use_messages: Berichten
       use_nick: Bijnamen gebruiken
       use_wiki: Wiki gebruiken
@@ -549,6 +645,54 @@ nl:
       others: Overig
       payment: Financiën
       tasks: Taken
+  current_orders:
+    articles:
+      article:
+        counts: "%{ordergroups} huishoudens bestelden %{articles} verschillende artikelen."
+        no_selection: Kies een artikel om te zien wie het besteld heeft, of download verdeellijsten rechtsboven.
+      article_info:
+        from: van %{supplier}
+        origin_in: uit %{origin}
+        supplied_and_made_by: gemaakt door %{manufacturer}
+        supplied_by: van %{supplier}
+        supplied_by_made_by: van %{supplier} gemaakt door %{manufacturer}
+        unit: per %{unit}
+      form:
+        article_placeholder: Zoek artikelen...
+        current_orders: Alle huidige bestellingen
+      index:
+        title: Artikelen verdelen
+      ordergroups:
+        add_new: Huishouden toevoegen...
+        piece: st
+        unit: eenh
+      show:
+        title: "%{name} verdelen"
+    group_orders:
+      index:
+        title: Je huidige bestellingen
+    navigation:
+      articles: Verdelen
+      ordergroups: Ledenbestellingen
+      receive: Ontvangen
+    ordergroups:
+      articles:
+        add_new: Artikel toevoegen...
+        no_selection: Kies een huishouden om de artikelen te tonen.
+      form:
+        ordergroup_placeholder: Kies een huishouden...
+      index:
+        title: Artikelen voor huishouden
+      payment_bar:
+        account_balance: Account balance
+        new_transaction: Nieuwe transactie
+        payment: 'Betaling:'
+      show:
+        title: Artikelen voor %{name}
+    orders:
+      receive:
+        no_finished_orders: Er zijn momenteel geen bestellingen die ontvangen hoeven te worden.
+        title: Bestellingen ontvangen
   deliveries:
     add_stock_change:
       how_many_units: 'Hoeveel eenheden (%{unit}) leveren? Voorraadartikel: %{name}.'
@@ -589,7 +733,31 @@ nl:
     suppliers_overview: Leverancieroverzicht
     update:
       notice: Levering is bijgewerkt.
+  discourse:
+    callback:
+      invalid_nonce: Onjuiste nonce
+      invalid_signature: Onjuiste digitale handtekening
+      logged_in: Ingelogd!
   documents:
+    create:
+      error: 'Document kon niet gemaakt worden: %{error}'
+      not_allowed_mime: Het bestandstype "%{mime}" is niet toegestaan. Vraag de systeembeheerder het toe te staan.
+      notice: Document is gemaakt
+    destroy:
+      error: 'Document kon niet verwijderd worden: %{error}'
+      no_right: Je hebt niet genoeg rechten om het document te verwijderen
+      notice: Document is verwijderd
+    index:
+      new: Nieuw document uploaden
+      title: Documenten
+    multiple_orders_by_articles:
+      filename: Huidige bestellingen per artikel
+      title: Huidige bestellingen - per artikel
+    multiple_orders_by_groups:
+      filename: Huidige bestellingen per huishouden
+      title: Huidige bestellingen - per huishouden
+    new:
+      title: Nieuw document
     order_by_articles:
       filename: Bestelling %{name}-%{date} - Artikellijst
       rows:
@@ -728,6 +896,9 @@ nl:
         without_extra_charge: 'zonder marge:'
     create:
       notice: Rekening is gemaakt.
+    financial_links:
+      show:
+        title: Financiële link %{number}
     financial_transactions:
       controller:
         create:
@@ -748,6 +919,7 @@ nl:
         paragraph: Hier kun je het tegoed van huishouden <b>%{name}</b> ophogen en verlagen.
         title: Nieuwe transactie
       new_collection:
+        add_all_ordergroups: Alle huishoudens toevoegen
         new_ordergroup: Nog een huishouden toevoegen
         save: Transactie opslaan
         sidebar: Hier kun je meerdere tegoeden tegelijk bijwerken. Bijvoorbeeld alle overschrijvingen van leden van een bankafschrift.
@@ -769,18 +941,19 @@ nl:
     invoices:
       edit:
         title: Factuur bewerken
+      form:
+        attachment_hint: Alleen JPEG en PDF zijn toegestaan.
       index:
         action_new: Nieuwe factuur toevoegen
         title: Facturen
-      invoices:
-        confirm_delete: Weet je het zeker?
-      linked: Deze factuur is aan %{what_link} gekoppeld.
-      linked_delivery: een levering
-      linked_order: een bestelling
       new:
         title: Nieuwe factuur toevoegen
       show:
         title: Factuur %{number}
+      unpaid:
+        invoices_sum: Totale som
+        invoices_text: Referentie
+        title: Onbetaalde rekeningen
     ordergroups:
       index:
         new_transaction: Nieuwe transacties toevoegen
@@ -799,6 +972,8 @@ nl:
         only_active: Alleen actieve
         only_active_desc: "(minstens eenmaal in de laatste 3 maanden besteld)"
         title: Huishoudens
+      ordergroups:
+        break: "%{start} - %{end}"
     users:
       index:
         body: "<p>Hier kun je leden van deze foodcoop een bericht sturen. Om je eigen contactgegevens te laten zien, moet je die vrijgeven in je %{profile_link}.</p>"
@@ -900,10 +1075,15 @@ nl:
       role_admin: Admin
       role_article_meta: Artikelen
       role_finance: Financiën
+      role_invoices: Rekeningen
       role_orders: Bestelling
       role_suppliers: Leveranciers
       show_google_maps: Op Google maps bekijken
       sort_by: Sorteren op %{text}
+    current_orders:
+      pay_amount: Te betalen %{amount}
+      pay_done: Alles betaald
+      pay_none: Niets te betalen
     deliveries:
       new_invoice: Nieuwe factuur
       show_invoice: Factuur tonen
@@ -935,9 +1115,11 @@ nl:
       due_date_format: "%A %d %B"
       messages:
         title: Nieuwste berichten
-        view_all: Alle berichten bekijken
+        view_all:
+          messages: Alle berichten
+          text: "%{messages} of %{threads} bekijken"
+          threads: conversaties
       my_ordergroup:
-        funds: "| Beschikbaar tegoed:"
         last_update: Laatst gewijzigd %{when} geleden
         title: Mijn huishouden
         transactions:
@@ -950,9 +1132,8 @@ nl:
         desc: Je bent voor de volgende taken verantwoordelijk.
         title: Taken op je nemen
       tasks_open:
-        action: open taken
-        desc: Er zijn %{size}
         title: open taken
+        view_all: Alle taken tonen
       title: Hoofdpagina
       your_tasks: Jouw taken
     no_ordergroups: Jammergenoeg ben je niet aangesloten bij een huishouden.
@@ -1005,6 +1186,11 @@ nl:
       body: "<p>Hier kun je iemand die nog geen lid is, uitnodigen voor de groep <b>%{group}</b>.</p>"
     success: Persoon is uitgenodigd.
   js:
+    current_orders:
+      articles:
+        above: "%{count} meer dan<br>beschikbaar"
+        below: "%{count} blijft over"
+        equal: alles verdeeld
     ordering:
       confirm_change: Als je naar een andere bestelling gaat, gaan je aanpassingen in deze bestelling verloren. Wijzigingen vergeten en naar de andere bestelling gaan?
   layouts:
@@ -1056,6 +1242,7 @@ nl:
     feedback:
       header: "%{user} schreef op %{date}:"
       subject: Feedback van %{email}
+    from_via_foodsoft: "%{name} via Foodsoft"
     invite:
       subject: Uitnodiging voor de foodcoop
       text: |-
@@ -1105,6 +1292,18 @@ nl:
 
 
         Vriendelijke groet van %{foodcoop}.
+    order_result_supplier:
+      subject: Nieuwe bestelling voor %{name}
+      text: |-
+        Beste mijnheer/mevrouw,
+
+        Foodcoop %{foodcoop} wil graag een bestelling plaatsen.
+
+        Een PDF en spreadsheet vind u meegestuurd.
+
+        Met vriendelijke groet,
+        %{user}
+        %{foodcoop}
     reset_password:
       subject: Nieuw wachtwoord voor %{username}
       text: |-
@@ -1124,10 +1323,40 @@ nl:
 
         Je bent opgegeven voor "%{task}". Deze taak is morgen te vervullen (%{when})!
       text1: |-
-        Mijn taken: %{user_tasks_url}
+        Je taken: %{user_tasks_url}
 
         Groeten van %{foodcoop}.
+  message_threads:
+    groupmessage_threads:
+      show_message_threads: alles tonen
+    index:
+      general: Algemeen
+      title: Conversaties
+    message_threads:
+      last_reply_at: Laatst beantwoord op
+      last_reply_by: Laatst beantwoord door
+      started_at: Begonnen op
+      started_by: Begonnen door
+    show: Algemene berichten
+  messagegroups:
+    index:
+      body: 'Een berichtengroep is als een mailinglijst: je kunt kiezen voor welke je je aanmeld (of afmeld) om berichten te ontvangen die naar die groep verzonden worden.'
+      title: Berichtengroepen
+    join:
+      error: 'Kon niet aanmelden voor berichtengroep: %{error}'
+      notice: Aangemeld voor berichtengroep
+    leave:
+      error: 'Kon niet afmelden van berichtengroep: %{error}'
+      notice: Afgemeld voor berichtengroep
+    messagegroup:
+      join: Aanmelden voor berichtengroep
+      leave: Afmelden van berichtengroep
   messages:
+    actionbar:
+      message_threads: Toon als conversaties
+      messagegroups: Aanmelden voor groepen
+      messages: Toon als lijst
+      new: Nieuw bericht
     create:
       notice: Bericht is opgeslagen en wordt verzonden.
     index:
@@ -1140,6 +1369,7 @@ nl:
       reply_indent: "> %{line}"
       reply_subject: 'Re: %{subject}'
     new:
+      error_private: Sorry, dit bericht is privé.
       hint_private: Bericht wordt niet getoond in de Foodsoft inbox
       list:
         desc: 'Berichten voor alle leden graag via de mailing-lijst verzenden: %{list}'
@@ -1147,18 +1377,25 @@ nl:
         subscribe: Lees meer over de mailing-lijst op %{link}.
         subscribe_msg: Mogelijk moet je je eerst aanmelden voor de mailing-lijst.
         wiki: Wiki (mailing-lijst pagina)
+      message: bericht
       no_user_found: Geen gebruiker gevonden
+      reply_to: Dit bericht is een antwoord op %{link}.
       search: Zoeken ...
       search_user: Gebruiker zoeken
       title: Nieuw bericht
     show:
       all_messages: Berichtenoverzicht
       from: 'Van:'
+      group: 'Groep:'
       reply: Antwoorden
+      reply_to: 'Antwoord:'
       sent_on: 'Verzonden:'
       subject: 'Onderwerp:'
       title: Bericht lezen
       to: 'Aan:'
+    thread:
+      all_message_threads: Alle conversaties
+      reply: Antwoord
   messages_mailer:
     foodsoft_message:
       footer: |-
@@ -1168,6 +1405,10 @@ nl:
   model:
     delivery:
       each_stock_article_must_be_unique: In een levering mag ieder voorraadsartikel maar een keer voorkomen.
+    group_order:
+      stock_ordergroup_name: Voorraad (%{user})
+    invoice:
+      invalid_mime: heeft ongeldig MIME type (%{mime})
     membership:
       no_admin_delete: Lidmaatschap kan niet beeindigd worden. Je bent de laatste administrator.
     order_article:
@@ -1180,6 +1421,8 @@ nl:
     admin:
       config: Instellingen
       home: Overzicht
+      mail_delivery_status: Emailproblemen
+      messagegroups: Berichtengroepen
       ordergroups: Huishoudens
       title: Administratie
       users: Gebruikers
@@ -1190,6 +1433,7 @@ nl:
       suppliers: Leveranciers/producten
       title: Producten
     dashboard: Dashboard
+    documents: Documenten
     finances:
       accounts: Ledenbetalingen
       balancing: Bestellingen afrekenen
@@ -1274,8 +1518,10 @@ nl:
       title: Bestellingen beheren
     model:
       close_direct_message: Bestelling afgerekend zonder bedragen in rekening te brengen bij huishoudens.
+      error_boxfill_before_ends: moet na de dozen-vul-datum zijn (of leeg blijven)
       error_closed: Bestelling was al afgerekend
       error_nosel: Er moet minstens één artikel geselecteerd zijn. Mogelijk wil je de bestelling verwijderen?
+      error_starts_before_boxfill: moet na de startdatum zijn (of leeg blijven)
       error_starts_before_ends: moet na de startdatum zijn (of niet ingevuld worden)
       notice_close: 'Bestelling: %{name}, tot %{ends}'
       stock: Voorraad
@@ -1292,6 +1538,8 @@ nl:
       submit: Bestelling ontvangen
       surplus_options: 'Overschot:'
       title: 'Ontvangen: %{order}'
+    send_to_supplier:
+      notice: De bestelling is naar de leverancier verzonden.
     show:
       action_end: Sluiten!
       amounts: 'Totaal netto/bruto:'
@@ -1304,7 +1552,13 @@ nl:
       confirm_end: |-
         Wil je de bestelling %{order} echt sluiten?
         Hierna kan zij niet opnieuw geopend worden.
-      description1: "%{state} bestelling van %{supplier}, geopend door %{who}, open van %{starts} tot %{ends}."
+      confirm_send_to_supplier: De bestelling is al naar de leverancier gestuurd op %{when}. Wil je deze opnieuw verzenden?
+      create_invoice: Rekening toevoegen
+      description1_order: "%{state} order van %{supplier} geopend door %{who},"
+      description1_period:
+        pickup: en kan opgehaald worden op %{pickup}
+        starts: open van %{starts}
+        starts_ends: open van %{starts} tot %{ends}
       description2: "%{ordergroups} hebben %{article_count} artikelen besteld met een totale waarde van %{net_sum} / %{gross_sum} (netto / bruto)."
       download:
         article_pdf: Artikelen PDF
@@ -1321,8 +1575,11 @@ nl:
         default: Artikelen zoeken...
         groups: Huishoudens zoeken...
       search_reset: Zoekopdracht wissen
+      send_to_supplier: Verzenden naar leverancier
+      show_invoice: Rekening tonen
       sort_article: Per artikel
       sort_group: Per huishouden
+      stock_order: Voorraadbestelling
       title: 'Bestelling: %{name}'
       warn_not_closed: Opgelet, bestelling is nog niet afgerekend.
     state:
@@ -1334,7 +1591,6 @@ nl:
     update_order_amounts:
       msg1: "%{count} artikelen (%{units} eenheden) bijgewerkt"
       msg2: "%{count} (%{units}) naar tolerantie"
-      msg3: 
       msg4: "%{count} (%{units}) overgebleven"
   pages:
     all:
@@ -1356,6 +1612,8 @@ nl:
       redirect_notice: Doorverwezen van %{page} ...
     destroy:
       notice: De pagina '%{page}' en alle subpagina's zijn verwijderd.
+    diff:
+      title: "%{title} - veranderingen van versie %{old} tot %{new}"
     edit:
       title: Pagina bewerken
     error_stale_object: Opgelet, de pagina is net veranderd door een ander. Probeer het alsjeblieft opnieuw.
@@ -1381,6 +1639,9 @@ nl:
         section_character: Tekens
         section_link: Links
         section_more: Meer onderwerpen
+        section_table: Tabelopmaak
+        see_tables: zie %{tables_link}
+        tables_link: Tabellen
         text: tekst
         title: Korte opmaakhulp
         unordered_list: Itemlijst
@@ -1396,6 +1657,7 @@ nl:
       date_format: "%d-%m-%y %H:%M"
       delete: Pagina verwijderen
       delete_confirm: 'Opgelet: alle onderliggende pagina''s worden ook verwijderd. Zeker weten?'
+      diff: Versies vergelijken
       edit: Pagina bewerken
       last_updated: Laatst bijgewerkt door <b>%{user}</b> op %{when}
       subpages: kindpagina's
@@ -1440,6 +1702,7 @@ nl:
       access: Toegang tot
       activated: actief
       apple_limit: Appelpunten bestellingslimiet
+      break: van %{start} tot %{end}
       deactivated: inactief
     group_form_fields:
       search: Zoeken ...
@@ -1451,8 +1714,17 @@ nl:
       title: Lopende bestellingen
       total_sum: Totaalsom
       who_ordered: Wie heeft besteld?
+    task_list:
+      accept_task: Taak accepteren
+      done: Gedaan
+      done_q: Gedaan?
+      mark_done: Als gedaan markeren
+      reject_task: Taak laten vallen
+      who: Wie doet het?
+      who_hint: "(Hoeveel zijn er nog nodig?)"
     user_form_fields:
       contact_address_hint: Het adres van je huishouden. Als je dit wijzigt, verandert het ook voor de andere leden van je huishouden.
+      messagegroups: Aan- en afmelden voor berichtengroepen
     workgroup_members:
       title: Groepsleden
   simple_form:
@@ -1500,6 +1772,7 @@ nl:
           language:
             de: Duits
             en: Engels
+            es: Spaans
             fr: Frans
             nl: Nederlands
     required:
@@ -1575,8 +1848,6 @@ nl:
       new_quantity: Nieuw aantal
       reason: Reden
       stock_changes: Verloop
-    stock_article:
-      confirm_delete: Voorraadartikel "%{name}" echt verwijderen?
     update:
       notice: Voorraadartikel "%{name}" is bijgewerkt.
   suppliers:
@@ -1608,7 +1879,6 @@ nl:
       supplier: Leverancier
       title: Externe lijsten
     show:
-      confirm_delete: Zeker weten?
       last_deliveries: Laatste leveringen
       last_orders: Recente bestellingen
       new_delivery: Levering aanmaken
@@ -1641,14 +1911,6 @@ nl:
       show_group_tasks: Groepstaken tonen
       title: Taken
       title_non_group: Taken voor iedereen!
-    list:
-      accept_task: Taak accepteren
-      done: Gedaan
-      done_q: Gedaan?
-      mark_done: Taak als gedaan markeren
-      reject_task: Taak laten vallen
-      who: Wie doet het?
-      who_hint: "(Hoeveel zijn er nog nodig?)"
     nav:
       all_tasks: Alle taken
       archive: Gedane taken (archief)
@@ -1690,14 +1952,18 @@ nl:
     back: Terug
     cancel: Annuleren
     close: Sluiten
+    confirm_delete: Wil je %{name} echt verwijderen?
+    confirm_restore: Wil je %{name} echt opnieuw actief maken?
     copy: Kopiëren
     delete: Verwijder
+    download: Download
     edit: Bewerk
     marks:
       close: "&times;"
       success: <i class="icon icon-ok"></i>
     or_cancel: of annuleren
     please_wait: Een moment alstublieft...
+    restore: Herstellen
     save: Opslaan
     show: Tonen
   views:

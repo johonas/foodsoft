@@ -2,24 +2,53 @@ log/*.log
 tmp/**/*
 config/app_config.yml
 config/database.yml
+.bundle
+.rake_tasks*
 db/*.sqlite3
-nbproject/
+log
+node_modules
+tmp
+public/assets
+public/system
+public/uploads
+vendor/bundle
+
+# no configuration
+config/*.yml
+!config/i18n-js.yml
 config/environments/development.rb
-*.swp
-*~
-public/**/*_cached.*
+
+# IDEs, Developer tools
 .idea
+.loadpath
+.project
+.sass-cache
+.rbenv-version
 .get-dump.yml
-.sass-cache/
+.bash_history
+.localeapp
+nbproject/
+.*.sw?
+*~
+
+coverage
+tags
 doc/app/
 doc/api/
 .yarddoc/
-# Deployment tools
+rspec.failures
+
+# Capistrano etc.
 Capfile
+config/deploy
 config/deploy.rb
+<<<<<<< HEAD
 config/deploy/*
 .localeapp
 log/localeapp.yml
 .bundle
 rspec.failures
 vendor/bundle
+=======
+Gemfile.capistrano*
+>>>>>>> d7420a13d2fafb91a9687c7d09e48c7cc279c3c5
