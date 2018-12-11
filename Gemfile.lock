@@ -77,12 +77,6 @@ GEM
     axlsx_rails (0.5.0)
       actionpack (>= 3.1)
       axlsx (>= 2.0.1)
-    better_errors (2.1.1)
-      coderay (>= 1.0.0)
-      erubis (>= 2.6.6)
-      rack (>= 0.9.0)
-    binding_of_caller (0.7.2)
-      debug_inspector (>= 0.0.1)
     bootstrap-datepicker-rails (1.4.0)
       railties (>= 3.0)
     builder (3.2.2)
@@ -90,19 +84,6 @@ GEM
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.9.0)
     callsite (0.0.11)
-    capistrano (3.2.1)
-      i18n
-      rake (>= 10.0.0)
-      sshkit (~> 1.3)
-    capistrano-bundler (1.1.4)
-      capistrano (~> 3.1)
-      sshkit (~> 1.2)
-    capistrano-rails (1.1.3)
-      capistrano (~> 3.1)
-      capistrano-bundler (~> 1.1)
-    capistrano-rvm (0.1.2)
-      capistrano (~> 3.0)
-      sshkit (~> 1.2)
     capybara (2.5.0)
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
@@ -112,7 +93,6 @@ GEM
     childprocess (0.5.6)
       ffi (~> 1.0, >= 1.0.11)
     chronic (0.10.2)
-    coderay (1.1.0)
     coffee-rails (4.1.0)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.0)
@@ -134,7 +114,6 @@ GEM
     database_cleaner (1.5.0)
     date_time_attribute (0.1.2)
       activesupport (>= 3.0.0)
-    debug_inspector (0.0.2)
     deface (1.0.1)
       colorize (>= 0.5.8)
       nokogiri (~> 1.6.0)
@@ -195,7 +174,6 @@ GEM
       has_scope (~> 0.6.0.rc)
       railties (>= 3.2, < 5)
       responders
-    interception (0.5)
     iso (0.2.1)
       i18n
     jquery-rails (4.0.5)
@@ -230,16 +208,12 @@ GEM
       callsite (~> 0.0, >= 0.0.11)
       rack-contrib (~> 1.1)
       railties (>= 3.0.0, < 5.0.0)
-    method_source (0.8.2)
     mime-types (2.6.1)
     mini_portile (0.6.2)
     minitest (5.8.0)
     mono_logger (1.1.0)
     multi_json (1.11.2)
     mysql2 (0.3.20)
-    net-scp (1.2.1)
-      net-ssh (>= 2.6.5)
-    net-ssh (2.9.2)
     netrc (0.10.3)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
@@ -254,16 +228,6 @@ GEM
       prawn (>= 1.3.0, < 3.0.0)
     protected_attributes (1.1.0)
       activemodel (>= 4.0.1, < 5.0)
-    pry (0.10.1)
-      coderay (~> 1.1.0)
-      method_source (~> 0.8.1)
-      slop (~> 3.4)
-    pry-rescue (1.4.2)
-      interception (>= 0.5)
-      pry
-    pry-stack_explorer (0.4.9.2)
-      binding_of_caller (>= 0.7)
-      pry (>= 0.9.11)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.4)
@@ -407,7 +371,6 @@ GEM
     skinny (0.2.3)
       eventmachine (~> 1.0.0)
       thin (~> 1.5.0)
-    slop (3.6.0)
     spreadsheet (1.0.5)
       ruby-ole (>= 1.0)
     sprockets (3.3.4)
@@ -417,10 +380,6 @@ GEM
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
     sqlite3 (1.3.10)
-    sshkit (1.7.1)
-      colorize (>= 0.7.0)
-      net-scp (>= 1.1.2)
-      net-ssh (>= 2.8.0)
     term-ansicolor (1.3.2)
       tins (~> 1.0)
     therubyracer (0.12.2)
@@ -453,11 +412,6 @@ GEM
     uniform_notifier (1.9.0)
     vegas (0.1.11)
       rack (>= 1.0.0)
-    web-console (2.2.1)
-      activemodel (>= 4.0)
-      binding_of_caller (>= 0.7.2)
-      railties (>= 4.0)
-      sprockets-rails (>= 2.0, < 4.0)
     websocket (1.2.2)
     whenever (0.9.4)
       chronic (>= 0.6.3)
@@ -479,13 +433,8 @@ DEPENDENCIES
   attribute_normalizer
   axlsx (= 2.1.0.pre)
   axlsx_rails (>= 0.4)
-  better_errors
   bootstrap-datepicker-rails
   bullet
-  capistrano (~> 3.2.0)
-  capistrano-bundler (>= 1.1.0)
-  capistrano-rails
-  capistrano-rvm
   capybara
   coffee-rails
   connection_pool
@@ -514,8 +463,6 @@ DEPENDENCIES
   prawn
   prawn-table
   protected_attributes (= 1.1.0)
-  pry-rescue
-  pry-stack_explorer
   quiet_assets
   rails (~> 4.2)
   rails-assets-listjs (= 0.2.0.beta.4)
@@ -540,12 +487,10 @@ DEPENDENCIES
   simple_form
   simplecov
   spreadsheet
-  sqlite3
   therubyracer
   thin
   twitter-bootstrap-rails (~> 2.2.8)
   uglifier (>= 1.0.3)
-  web-console (~> 2.0)
   whenever
 
 BUNDLED WITH
