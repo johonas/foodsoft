@@ -1,4 +1,4 @@
 = raw @message.body
 ======================================================================
 \
-= raw t '.footer', reply_url: new_message_url('message[reply_to]' => @message.id, :foodcoop => FoodsoftConfig[:default_scope]), msg_url: message_url(:id => @message.id, :foodcoop => FoodsoftConfig[:default_scope]), profile_url: my_profile_url(:foodcoop => FoodsoftConfig[:default_scope])
+= raw t '.footer', reply_url: new_message_url('message[reply_to]' => @message.id), msg_url: message_url(:id => @message.id), profile_url: my_profile_url

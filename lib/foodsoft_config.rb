@@ -69,6 +69,8 @@ class FoodsoftConfig
       self.scope = config[:default_scope] or raise "No default_scope is set"
       # Set defaults for backward-compatibility
       set_missing
+      # Set default url options for mailer
+      setup_mailing
     end
 
     # Set config and database connection for specific foodcoop.
@@ -204,7 +206,6 @@ class FoodsoftConfig
     #
     #   @return [Hash] Default configuration values
     mattr_accessor :default_config
-
 
     private
 

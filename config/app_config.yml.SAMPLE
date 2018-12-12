@@ -8,6 +8,11 @@ default: &defaults
   # If multi_coop_install you have to use a coop name, which you you wanna be selected by default
   default_scope: 'f'
 
+  # Hostname and protocol of the current host. Used for action_mailer to generate correct reply urls
+  protocol: 'https'
+  host: 'hostname'
+  port: '80'
+
   # name of this foodcoop
   name: FC Test
   # foodcoop contact information (used for FAX messages)
