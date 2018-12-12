@@ -8,6 +8,7 @@ public/assets
 public/system
 public/uploads
 vendor/bundle
+resque.pid
 
 # no configuration
 config/app_config.yml
