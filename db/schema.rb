@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171201000000) do
+ActiveRecord::Schema.define(version: 20181217095119) do
 
   create_table "article_categories", force: :cascade do |t|
     t.string "name",        limit: 255, default: "", null: false
@@ -66,7 +66,30 @@ ActiveRecord::Schema.define(version: 20171201000000) do
 
   add_index "assignments", ["user_id", "task_id"], name: "index_assignments_on_user_id_and_task_id", unique: true, using: :btree
 
-<<<<<<< HEAD
+  create_table "bank_accounts", force: :cascade do |t|
+    t.string   "name",                      limit: 255,                                      null: false
+    t.string   "iban",                      limit: 255
+    t.string   "description",               limit: 255
+    t.decimal  "balance",                               precision: 12, scale: 2, default: 0, null: false
+    t.datetime "last_import"
+    t.string   "import_continuation_point", limit: 255
+  end
+
+  create_table "bank_transactions", force: :cascade do |t|
+    t.integer "bank_account_id",   limit: 4,                                null: false
+    t.string  "external_id",       limit: 255
+    t.date    "date"
+    t.decimal "amount",                             precision: 8, scale: 2, null: false
+    t.string  "iban",              limit: 255
+    t.string  "reference",         limit: 255
+    t.text    "text",              limit: 65535
+    t.text    "receipt",           limit: 65535
+    t.binary  "image",             limit: 16777215
+    t.integer "financial_link_id", limit: 4
+  end
+
+  add_index "bank_transactions", ["financial_link_id"], name: "index_bank_transactions_on_financial_link_id", using: :btree
+
   create_table "bestellrunden", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -74,32 +97,6 @@ ActiveRecord::Schema.define(version: 20171201000000) do
     t.date     "ends",       null: false
   end
 
-=======
-  create_table "bank_accounts", force: :cascade do |t|
-    t.string   "name",                                                           null: false
-    t.string   "iban"
-    t.string   "description"
-    t.decimal  "balance",                   precision: 12, scale: 2, default: 0, null: false
-    t.datetime "last_import"
-    t.string   "import_continuation_point"
-  end
-
-  create_table "bank_transactions", force: :cascade do |t|
-    t.integer "bank_account_id",                           null: false
-    t.string  "external_id"
-    t.date    "date"
-    t.decimal "amount",            precision: 8, scale: 2, null: false
-    t.string  "iban"
-    t.string  "reference"
-    t.text    "text"
-    t.text    "receipt"
-    t.binary  "image"
-    t.integer "financial_link_id"
-  end
-
-  add_index "bank_transactions", ["financial_link_id"], name: "index_bank_transactions_on_financial_link_id", using: :btree
-
->>>>>>> 9b307f735a13c1dae170e1c80ea940968063506b
   create_table "deliveries", force: :cascade do |t|
     t.integer  "supplier_id",  limit: 4
     t.date     "delivered_on"
@@ -128,49 +125,35 @@ ActiveRecord::Schema.define(version: 20171201000000) do
     t.integer  "created_by_user_id", limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "parent_id"
+    t.integer  "parent_id",          limit: 4
   end
 
-<<<<<<< HEAD
-  create_table "financial_links", force: :cascade do |t|
-    t.text "note", limit: 65535
-=======
   add_index "documents", ["parent_id"], name: "index_documents_on_parent_id", using: :btree
 
   create_table "financial_links", force: :cascade do |t|
-    t.text "note"
->>>>>>> 9b307f735a13c1dae170e1c80ea940968063506b
+    t.text "note", limit: 65535
   end
 
   create_table "financial_transaction_classes", force: :cascade do |t|
-    t.string "name", null: false
+    t.string "name", limit: 255, null: false
   end
 
   create_table "financial_transaction_types", force: :cascade do |t|
-    t.string  "name",                           null: false
-    t.integer "financial_transaction_class_id", null: false
-    t.string  "name_short"
+    t.string  "name",                           limit: 255, null: false
+    t.integer "financial_transaction_class_id", limit: 4,   null: false
+    t.string  "name_short",                     limit: 255
   end
 
   add_index "financial_transaction_types", ["name_short"], name: "index_financial_transaction_types_on_name_short", using: :btree
 
   create_table "financial_transactions", force: :cascade do |t|
-<<<<<<< HEAD
-    t.integer  "ordergroup_id",     limit: 4,                             default: 0, null: false
-    t.decimal  "amount",                          precision: 8, scale: 2, default: 0, null: false
-    t.text     "note",              limit: 65535,                                     null: false
-    t.integer  "user_id",           limit: 4,                             default: 0, null: false
-    t.datetime "created_on",                                                          null: false
-    t.integer  "financial_link_id", limit: 4
-=======
     t.integer  "ordergroup_id",                 limit: 4,                             default: 0, null: false
     t.decimal  "amount",                                      precision: 8, scale: 2, default: 0, null: false
     t.text     "note",                          limit: 65535,                                     null: false
     t.integer  "user_id",                       limit: 4,                             default: 0, null: false
     t.datetime "created_on",                                                                      null: false
-    t.integer  "financial_link_id"
-    t.integer  "financial_transaction_type_id",                                                   null: false
->>>>>>> 9b307f735a13c1dae170e1c80ea940968063506b
+    t.integer  "financial_link_id",             limit: 4
+    t.integer  "financial_transaction_type_id", limit: 4,                                         null: false
   end
 
   add_index "financial_transactions", ["ordergroup_id"], name: "index_financial_transactions_on_ordergroup_id", using: :btree
@@ -233,11 +216,8 @@ ActiveRecord::Schema.define(version: 20171201000000) do
     t.boolean  "role_verteilen",                                                  default: false, null: false
     t.date     "break_start"
     t.date     "break_end"
-<<<<<<< HEAD
     t.boolean  "role_invoices",                                                   default: false, null: false
-=======
     t.boolean  "role_pickups",                                                    default: false, null: false
->>>>>>> 9b307f735a13c1dae170e1c80ea940968063506b
   end
 
   add_index "groups", ["name"], name: "index_groups_on_name", unique: true, using: :btree
@@ -369,6 +349,8 @@ ActiveRecord::Schema.define(version: 20171201000000) do
   create_table "orders", force: :cascade do |t|
     t.integer  "supplier_id",        limit: 4
     t.text     "note",               limit: 65535
+    t.datetime "starts"
+    t.datetime "ends"
     t.string   "state",              limit: 255,                           default: "open"
     t.integer  "lock_version",       limit: 4,                             default: 0,      null: false
     t.integer  "updated_by_user_id", limit: 4
@@ -376,7 +358,6 @@ ActiveRecord::Schema.define(version: 20171201000000) do
     t.integer  "created_by_user_id", limit: 4
     t.datetime "boxfill"
     t.integer  "bestellrunde_id",    limit: 4,                                              null: false
-    t.date     "end_date"
     t.integer  "invoice_id",         limit: 4
     t.date     "pickup"
     t.datetime "last_sent_mail"
