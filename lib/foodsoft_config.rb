@@ -182,6 +182,9 @@ class FoodsoftConfig
       Hash[keys.map {|k| [k, self[k]]} ]
     end
 
+    # for using active_model_serializer in the api/v1/configs controller
+    alias :read_attribute_for_serialization :[]
+
     protected
 
     # @!attribute default_config

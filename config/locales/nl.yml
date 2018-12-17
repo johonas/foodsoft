@@ -39,7 +39,7 @@ nl:
         supplier: Leverancier
       document:
         created_at: Upload op
-        created_by_user_id: Upload door
+        created_by: Upload door
         data: Data
         mime: MIME-type
         name: Naam
@@ -50,14 +50,17 @@ nl:
         ordergroup: Huishouden
         user: Ingevuld door
       group_order:
+        ordergroup: Huishouden
         price: Totaal bestelling
         updated_by: Laatst besteld door
       group_order_article:
-        ordergroup_id: Huishouden
+        ordered: Besteld
         quantity: Hoeveelheid
+        received: Ontvangen
         result: Hoeveelheid
         tolerance: Tolerantie
         total_price: Som
+        unit_price: Prijs/Eenheid
       invoice:
         amount: Bedrag
         attachment: Bijlage
@@ -637,6 +640,7 @@ nl:
       use_wiki: Wiki gebruiken
       webstats_tracking_code: Tracking code
     tabs:
+      applications: Apps
       foodcoop: Foodcoop
       language: Taal
       layout: Layout
@@ -747,6 +751,8 @@ nl:
       error: 'Document kon niet verwijderd worden: %{error}'
       no_right: Je hebt niet genoeg rechten om het document te verwijderen
       notice: Document is verwijderd
+    form:
+      title: Nieuw document
     index:
       new: Nieuw document uploaden
       title: Documenten
@@ -756,26 +762,11 @@ nl:
     multiple_orders_by_groups:
       filename: Huidige bestellingen per huishouden
       title: Huidige bestellingen - per huishouden
-    new:
-      title: Nieuw document
     order_by_articles:
       filename: Bestelling %{name}-%{date} - Artikellijst
-      rows:
-      - Huishouden
-      - Besteld
-      - Ontvangen
-      - Prijs
       title: 'Artikellijst van bestelling: %{name}, gesloten op %{date}'
     order_by_groups:
       filename: Bestelling %{name}-%{date} - Huishoudenslijst
-      rows:
-      - Artikel
-      - Besteld
-      - Ontvangen
-      - Prijs
-      - Colli
-      - Eenheid
-      - Som
       sum: Som
       title: 'Huishoudenslijst van bestelling: %{name}, gesloten op %{date}'
     order_fax:
@@ -791,17 +782,8 @@ nl:
       total: Totaal
     order_matrix:
       filename: Bestelling %{name}-%{date} - Sorteermatrix
-      heading: Artikeloverzicht
-      rows:
-      - Artikel
-      - Eenheid
-      - Gr.Eenh.
-      - Foodcoop-prijs
-      - Aantal
+      heading: Artikeloverzicht (%{count})
       title: 'Sorteermatrix van bestelling: %{name}, gesloten op %{date}'
-      total:
-        one: In totaal éen artikel
-        other: In totaal %{count} artikelen
   errors:
     general: Er is een probleem opgetreden.
     general_again: Er is een fout opgetreden. Probeer het opnieuw.
@@ -1212,7 +1194,7 @@ nl:
       profile: Profiel aanpassen
     logo: "<span>food</span>soft"
   lib:
-    order_pdf:
+    render_pdf:
       page: Pagina %{number} van %{count}
   login:
     accept_invitation:
@@ -1420,6 +1402,7 @@ nl:
   navigation:
     admin:
       config: Instellingen
+      finance: Financiën
       home: Overzicht
       mail_delivery_status: Emailproblemen
       messagegroups: Berichtengroepen
@@ -1560,15 +1543,6 @@ nl:
         starts: open van %{starts}
         starts_ends: open van %{starts} tot %{ends}
       description2: "%{ordergroups} hebben %{article_count} artikelen besteld met een totale waarde van %{net_sum} / %{gross_sum} (netto / bruto)."
-      download:
-        article_pdf: Artikelen PDF
-        download_file: Bestand downloaden
-        fax_csv: Fax CSV
-        fax_pdf: Fax PDF
-        fax_txt: Fax text
-        group_pdf: Huishoudens PDF
-        matrix_pdf: Matrix PDF
-        title: Downloaden
       group_orders: 'Ledenbestellingen:'
       search_placeholder:
         articles: Artikelen zoeken...
@@ -1714,6 +1688,15 @@ nl:
       title: Lopende bestellingen
       total_sum: Totaalsom
       who_ordered: Wie heeft besteld?
+    order_download_button:
+      article_pdf: Artikelen PDF
+      download_file: Bestand downloaden
+      fax_csv: Fax CSV
+      fax_pdf: Fax PDF
+      fax_txt: Fax text
+      group_pdf: Huishoudens PDF
+      matrix_pdf: Matrix PDF
+      title: Downloaden
     task_list:
       accept_task: Taak accepteren
       done: Gedaan

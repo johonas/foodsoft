@@ -3,7 +3,6 @@ source "https://rubygems.org"
 
 gem "rails", '~> 4.2'
 
-
 gem 'sass-rails'
 gem 'less-rails'
 gem 'uglifier', '>= 1.0.3'
@@ -20,7 +19,7 @@ gem 'rails-assets-listjs', '0.2.0.beta.4' # remember to maintain list.*.js plugi
 gem 'i18n-js', '~> 3.0.0.rc8'
 gem 'rails-i18n'
 
-gem 'mysql2'
+gem 'mysql2', '~> 0.4.0' # for compatibility with rails 4
 gem 'prawn'
 gem 'prawn-table'
 gem 'haml', '~> 4.0' # some breaking changes in version 5, remove this line again when fixed
@@ -30,6 +29,10 @@ gem 'simple_form'
 gem 'inherited_resources'
 gem 'localize_input', git: "https://github.com/bennibu/localize_input.git"
 gem 'daemons'
+gem 'doorkeeper'
+gem 'doorkeeper-i18n'
+gem 'rack-cors', require: 'rack/cors'
+gem 'active_model_serializers', '~> 0.10.0'
 gem 'twitter-bootstrap-rails', '~> 2.2.8'
 gem 'simple-navigation', '~> 3.14.0' # 3.x for simple_navigation_bootstrap
 gem 'simple-navigation-bootstrap'

@@ -31,6 +31,18 @@ class Ordergroup < Group
     User.natural_order.all.reject { |u| (users.include?(u) || u.ordergroup) }
   end
 
+  def self.include_transaction_class_sum
+    columns = ['groups.*']
+    FinancialTransactionClass.all.each do |c|
+      columns << "sum(CASE financial_transaction_types.financial_transaction_class_id WHEN #{c.id} THEN financial_transactions.amount ELSE 0 END) AS sum_of_class_#{c.id}"
+    end
+
+    select(columns.join(', '))
+      .joins('LEFT JOIN financial_transactions ON groups.id = financial_transactions.ordergroup_id')
+      .joins('LEFT JOIN financial_transaction_types ON financial_transaction_types.id = financial_transactions.financial_transaction_type_id')
+      .group('groups.id')
+  end
+
   def last_user_activity
     last_active_user = users.order('users.last_activity DESC').first
     if last_active_user
@@ -70,9 +82,9 @@ class Ordergroup < Group
 
   # Creates a new FinancialTransaction for this Ordergroup and updates the account_balance accordingly.
   # Throws an exception if it fails.
-  def add_financial_transaction!(amount, note, user, link = nil)
+  def add_financial_transaction!(amount, note, user, transaction_type, link = nil)
     transaction do
-      t = FinancialTransaction.new(ordergroup: self, amount: amount, note: note, user: user, financial_link: link)
+      t = FinancialTransaction.new(ordergroup: self, amount: amount, note: note, user: user, financial_transaction_type: transaction_type, financial_link: link)
       t.save!
       self.account_balance = financial_transactions.sum('amount')
       save!

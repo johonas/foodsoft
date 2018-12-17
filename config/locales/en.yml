@@ -39,7 +39,7 @@ en:
         supplier: Supplier
       document:
         created_at: Created at
-        created_by_user_id: Created by
+        created_by: Created by
         data: Data
         mime: MIME type
         name: Name
@@ -49,15 +49,24 @@ en:
         note: Note
         ordergroup: Ordergroup
         user: Entered by
+      financial_transaction_class:
+        name: Name
+      financial_transaction_type:
+        name: Name
+        financial_transaction_class: Financial transaction class
+        name_short: Short Name
       group_order:
+        ordergroup: Ordergroup
         price: Order sum
         updated_by: Last ordered by
       group_order_article:
-        ordergroup_id: Ordergroup
+        ordered: Ordered
         quantity: Amount
+        received: Received
         result: Amount
         tolerance: Tolerance
         total_price: Sum
+        unit_price: Price/Unit
       invoice:
         amount: Amount
         attachment: Attachment
@@ -214,6 +223,7 @@ en:
         role_finance: Finances
         role_invoices: Invoices
         role_orders: Order management
+        role_pickups: Pickup days
         role_suppliers: Suppliers
         user_tokens: Members
     errors:
@@ -235,8 +245,11 @@ en:
     models:
       article: Article
       article_category: Category
+      bank_transaction: Bank transaction
       delivery: Delivery
       financial_transaction: Financial transaction
+      financial_transaction_class: Financial transaction class
+      financial_transaction_type: Financial transaction type
       invoice: Invoice
       message: Message
       messagegroup: Message group
@@ -293,6 +306,22 @@ en:
       update:
         notice: Configuration saved.
     confirm: Are you sure?
+    finances:
+      index:
+        first_paragraph: Here you can manage the financial transaction classes and the corresponding financial transaction types. Every financial transaction has a type, which you have to select at every transaction, if you created more than one type. The financial transaction classes can be use to group the financial transaction types and will be shown as additional columns in the account overview, if there have been created more than one.
+        new_financial_transaction_class: Add new financial transaction class
+        title: Finances
+      transaction_types:
+        name: Name
+        new_financial_transaction_type: Add new financial transaction type
+    financial_transaction_classes:
+      form:
+        title_edit: Edit financial transaction class
+        title_new: Add new financial transaction class
+    financial_transaction_types:
+      form:
+        title_edit: Edit financial transaction type
+        title_new: Add new financial transaction type
     mail_delivery_status:
       destroy_all:
         notice: All email problems were deleted
@@ -639,6 +668,7 @@ en:
       use_wiki: Enable wiki
       webstats_tracking_code: Tracking code
     tabs:
+      applications: Apps
       foodcoop: Foodcoop
       language: Language
       layout: Layout
@@ -750,15 +780,20 @@ en:
       logged_in: Logged in!
   documents:
     create:
-      error: 'Document could not be created: %{error}'
+      error: 'Document or folder could not be created: %{error}'
       not_allowed_mime: The filetype "%{mime}" is not allowed. Please contact an administrator to whitelist it.
-      notice: Document was created
+      notice: Document or folder was created
     destroy:
-      error: 'Document could not be deleted: %{error}'
-      no_right: You do not have enough rights to delete the document
-      notice: Document was deleted
+      error: 'Document or folder could not be deleted: %{error}'
+      no_right: You do not have enough rights to delete the document or folder
+      notice: Document or folder was deleted
+    form:
+      new: New Document
+      new_folder: new Folder
+      submit: Create
     index:
       new: Upload new document
+      new_folder: Create new folder
       title: Documents
     multiple_orders_by_articles:
       filename: Current orders sorted by article
@@ -766,26 +801,11 @@ en:
     multiple_orders_by_groups:
       filename: Current orders sorted by group
       title: Current orders - by group
-    new:
-      title: New Document
     order_by_articles:
       filename: Order %{name}-%{date} - by articles
-      rows:
-      - Ordergroup
-      - Ordered
-      - Received
-      - Price
       title: 'Order sorted by articles: %{name}, closed at %{date}'
     order_by_groups:
       filename: Order %{name}-%{date} - by group
-      rows:
-      - Article
-      - Ordered
-      - Received
-      - Price
-      - U.Q.
-      - Unit
-      - Sum
       sum: Sum
       title: 'Order sorted by group: %{name}, closed at %{date}'
     order_fax:
@@ -801,17 +821,8 @@ en:
       total: Total
     order_matrix:
       filename: Order %{name}-%{date} - sorting matrix
-      heading: Article overview
-      rows:
-      - Article
-      - Unit
-      - Unit quantity
-      - FC-Price
-      - Amount
+      heading: Article overview (%{count})
       title: 'Order sorting matrix: %{name}, closed at %{date}'
-      total:
-        one: One article in total
-        other: "%{count} articles in total"
   errors:
     general: A problem has occured.
     general_again: A problem has occured. Please try again.
@@ -904,6 +915,20 @@ en:
         reload: Reload summary
         with_extra_charge: 'with extra charge:'
         without_extra_charge: 'without extra charge:'
+    bank_accounts:
+      controller:
+        import:
+          notice: '%{count} new transactions have been imported'
+      index:
+        account_statement: Account statement
+        title: Bank Accounts
+    bank_transactions:
+      index:
+        title: Bank transactions for %{name} (%{balance})
+      show:
+        belongs_to_supplier: belongs to supplier
+        belongs_to_user: belongs to user
+        in_ordergroup: in ordergroup
     create:
       notice: Invoice was created.
     financial_links:
@@ -1090,6 +1115,7 @@ en:
       role_finance: Finance
       role_invoices: Invoices
       role_orders: Orders
+      role_pickups: Pickup days
       role_suppliers: Suppliers
       show_google_maps: Show it on Google maps
       sort_by: Sort by %{text}
@@ -1223,7 +1249,7 @@ en:
       profile: Edit profile
     logo: "<span>food</span>soft"
   lib:
-    order_pdf:
+    render_pdf:
       page: Page %{number} of %{count}
   login:
     accept_invitation:
@@ -1421,6 +1447,8 @@ en:
   model:
     delivery:
       each_stock_article_must_be_unique: Each stock article must not be listed more than once.
+    financial_transaction_type:
+      no_delete_last: At least one financial transaction type must exist.
     group_order:
       stock_ordergroup_name: Stock (%{user})
     invoice:
@@ -1436,6 +1464,7 @@ en:
   navigation:
     admin:
       config: Configuration
+      finance: Finances
       home: Overview
       mail_delivery_status: Email problems
       messagegroups: Message groups
@@ -1453,6 +1482,7 @@ en:
     finances:
       accounts: Manage accounts
       balancing: Account orders
+      bank_accounts: Bank Accounts
       home: Overview
       invoices: Invoices
       title: Finances
@@ -1464,6 +1494,7 @@ en:
       archive: My Orders
       manage: Manage orders
       ordering: Place order!
+      pickups: Pickup days
       title: Orders
     tasks: Tasks
     wiki:
@@ -1576,15 +1607,6 @@ en:
         starts: open from %{starts}
         starts_ends: open from %{starts} until %{ends}
       description2: "%{ordergroups} ordered %{article_count} articles, with a total value of %{net_sum} / %{gross_sum} (net / gross)."
-      download:
-        article_pdf: Article PDF
-        download_file: Download file
-        fax_csv: Fax CSV
-        fax_pdf: Fax PDF
-        fax_txt: Fax text
-        group_pdf: Group PDF
-        matrix_pdf: Matrix PDF
-        title: Download
       group_orders: 'Group orders:'
       search_placeholder:
         articles: Search for articles...
@@ -1694,6 +1716,17 @@ en:
       title: "%{title} - version %{version}"
       title_version: Version
       view_current: See current version
+  pickups:
+    document:
+      empty_selection: At least one order must be selected.
+      filename: Pickup for %{date}
+      invalid_document: Invalid document type
+      title: Pickup for %{date}
+    index:
+      article_pdf: Article PDF
+      group_pdf: Group PDF
+      matrix_pdf: Matrix PDF
+      title: Pickup days
   sessions:
     logged_in: Logged in!
     logged_out: Logged out!
@@ -1730,6 +1763,15 @@ en:
       title: Current orders
       total_sum: Total sum
       who_ordered: Who ordered?
+    order_download_button:
+      article_pdf: Article PDF
+      download_file: Download file
+      fax_csv: Fax CSV
+      fax_pdf: Fax PDF
+      fax_txt: Fax text
+      group_pdf: Group PDF
+      matrix_pdf: Matrix PDF
+      title: Download
     task_list:
       accept_task: Accept task
       done: Done
@@ -1981,6 +2023,7 @@ en:
     please_wait: Please wait...
     restore: Restore
     save: Save
+    search_placeholder: Search ...
     show: Show
   views:
     pagination:

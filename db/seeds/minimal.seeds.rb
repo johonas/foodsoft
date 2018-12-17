@@ -7,6 +7,7 @@ administrators = Workgroup.create(
     :role_admin => true,
     :role_finance => true,
     :role_article_meta => true,
+    :role_pickups => true,
     :role_suppliers => true,
     :role_orders => true,
 )
@@ -20,6 +21,10 @@ User.create(
     :password => "secret",
     :groups => [administrators]
 )
+
+# First entry for financial transaction types
+financial_transaction_class = FinancialTransactionClass.create(:name => "Other")
+FinancialTransactionType.create(:name => "Foodcoop", :financial_transaction_class_id => financial_transaction_class.id)
 
 # First entry for article categories
 ArticleCategory.create(:name => "Other", :description => "other, misc, unknown")

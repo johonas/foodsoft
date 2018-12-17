@@ -219,7 +219,7 @@ class Order < ActiveRecord::Base
   end
 
   # Sets order.status to 'close' and updates all Ordergroup.account_balances
-  def close!(user)
+  def close!(user, transaction_type = nil)
     raise I18n.t('orders.model.error_closed') if closed?
     transaction_note = I18n.t('orders.model.notice_close', :name => name,
                               :ends => ends.strftime(I18n.t('date.formats.default')))
@@ -231,7 +231,7 @@ class Order < ActiveRecord::Base
       for group_order in gos
         if group_order.ordergroup
           price = group_order.price * -1                  # decrease! account balance
-          group_order.ordergroup.add_financial_transaction!(price, transaction_note, user)
+          group_order.ordergroup.add_financial_transaction!(price, transaction_note, user, transaction_type)
         end
       end
 
@@ -274,7 +274,7 @@ class Order < ActiveRecord::Base
       send_to_supplier!(created_by)
     elsif auto_close_and_send_min_quantity?
       finish!(created_by)
-      send_to_supplier!(created_by) if order.sum >= order.supplier.min_order_quantity
+      send_to_supplier!(created_by) if sum >= supplier.min_order_quantity.to_r
     end
   end
 

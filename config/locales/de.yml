@@ -51,7 +51,7 @@ de:
         owner: Kontaktperson
       document:
         created_at: Erstellt am
-        created_by_user_id: Erstellt von
+        created_by: Erstellt von
         data: Daten
         mime: MIME-Typ
         name: Name
@@ -61,15 +61,24 @@ de:
         note: Notiz
         ordergroup: Bestellgruppe
         user: Eingetragen von
+      financial_transaction_class:
+        name: Name
+      financial_transaction_type:
+        name: Name
+        financial_transaction_class: Finanztransaktionsklasse
+        name_short: Kurzname
       group_order:
+        ordergroup: Bestellgruppe
         price: Bestellsumme
         updated_by: Zuletzt bestellt
       group_order_article:
-        ordergroup_id: Bestellgruppe
+        ordered: Bestellt
         quantity: Menge
+        received: Bekommen
         result: Menge
         tolerance: Toleranz
         total_price: Summe
+        unit_price: Preis/Einheit
       invoice:
         amount: Betrag
         attachment: Anhang
@@ -227,6 +236,7 @@ de:
         role_verteilen: Verteilem
         role_invoices: Rechnungen
         role_orders: Bestellverwaltung
+        role_pickups: Abholtage
         role_suppliers: Lieferanten
         user_tokens: Mitglieder
     errors:
@@ -250,6 +260,8 @@ de:
       article_category: Kategorie
       delivery: Lieferung
       financial_transaction: Kontotransaktion
+      financial_transaction_class: Finanztransaktionsklasse
+      financial_transaction_type: Finanztransaktionstyp
       invoice: Rechnung
       message: Nachricht
       messagegroup: Nachrichtengruppe
@@ -304,6 +316,22 @@ de:
       update:
         notice: Einstellungen gespeichert.
     confirm: Bist Du sicher?
+    finances:
+      index:
+        first_paragraph: Hier kannst du die Finanztransaktionsklassen und die dazugehörigen Finanztransaktionstypen verwalten. Jede Finanztansaktion hat einen bestimmten Typ, den du bei jeder Transaktion auswählen muss, falls du mehr als einen Typ angelegt hast. Die Finanztransaktionsklassen können zur Gruppierung der Finanztransaktionstypen verwendet werden und werden in der Kontoübersicht als weitere Spalten angezeigt, falls mehrere angelegt wurden.
+        new_financial_transaction_class: Neue Finanztransaktionsklasse anlegen
+        title: Finanzen
+      transaction_types:
+        name: Name
+        new_financial_transaction_type: Neuen Finanztransaktionstyp anlegen
+    financial_transaction_classes:
+      form:
+        title_edit: Finanztransaktionsklasse bearbeiten
+        title_new: Finanztransaktionsklasse anlegen
+    financial_transaction_types:
+      form:
+        title_edit: Finanztransaktionstyp bearbeiten
+        title_new: Finanztransaktionstyp anlegen
     mail_delivery_status:
       destroy_all:
         notice: Alle E-Mail Probleme wurden gelöscht
@@ -681,6 +709,7 @@ de:
       use_wiki: Wiki verwenden
       webstats_tracking_code: Code für Websiteanalysetool
     tabs:
+      applications: Apps
       foodcoop: Foodcoop
       language: Sprache
       layout: Layout
@@ -792,15 +821,20 @@ de:
       logged_in: Angemeldet!
   documents:
     create:
-      error: 'Dokument konnte nicht erstellt werden: %{error}'
+      error: 'Dokument oder Ordner konnte nicht erstellt werden: %{error}'
       not_allowed_mime: Der Dateityp "%{mime}" ist nicht erlaubt. Bitte kontaktiere einen Administrator um ihn freizuschalten.
-      notice: Dokument wurde erstellt
+      notice: Dokument oder Ordner wurde erstellt
     destroy:
-      error: 'Dokument konnt nicht gelöscht werden: %{error}'
-      no_right: Du hast nicht genügend Rechte um die Datei zu löschen
-      notice: Dokument wurde gelöscht
+      error: 'Dokument oder Ordner konnt nicht gelöscht werden: %{error}'
+      no_right: Du hast nicht genügend Rechte um die Datei oder den Ordner zu löschen
+      notice: Dokument oder Ordner wurde gelöscht
+    form:
+      new: Neues Dokument
+      new_folder: Neuer Ordner
+      submit: Erstellen
     index:
       new: Neues Dokument anlegen
+      new_folder: Neuen Ordner anlegen
       title: Dokumente
     multiple_orders_by_articles:
       filename: Artikelsortierung aktueller Bestellungen
@@ -808,26 +842,11 @@ de:
     multiple_orders_by_groups:
       filename: Gruppensortierung aktueller Bestellungen
       title: Aktuelle Bestellungen - Gruppensortierung
-    new:
-      title: Neues Dokument
     order_by_articles:
       filename: Bestellung %{name}-%{date} - Artikelsortierung
-      rows:
-      - Bestellgruppe
-      - Bestellt
-      - Bekommen
-      - Preis
       title: 'Artikelsortierung der Bestellung: %{name}, beendet am %{date}'
     order_by_groups:
       filename: Bestellung %{name}-%{date} - Gruppensortierung
-      rows:
-      - Artikel
-      - Bestellt
-      - Bekommen
-      - Preis
-      - GebGr
-      - Einheit
-      - Summe
       sum: Summe
       title: 'Gruppensortierung der Bestellung: %{name}, beendet am %{date}'
     order_fax:
@@ -843,17 +862,8 @@ de:
       total: Gesamtpreis
     order_matrix:
       filename: Bestellung %{name}-%{date} - Sortiermatrix
-      heading: Artikelübersicht
-      rows:
-      - Artikel
-      - Einheit
-      - Gebinde
-      - FC-Preis
-      - Menge
+      heading: Artikelübersicht (%{count})
       title: 'Sortiermatrix der Bestellung: %{name}, beendet am %{date}'
-      total:
-        one: Insgesamt ein Artikel
-        other: Insgesamt %{count} Artikel
   errors:
     general: Ein Problem ist aufgetreten.
     general_again: Ein Fehler ist aufgetreten. Bitte erneut versuchen.
@@ -1137,6 +1147,7 @@ de:
       role_verteilen: Verteilem
       role_invoices: Rechnungen
       role_orders: Bestellung
+      role_pickups: Abholtage
       role_suppliers: Lieferanten
       show_google_maps: Show it on Google maps
       sort_by: Nach %{text} sortieren
@@ -1270,7 +1281,7 @@ de:
       profile: Profil bearbeiten
     logo: "<span>food</span>soft"
   lib:
-    order_pdf:
+    render_pdf:
       page: Seite %{number} von %{count}
   login:
     accept_invitation:
@@ -1460,6 +1471,8 @@ de:
   model:
     delivery:
       each_stock_article_must_be_unique: Lieferung darf jeden Lagerartikel höchstens einmal auflisten.
+    financial_transaction_type:
+      no_delete_last: Es muss mindestens ein Finanztransaktionstyp existieren.
     group_order:
       stock_ordergroup_name: Lager (%{user})
     invoice:
@@ -1475,6 +1488,7 @@ de:
   navigation:
     admin:
       config: Einstellungen
+      finance: Finanzen
       home: Übersicht
       mail_delivery_status: E-Mail Probleme
       messagegroups: Nachrichtengruppen
@@ -1506,6 +1520,7 @@ de:
       archive: Meine Bestellungen
       manage: Bestellverwaltung
       ordering: Bestellen!
+      pickups: Abholtage
       title: Bestellungen
     tasks: Aufgaben
     wiki:
@@ -1622,15 +1637,6 @@ de:
         starts: läuft von %{starts}
         starts_ends: läuft von %{starts} bis %{ends}
       description2: "%{ordergroups} haben %{article_count} Artikel mit einem Gesamtwert von %{net_sum} / %{gross_sum} (netto / brutto) bestellt."
-      download:
-        article_pdf: Artikel PDF
-        download_file: Download file
-        fax_csv: Fax CSV
-        fax_pdf: Fax PDF
-        fax_txt: Fax Text
-        group_pdf: Gruppen PDF
-        matrix_pdf: Matrix PDF
-        title: Download
       group_orders: 'Gruppenbestellungen:'
       search_placeholder:
         articles: Suche nach Artikeln ...
@@ -1740,6 +1746,17 @@ de:
       title: "%{title} - Version %{version}"
       title_version: Version
       view_current: Aktuelle Version sehen
+  pickups:
+    document:
+      empty_selection: Es muss zumindest eine Bestellung ausgewählt sein.
+      filename: Abholungen für %{date}
+      invalid_document: Ungültiger Dokumententyp
+      title: Abholungen für %{date}
+    index:
+      article_pdf: Artikel PDF
+      group_pdf: Gruppen PDF
+      matrix_pdf: Matrix PDF
+      title: Abholtage
   sessions:
     logged_in: Angemeldet!
     logged_out: Abgemeldet!
@@ -1776,6 +1793,15 @@ de:
       title: Laufende Bestellungen
       total_sum: Gesamtsumme
       who_ordered: Wer hat bestellt?
+    order_download_button:
+      article_pdf: Artikel PDF
+      download_file: Download file
+      fax_csv: Fax CSV
+      fax_pdf: Fax PDF
+      fax_txt: Fax Text
+      group_pdf: Gruppen PDF
+      matrix_pdf: Matrix PDF
+      title: Download
     task_list:
       accept_task: Aufgabe übernehmen
       done: Erledigt

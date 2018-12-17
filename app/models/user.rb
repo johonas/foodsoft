@@ -159,12 +159,17 @@ class User < ActiveRecord::Base
   def role_article_meta?
     groups.detect {|group| group.role_article_meta?}
   end
-  
+
   # Checks the suppliers role
   def role_suppliers?
     groups.detect {|group| group.role_suppliers?}
   end
-  
+
+  # Checks the invoices role
+  def role_pickups?
+    groups.detect {|group| group.role_pickups?}
+  end
+
   # Checks the orders role
   def role_orders?
     groups.detect {|group| group.role_orders?}
@@ -183,7 +188,6 @@ class User < ActiveRecord::Base
     role_admin? || (task.workgroup && member_of?(task.workgroup))
   end
 
-
   def ordergroup_name
     ordergroup ? ordergroup.name : I18n.t('model.user.no_ordergroup')
   end
@@ -192,7 +196,7 @@ class User < ActiveRecord::Base
   def member_of?(group)
     group.users.exists?(self.id)
   end
- 
+
   #Returns an array with the users groups (but without the Ordergroups -> because tpye=>"")
   def member_of_groups()
      self.groups.where(type: '')

@@ -25,6 +25,7 @@ SimpleNavigation::Configuration.run do |navigation|
       subnav.item :ordering, I18n.t('navigation.orders.ordering'), group_orders_path
       subnav.item :ordering_archive, I18n.t('navigation.orders.archive'), archive_group_orders_path
       subnav.item :orders, I18n.t('navigation.orders.manage'), orders_path, if: Proc.new { current_user.role_orders? }
+      subnav.item :pickups, I18n.t('navigation.orders.pickups'), pickups_path, if: Proc.new { current_user.role_pickups? }
     end
 
     primary.item :articles, I18n.t('navigation.articles.title'), '#',
@@ -36,6 +37,7 @@ SimpleNavigation::Configuration.run do |navigation|
 
     primary.item :finance, I18n.t('navigation.finances.title'), '#', if: Proc.new { current_user.role_finance? || current_user.role_invoices? } do |subnav|
       subnav.item :finance_home, I18n.t('navigation.finances.home'), finance_root_path, if: Proc.new { current_user.role_finance? }
+      subnav.item :finance_home, I18n.t('navigation.finances.bank_accounts'), finance_bank_accounts_path, if: Proc.new { current_user.role_finance? }
       subnav.item :accounts, I18n.t('navigation.finances.accounts'), finance_ordergroups_path, if: Proc.new { current_user.role_finance? }
       subnav.item :balancing, I18n.t('navigation.finances.balancing'), finance_order_index_path, if: Proc.new { current_user.role_finance? }
       subnav.item :invoices, I18n.t('navigation.finances.invoices'), finance_invoices_path
@@ -53,6 +55,7 @@ SimpleNavigation::Configuration.run do |navigation|
       subnav.item :workgroups, I18n.t('navigation.admin.workgroups'), admin_workgroups_path
       subnav.item :bestellrunden, I18n.t('navigation.admin.bestellrunden'), admin_bestellrunden_path
       subnav.item :mail_delivery_status, I18n.t('navigation.admin.mail_delivery_status'), admin_mail_delivery_status_index_path
+      subnav.item :finances, I18n.t('navigation.admin.finance'), admin_finances_path
       subnav.item :config, I18n.t('navigation.admin.config'), admin_config_path
     end
 

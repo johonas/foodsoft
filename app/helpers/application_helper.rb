@@ -19,6 +19,11 @@ module ApplicationHelper
     I18n.l(time, :format => format) unless (time.nil? || format.nil?)
   end
 
+  def format_currency(amount)
+    class_name = amount < 0 ? 'negative_amout' : 'positive_amount'
+    content_tag :span, number_to_currency(amount), class: class_name
+  end
+
   # Creates ajax-controlled-links for pagination
   def pagination_links_remote(collection, options = {})
     per_page = options[:per_page] || @per_page
@@ -150,7 +155,7 @@ module ApplicationHelper
   end
 
   def format_roles(record, icon=false)
-    roles = %w(suppliers article_meta orders finance invoices admin verteilen)
+    roles = %w(suppliers article_meta orders pickups finance invoices admin verteilen)
     roles.select! {|role| record.send "role_#{role}?"}
     names = Hash[roles.map{|r| [r, I18n.t("helpers.application.role_#{r}")]}]
     if icon

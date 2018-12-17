@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171002000000) do
+ActiveRecord::Schema.define(version: 20171201000000) do
 
   create_table "article_categories", force: :cascade do |t|
     t.string "name",        limit: 255, default: "", null: false
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(version: 20171002000000) do
 
   add_index "assignments", ["user_id", "task_id"], name: "index_assignments_on_user_id_and_task_id", unique: true, using: :btree
 
+<<<<<<< HEAD
   create_table "bestellrunden", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -73,6 +74,32 @@ ActiveRecord::Schema.define(version: 20171002000000) do
     t.date     "ends",       null: false
   end
 
+=======
+  create_table "bank_accounts", force: :cascade do |t|
+    t.string   "name",                                                           null: false
+    t.string   "iban"
+    t.string   "description"
+    t.decimal  "balance",                   precision: 12, scale: 2, default: 0, null: false
+    t.datetime "last_import"
+    t.string   "import_continuation_point"
+  end
+
+  create_table "bank_transactions", force: :cascade do |t|
+    t.integer "bank_account_id",                           null: false
+    t.string  "external_id"
+    t.date    "date"
+    t.decimal "amount",            precision: 8, scale: 2, null: false
+    t.string  "iban"
+    t.string  "reference"
+    t.text    "text"
+    t.text    "receipt"
+    t.binary  "image"
+    t.integer "financial_link_id"
+  end
+
+  add_index "bank_transactions", ["financial_link_id"], name: "index_bank_transactions_on_financial_link_id", using: :btree
+
+>>>>>>> 9b307f735a13c1dae170e1c80ea940968063506b
   create_table "deliveries", force: :cascade do |t|
     t.integer  "supplier_id",  limit: 4
     t.date     "delivered_on"
@@ -101,19 +128,49 @@ ActiveRecord::Schema.define(version: 20171002000000) do
     t.integer  "created_by_user_id", limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "parent_id"
   end
 
+<<<<<<< HEAD
   create_table "financial_links", force: :cascade do |t|
     t.text "note", limit: 65535
+=======
+  add_index "documents", ["parent_id"], name: "index_documents_on_parent_id", using: :btree
+
+  create_table "financial_links", force: :cascade do |t|
+    t.text "note"
+>>>>>>> 9b307f735a13c1dae170e1c80ea940968063506b
   end
 
+  create_table "financial_transaction_classes", force: :cascade do |t|
+    t.string "name", null: false
+  end
+
+  create_table "financial_transaction_types", force: :cascade do |t|
+    t.string  "name",                           null: false
+    t.integer "financial_transaction_class_id", null: false
+    t.string  "name_short"
+  end
+
+  add_index "financial_transaction_types", ["name_short"], name: "index_financial_transaction_types_on_name_short", using: :btree
+
   create_table "financial_transactions", force: :cascade do |t|
+<<<<<<< HEAD
     t.integer  "ordergroup_id",     limit: 4,                             default: 0, null: false
     t.decimal  "amount",                          precision: 8, scale: 2, default: 0, null: false
     t.text     "note",              limit: 65535,                                     null: false
     t.integer  "user_id",           limit: 4,                             default: 0, null: false
     t.datetime "created_on",                                                          null: false
     t.integer  "financial_link_id", limit: 4
+=======
+    t.integer  "ordergroup_id",                 limit: 4,                             default: 0, null: false
+    t.decimal  "amount",                                      precision: 8, scale: 2, default: 0, null: false
+    t.text     "note",                          limit: 65535,                                     null: false
+    t.integer  "user_id",                       limit: 4,                             default: 0, null: false
+    t.datetime "created_on",                                                                      null: false
+    t.integer  "financial_link_id"
+    t.integer  "financial_transaction_type_id",                                                   null: false
+>>>>>>> 9b307f735a13c1dae170e1c80ea940968063506b
   end
 
   add_index "financial_transactions", ["ordergroup_id"], name: "index_financial_transactions_on_ordergroup_id", using: :btree
@@ -176,7 +233,11 @@ ActiveRecord::Schema.define(version: 20171002000000) do
     t.boolean  "role_verteilen",                                                  default: false, null: false
     t.date     "break_start"
     t.date     "break_end"
+<<<<<<< HEAD
     t.boolean  "role_invoices",                                                   default: false, null: false
+=======
+    t.boolean  "role_pickups",                                                    default: false, null: false
+>>>>>>> 9b307f735a13c1dae170e1c80ea940968063506b
   end
 
   add_index "groups", ["name"], name: "index_groups_on_name", unique: true, using: :btree
@@ -240,6 +301,46 @@ ActiveRecord::Schema.define(version: 20171002000000) do
     t.string   "salt",           limit: 255
     t.binary   "received_email", limit: 16777215
   end
+
+  create_table "oauth_access_grants", force: :cascade do |t|
+    t.integer  "resource_owner_id", limit: 4,     null: false
+    t.integer  "application_id",    limit: 4,     null: false
+    t.string   "token",             limit: 255,   null: false
+    t.integer  "expires_in",        limit: 4,     null: false
+    t.text     "redirect_uri",      limit: 65535, null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "revoked_at"
+    t.string   "scopes",            limit: 255
+  end
+
+  add_index "oauth_access_grants", ["token"], name: "index_oauth_access_grants_on_token", unique: true, using: :btree
+
+  create_table "oauth_access_tokens", force: :cascade do |t|
+    t.integer  "resource_owner_id", limit: 4
+    t.integer  "application_id",    limit: 4
+    t.string   "token",             limit: 255, null: false
+    t.string   "refresh_token",     limit: 255
+    t.integer  "expires_in",        limit: 4
+    t.datetime "revoked_at"
+    t.datetime "created_at",                    null: false
+    t.string   "scopes",            limit: 255
+  end
+
+  add_index "oauth_access_tokens", ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true, using: :btree
+  add_index "oauth_access_tokens", ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id", using: :btree
+  add_index "oauth_access_tokens", ["token"], name: "index_oauth_access_tokens_on_token", unique: true, using: :btree
+
+  create_table "oauth_applications", force: :cascade do |t|
+    t.string   "name",         limit: 255,                null: false
+    t.string   "uid",          limit: 255,                null: false
+    t.string   "secret",       limit: 255,                null: false
+    t.text     "redirect_uri", limit: 65535,              null: false
+    t.string   "scopes",       limit: 255,   default: "", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
   create_table "order_articles", force: :cascade do |t|
     t.integer "order_id",         limit: 4, default: 0, null: false

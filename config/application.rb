@@ -49,7 +49,7 @@ module Foodsoft
     # parameters by using an attr_accessible or attr_protected declaration.
     # TODO Re-activate this. Uncommenting this line will currently cause rspec to fail.
     config.active_record.whitelist_attributes = false
-    
+
     # Enable the asset pipeline
     config.assets.enabled = true
 
@@ -63,6 +63,14 @@ module Foodsoft
     # Load legacy scripts from vendor
     config.assets.precompile += [ 'vendor/assets/javascripts/*.js' ]
 
+    # CORS for API
+    config.middleware.insert_before 0, 'Rack::Cors' do
+      allow do
+        origins '*'
+        # this restricts Foodsoft scopes to certain characters - let's discuss it when it becomes an actual problem
+        resource %r{\A/[-a-zA-Z0-9_]+/api/v1/}, headers: :any, methods: :any
+      end
+    end
   end
 
   # Foodsoft version

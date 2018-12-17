@@ -39,7 +39,7 @@ fr:
         supplier: Fournisseur-e
       document:
         created_at: Créé le
-        created_by_user_id: Crée par
+        created_by: Crée par
         data: 
         mime: 
         name: Nom
@@ -50,14 +50,17 @@ fr:
         ordergroup: Cellule
         user: Créateur-trice
       group_order:
+        ordergroup: Cellule
         price: Total de la commande
         updated_by: Dernière commande
       group_order_article:
-        ordergroup_id: Cellule
+        ordered: Commandée
         quantity: Quantité
         result: Quantité
+        received: Quantité
         tolerance: Tolérance
         total_price: Total
+        unit_price: Prix/Unité
       invoice:
         amount: Montant
         attachment: Appendice
@@ -761,22 +764,9 @@ fr:
       title: 
     order_by_articles:
       filename: Commande %{name}-%{date} - Trier par
-      rows:
-      - Cellule
-      - 
-      - Quantité
-      - Prix
       title: 'Ordre des produits pour la commande: %{name}, clôturée le %{date}'
     order_by_groups:
       filename: Commande %{name}-%{date} - Répartition par cellules
-      rows:
-      - Nom de l'article
-      - Commandée
-      - Quantité
-      - Prix unitaire
-      - Unités par lot
-      - Unité
-      - Prix total
       sum: prix total
       title: 'Répartition par cellules pour la commande: %{name}, clôturée le %{date}'
     order_fax:
@@ -792,17 +782,8 @@ fr:
       total: Total
     order_matrix:
       filename: Commande %{name}-%{date} - Tableau de répartition
-      heading: Liste des produits
-      rows:
-      - Nom du produit
-      - Unité
-      - Nombre d'unités
-      - Prix coop
-      - Quantité
+      heading: Liste des produits (%{count})
       title: 'Tableau de répartition pour la commande: %{name}; clôturée le %{date}'
-      total:
-        one: Un seul produit
-        other: "%{count} produits au total"
   errors:
     general: Un problème a été rencontré.
     general_again: Une erreur s'est produite. Merci de réessayer.
@@ -1222,7 +1203,7 @@ fr:
       profile: Ton profil
     logo: coop
   lib:
-    order_pdf:
+    render_pdf:
       page: page %{number} de %{count}
   login:
     accept_invitation:
@@ -1419,6 +1400,7 @@ fr:
   navigation:
     admin:
       config: Configuration
+      finance: Trésorerie
       home: Aperçu
       mail_delivery_status: 
       messagegroups: 
@@ -1557,15 +1539,6 @@ fr:
         starts: ouverte du %{starts}
         starts_ends: ouverte du %{starts} au %{ends}
       description2: "%{ordergroups} ont commandé %{article_count} articles, pour un montant total de %{net_sum} (net)/ %{gross_sum} (brut)"
-      download:
-        article_pdf: Liste des articles en PDF
-        download_file: Télécharger
-        fax_csv: Fax CSV
-        fax_pdf: Fax au format PDF
-        fax_txt: Fax au format texte
-        group_pdf: Liste des cellules en PDF
-        matrix_pdf: Matrice de répartition en PDF
-        title: Télécharger
       group_orders: 'Commandes des cellules:'
       search_placeholder:
         articles: Rechercher des articles...
@@ -1711,6 +1684,15 @@ fr:
       title: Commandes en cours
       total_sum: Total
       who_ordered: Qui a commandé?
+    order_download_button:
+      article_pdf: Liste des articles en PDF
+      download_file: Télécharger
+      fax_csv: Fax CSV
+      fax_pdf: Fax au format PDF
+      fax_txt: Fax au format texte
+      group_pdf: Liste des cellules en PDF
+      matrix_pdf: Matrice de répartition en PDF
+      title: Télécharger
     task_list:
       accept_task: Te charger de ce boulot
       done: Effectué

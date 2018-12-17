@@ -1,32 +1,19 @@
 # encoding: utf-8
 class ApplicationController < ActionController::Base
-  include Foodsoft::ControllerExtensions::Locale
+  include Concerns::FoodcoopScope
+  include Concerns::Auth
+  include Concerns::Locale
+  helper_method :current_user
   helper_method :available_locales
 
   protect_from_forgery
-  before_filter  :select_foodcoop, :authenticate, :set_user_last_activity, :store_controller, :items_per_page
+  before_filter  :authenticate, :set_user_last_activity, :store_controller, :items_per_page
   after_filter  :remove_controller
   around_filter :set_time_zone, :set_currency
 
   # Returns the controller handling the current request.
   def self.current
     Thread.current[:application_controller]
-  end
-  
-  protected
-
-  def current_user
-    # check if there is a valid session and return the logged-in user (its object)
-    if session[:user_id] && params[:foodcoop]
-      # for shared-host installations. check if the cookie-subdomain fits to request.
-      @current_user ||= User.undeleted.find_by_id(session[:user_id]) if session[:scope] == FoodsoftConfig.scope
-    end
-  end
-  helper_method :current_user
-
-  def deny_access
-    session[:return_to] = request.original_url
-    redirect_to root_url, alert: I18n.t('application.controller.error_denied', sign_in: ActionController::Base.helpers.link_to(t('application.controller.error_denied_sign_in'), login_path))
   end
 
   private
@@ -161,16 +148,11 @@ class ApplicationController < ActionController::Base
     redirect_to root_path, alert: I18n.t('application.controller.error_feature_disabled')
   end
 
-  # Redirect to the login page, used in authenticate, plugins can override this.
-  def redirect_to_login(options={})
-    redirect_to login_url, options
-  end
-
   # Stores this controller instance as a thread local varibale to be accessible from outside ActionController/ActionView.
   def store_controller
     Thread.current[:application_controller] = self
   end
-    
+
   # Sets the thread local variable that holds a reference to the current controller to nil.
   def remove_controller
     Thread.current[:application_controller] = nil
@@ -181,34 +163,12 @@ class ApplicationController < ActionController::Base
     @supplier = Supplier.find(params[:supplier_id]) if params[:supplier_id]
   end
 
-  # Set config and database connection for each request
-  # It uses the subdomain to select the appropriate section in the config files
-  # Use this method as a before filter (first filter!) in ApplicationController
-  def select_foodcoop
-    return unless FoodsoftConfig[:multi_coop_install]
-
-    foodcoop = params[:foodcoop]
-    if foodcoop.blank?
-      FoodsoftConfig.select_default_foodcoop
-      redirect_to root_url
-    elsif FoodsoftConfig.allowed_foodcoop? foodcoop
-      FoodsoftConfig.select_foodcoop foodcoop
-    else
-      raise ActionController::RoutingError.new 'Foodcoop Not Found'
-    end
-  end
-
   def items_per_page
     if params[:per_page] && params[:per_page].to_i > 0 && params[:per_page].to_i <= 500
       @per_page = params[:per_page].to_i
     else
       @per_page = 20
     end
-  end
-
-  # Always stay in foodcoop url scope
-  def default_url_options(options = {})
-    {foodcoop: FoodsoftConfig.scope}
   end
 
   # Set timezone according to foodcoop preference.
