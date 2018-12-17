@@ -1,6 +1,10 @@
 = render layout: 'layouts/header' do
   .logo
-    = image_tag("comedor_logo_rot.png", width: 700)
+    - if FoodsoftConfig[:header_image]
+      = image_tag(FoodsoftConfig[:header_image], width: 700)
+    - else
+      = t('layouts.logo').html_safe
+
   %ul.nav.nav-pills.pull-right
     %li.dropdown
       %a.dropdown-toggle(data-toggle="dropdown" href="#")
