@@ -22,11 +22,11 @@ class Order < ActiveRecord::Base
   # Validations
   validate :include_articles
   validate :keep_ordered_articles
-  validates :bestellrunde, :presence => true
-  validates :bestellrunde_id, :presence => true
+  validates_presence_of :bestellrunde_id, :starts, :ends
 
   # Callbacks
   after_save :save_order_articles, :update_price_of_group_orders
+  before_validation :init_dates
 
   # Finders
   scope :open, -> { where(state: 'open') }
@@ -34,15 +34,14 @@ class Order < ActiveRecord::Base
   scope :finished_not_closed, -> { where(state: 'finished') }
   scope :closed, -> { where(state: 'closed') }
   scope :stockit, -> { where(supplier_id: 0) }
-  scope :recent, -> { joins(:bestellrunde).order('bestellrunden.starts DESC').limit(10) }
+  scope :recent, -> { order('starts DESC').limit(10) }
 
-  delegate :starts, to: :bestellrunde, :allow_nil => true
   scope :stock_group_order, -> { group_orders.where(ordergroup_id: nil).first }
 
   # Allow separate inputs for date and time
   #   with workaround for https://github.com/einzige/date_time_attribute/issues/14
   include DateTimeAttributeValidate
-  date_time_attribute :boxfill
+  date_time_attribute :starts, :boxfill, :ends
 
   def stockit?
     supplier_id == 0
@@ -75,7 +74,7 @@ class Order < ActiveRecord::Base
 
   # Save ids, and create/delete order_articles after successfully saved the order
   def article_ids=(ids)
-    @article_ids = ids
+    @article_ids = ids.reject(&:blank?)
   end
 
   def article_ids
@@ -109,6 +108,13 @@ class Order < ActiveRecord::Base
 
   def expired?
     ends.present? && ends < Time.now
+  end
+
+  # sets up first guess of dates when initializing a new object
+  # I guess `def initialize` would work, but it's tricky http://stackoverflow.com/questions/1186400
+  def init_dates
+    self.starts = bestellrunde.starts
+    self.ends = bestellrunde.ends
   end
 
   # search GroupOrder of given Ordergroup
@@ -253,14 +259,6 @@ class Order < ActiveRecord::Base
     update_attributes! state: 'closed', updated_by: user
   end
 
-  def ends
-    if end_date
-      return end_date
-    elsif bestellrunde
-      return bestellrunde.ends
-    end
-  end
-
   def send_to_supplier!(user)
     Mailer.order_result_supplier(user, self).deliver_now
     update!(last_sent_mail: Time.now)
@@ -287,15 +285,6 @@ class Order < ActiveRecord::Base
         ExceptionNotifier.notify_exception(error, data: {order_id: order.id})
       end
     end
-  end
-
-  protected
-
-  def ends=(value)
-    # TODO clean this up, order.ends is no longer needed as we have 'bestellrunden' now.
-    # e.g. clean up finish!-method
-    # raise 'No longer supported'
-    self.end_date = value
   end
 
   protected

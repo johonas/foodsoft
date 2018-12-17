@@ -71,11 +71,8 @@ class OrdersController < ApplicationController
   # Save a new order.
   # order_articles will be saved in Order.article_ids=()
   def create
-    bestellrunden_id = params['order'].delete('bestellrunde_id')
-
     @order = Order.new(params[:order])
-    @order.bestellrunde = Bestellrunde.find(bestellrunden_id)
-    @order.created_by = current_user
+
     if @order.save
       flash[:notice] = I18n.t('orders.create.notice')
       redirect_to @order
