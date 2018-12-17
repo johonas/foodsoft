@@ -1,7 +1,7 @@
 class DiscourseLoginController < DiscourseController
 
   before_filter -> { require_config_disabled :discourse_sso }
-  skip_before_filter :authenticate
+  skip_before_filter :authenticate_role
 
   def initiate
     discourse_url = FoodsoftConfig[:discourse_url]

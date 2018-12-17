@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   helper_method :available_locales
 
   protect_from_forgery
-  before_filter  :authenticate, :set_user_last_activity, :store_controller, :items_per_page
+  before_filter :authenticate_role, :set_user_last_activity, :store_controller, :items_per_page
   after_filter  :remove_controller
   around_filter :set_time_zone, :set_currency
 

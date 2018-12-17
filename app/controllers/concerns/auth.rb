@@ -45,7 +45,7 @@ module Concerns::Auth
     expire_access_tokens
   end
 
-  def authenticate(role = 'any')
+  def authenticate_role(role = 'any')
     # Attempt to retrieve authenticated user from controller instance or session...
     if !current_user
       # No user at all: redirect to login page.
@@ -76,35 +76,35 @@ module Concerns::Auth
   end
 
   def authenticate_admin
-    authenticate('admin')
+    authenticate_role('admin')
   end
 
   def authenticate_finance
-    authenticate('finance')
+    authenticate_role('finance')
   end
 
   def authenticate_article_meta
-    authenticate('article_meta')
+    authenticate_role('article_meta')
   end
 
   def authenticate_pickups
-    authenticate('pickups')
+    authenticate_role('pickups')
   end
 
   def authenticate_suppliers
-    authenticate('suppliers')
+    authenticate_role('suppliers')
   end
 
   def authenticate_orders
-    authenticate('orders')
+    authenticate_role('orders')
   end
 
   def authenticate_finance_or_orders
-    authenticate('finance_or_orders')
+    authenticate_role('finance_or_orders')
   end
 
   def authenticate_pickups_or_orders
-    authenticate('pickups_or_orders')
+    authenticate_role('pickups_or_orders')
   end
 
   # checks if the current_user is member of given group.
@@ -124,7 +124,7 @@ module Concerns::Auth
         redirect_to root_path, alert: I18n.t('application.controller.error_token')
       end
     else
-      authenticate(role)
+      authenticate_role(role)
     end
   end
 

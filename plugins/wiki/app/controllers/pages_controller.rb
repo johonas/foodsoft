@@ -3,7 +3,7 @@ class PagesController < ApplicationController
   before_filter -> { require_plugin_enabled FoodsoftWiki }
   before_filter :catch_special_pages, only: [:show, :new]
 
-  skip_before_filter :authenticate, :only => :all
+  skip_before_filter :authenticate_role, :only => :all
   before_filter :only => :all do
     authenticate_or_token(['wiki', 'all'])
   end
