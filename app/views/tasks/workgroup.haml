@@ -3,7 +3,6 @@
 
 %section
   %h3= t '.title_all'
-  = render 'list', tasks: @tasks, q: @q
   = render 'shared/task_list', tasks: @group.open_tasks
   %br/
   = link_to_top

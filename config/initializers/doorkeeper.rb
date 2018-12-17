@@ -4,7 +4,7 @@ Doorkeeper.configure do
 
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    authenticate
+    authenticate_role
   end
 
   resource_owner_from_credentials do
