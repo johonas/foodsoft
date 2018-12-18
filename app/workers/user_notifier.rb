@@ -1,6 +1,6 @@
 # This plain ruby class should handle all user notifications, called by various models
 class UserNotifier
-  @queue = :foodsoft_notifier
+  @queue = FoodsoftConfig[:redis_queue]
 
   # Resque style method to perform every class method defined here
   def self.perform(foodcoop, method_name, *args)

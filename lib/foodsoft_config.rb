@@ -247,6 +247,7 @@ class FoodsoftConfig
     # @see #set_missing
     def get_default_config
       cfg = {
+        redis_queue: :foodsoft_notifier,
         use_nick: true,
         use_apple_points: true,
         # English is the default language, and this makes it show up as default.

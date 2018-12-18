@@ -1,5 +1,5 @@
 class MessageNotifier < UserNotifier
-  @queue = :foodsoft_notifier
+  @queue = FoodsoftConfig[:redis_queue]
 
   def self.message_deliver(args)
     message_id = args.first
