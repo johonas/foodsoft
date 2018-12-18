@@ -1,2 +1,2 @@
 RAILS_ENV=production bundle exec rails r 'Resque.workers.each {|w| w.unregister_worker}'
-RAILS_ENV=production QUEUE=foodsoft_notifier COUNT=5 bundle exec rake resque:workers &
+RAILS_ENV=production QUEUE=foodsoft_notifier COUNT=5 PIDFILE=./resque.pid BACKGROUND=yes bundle exec rake resque:workers 
