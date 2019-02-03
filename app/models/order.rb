@@ -219,7 +219,9 @@ class Order < ActiveRecord::Base
         ordergroups.each(&:update_stats!)
 
         # Notifications
-        Resque.enqueue(UserNotifier, FoodsoftConfig.scope, 'finished_order', self.id)
+        if FoodsoftConfig[:send_order_finish_mail]
+          Resque.enqueue(UserNotifier, FoodsoftConfig.scope, 'finished_order', self.id)
+        end
       end
     end
   end
