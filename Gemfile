@@ -94,6 +94,7 @@ end
 
 group :development, :test do
   gem 'ruby-prof', require: false
+  gem 'byebug'
 end
 
 group :test do

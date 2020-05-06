@@ -40,3 +40,4 @@ Capfile
 config/deploy
 config/deploy.rb
 Gemfile.capistrano*
+/.byebug_history
