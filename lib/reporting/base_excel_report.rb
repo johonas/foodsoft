@@ -17,7 +17,7 @@ module Reporting
     end
 
     def with_sheet(name, size, orientation, worksheet_options = {}, &block)
-      package.workbook.add_worksheet(worksheet_options.merge(name: name)) do |sheet|
+      package.workbook.add_worksheet(worksheet_options.merge(name: sanitize(name))) do |sheet|
         sheet.page_setup do |page|
           page.paper_size = size
           page.orientation = orientation
@@ -42,6 +42,12 @@ module Reporting
     end
 
     protected
+
+    # Remove all characters except letters and digits
+    # and replace whitespaces with underscore
+    def sanitize(param)
+      param.gsub(/[^a-zA-Z\s]/, "").strip.gsub(/\s+/, '_').downcase
+    end
 
     def cm2in(cm)
       (cm.to_f * 0.393701).round(4)
