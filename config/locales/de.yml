@@ -121,6 +121,7 @@ de:
         description: Beschreibung
         name: Name
         user_tokens: Mitglieder
+        active: Aktiv
       order:
         boxfill: Kistenfüllen ab
         closed_by: Abgerechnet von
@@ -168,6 +169,7 @@ de:
         last_user_activity: Zuletzt aktiv
         name: Name
         user_tokens: Mitglieder
+        active: Aktiv
       page:
         body: Inhalt
         parent_id: Oberseite
@@ -239,6 +241,8 @@ de:
         role_pickups: Abholtage
         role_suppliers: Lieferanten
         user_tokens: Mitglieder
+        active: Aktiv
+
     errors:
       has_many_left: ist noch mit einem/r %{collection} verknüpft!
       models:
@@ -462,6 +466,8 @@ de:
       workgroups:
         members: Mitglieder
         name: Name
+        active: Aktiv
+
   application:
     controller:
       error_authn: Anmeldung erforderlich!

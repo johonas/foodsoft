@@ -52,7 +52,6 @@ module ApplicationHelper
         links.join.html_safe
       end
     end
-
   end
 
   def sort_link_helper(text, key, options = {})
@@ -259,4 +258,11 @@ module ApplicationHelper
     end
   end
 
+  def boolean_icon(value)
+    if value
+      content_tag :i, nil, class: 'icon-check icon-large'
+    else
+      content_tag :i, nil, class: 'icon-unchecked icon-large'
+    end
+  end
 end

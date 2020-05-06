@@ -5,6 +5,7 @@
   %thead
     %tr
       %th= sort_link(@q, :name)
+      %th= sort_link(@q, :active)
       %th= sort_link(@q, :contact_person)
       %th= sort_link(@q, :contact_address)
       %th= heading_helper Ordergroup, :user_tokens
@@ -14,6 +15,7 @@
     - for ordergroup in @ordergroups
       %tr{:class => cycle('even','odd', :name => 'groups')}
         %td= link_to ordergroup.name, [:admin, ordergroup]
+        %td= boolean_icon ordergroup.active
         %td{title: ordergroup_members_title(ordergroup)}
           %abbr{title: ordergroup_members_title(ordergroup)}= ordergroup.users.size
         %td= link_to_gmaps ordergroup.contact_address

@@ -4,7 +4,7 @@ class Foodcoop::WorkgroupsController < ApplicationController
     :except => [:index]
 
   def index
-    @workgroups = Workgroup.order("name")
+    @workgroups = Workgroup.undeleted.active.order("name")
   end
   
   def edit

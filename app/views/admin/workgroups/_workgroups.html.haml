@@ -5,6 +5,7 @@
   %thead
     %tr
       %th= t '.name'
+      %th= t '.active'
       %th= t '.members'
       %th= t 'admin.access_to'
       %th= t 'ui.actions'
@@ -12,6 +13,7 @@
     - for workgroup in @workgroups
       %tr
         %td= link_to workgroup.name, [:admin, workgroup]
+        %td= boolean_icon workgroup.active
         %td= workgroup.users.size
         %td= format_roles(workgroup)
         %td

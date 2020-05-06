@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181217095119) do
+ActiveRecord::Schema.define(version: 20200506091937) do
 
   create_table "article_categories", force: :cascade do |t|
     t.string "name",        limit: 255, default: "", null: false
@@ -196,6 +196,7 @@ ActiveRecord::Schema.define(version: 20181217095119) do
 
   create_table "groups", force: :cascade do |t|
     t.string   "type",                     limit: 255,                            default: "",    null: false
+    t.boolean  "active",                                                          default: true,  null: false
     t.string   "name",                     limit: 255,                            default: "",    null: false
     t.string   "description",              limit: 255
     t.decimal  "account_balance",                        precision: 12, scale: 2, default: 0,     null: false

@@ -3,7 +3,6 @@ class Admin::OrdergroupsController < Admin::BaseController
   inherit_resources
   
   def index
-
     @q = Ordergroup.undeleted.ransack(params[:q])
     @ordergroups = @q.result.page(params[:page]).per(@per_page)
 

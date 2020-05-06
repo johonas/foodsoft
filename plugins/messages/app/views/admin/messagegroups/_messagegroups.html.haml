@@ -5,12 +5,14 @@
   %thead
     %tr
       %th= Messagegroup.human_attribute_name :name
+      %th= Messagegroup.human_attribute_name :active
       %th= Messagegroup.human_attribute_name :user_tokens
       %th= t 'ui.actions'
   %tbody
     - for messagegroup in @messagegroups
       %tr
         %td= link_to messagegroup.name, [:admin, messagegroup]
+        %td= boolean_icon messagegroup  .active
         %td= messagegroup.users.size
         %td
           = link_to t('ui.edit'), edit_admin_messagegroup_path(messagegroup), class: 'btn btn-mini'

@@ -1,7 +1,7 @@
 class MessagegroupsController < ApplicationController
 
   def index
-    @messagegroups = Messagegroup.order("name")
+    @messagegroups = Messagegroup.undeleted.active.order("name")
   end
 
   def join

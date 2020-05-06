@@ -41,6 +41,6 @@ class CurrentOrders::ArticlesController < ApplicationController
 
   helper_method \
   def ordergroups_for_adding
-    Ordergroup.undeleted.order(:name)
+    Ordergroup.undeleted.active.order(:name)
   end
 end

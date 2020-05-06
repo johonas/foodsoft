@@ -98,11 +98,11 @@
   = f.input :send_method, :as => :radio_buttons, :collection => send_method_collection, :label => false, :label_method => ->(obj){ t("activerecord.attributes.message.send_method.#{obj}") }
 
   #workgroup
-    = f.input :workgroup_id, :as => :select, include_blank: false, :collection => Workgroup.undeleted.order(:name).includes(:memberships).reject { |g| g.memberships.empty? }
+    = f.input :workgroup_id, :as => :select, include_blank: false, :collection => Workgroup.undeleted.active.order(:name).includes(:memberships).reject { |g| g.memberships.empty? }
   #ordergroup
-    = f.input :ordergroup_id, :as => :select, include_blank: false, :collection => Ordergroup.undeleted.order(:name).includes(:memberships).reject { |g| g.memberships.empty? }
+    = f.input :ordergroup_id, :as => :select, include_blank: false, :collection => Ordergroup.undeleted.active.order(:name).includes(:memberships).reject { |g| g.memberships.empty? }
   #messagegroup
-    = f.input :messagegroup_id, :as => :select, include_blank: false, :collection => Messagegroup.undeleted.order(:name)
+    = f.input :messagegroup_id, :as => :select, include_blank: false, :collection => Messagegroup.undeleted.active.order(:name)
   #order
     = f.input :order_id, :as => :select, include_blank: false, :collection => Order.finished_not_closed.order('pickup DESC').includes(:supplier).limit(25)
   #recipients
