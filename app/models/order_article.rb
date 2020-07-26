@@ -23,9 +23,7 @@ class OrderArticle < ActiveRecord::Base
   # This method returns either the ArticlePrice or the Article
   # The first will be set, when the the order is finished
   def price
-    article
-    # TODO check why no article_price is set
-    # article_price || article
+    article_price || article
   end
 
   # latest information on available units
