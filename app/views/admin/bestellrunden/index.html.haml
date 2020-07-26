@@ -8,5 +8,6 @@
     'data-submit-onchange' => true, class: 'form-search' do
     = text_field_tag :query, params[:query], class: 'input-medium search-query',
       placeholder: t('admin.search_placeholder')
+
 #bestellrunden
-  = render "bestellrunden"
+  = render 'bestellrunden'

@@ -1,14 +1,21 @@
 - with_ordergroup = local_assigns[:with_ordergroup]
+- with_pdf = local_assigns[:with_pdf]
 - with_csv = local_assigns[:with_csv]
 .pull-right
+  - if with_pdf
+    = transactions_pdf(@ordergroup, params[:q])
+
   - if with_csv
     .btn-group
       = link_to url_for(search: params[:q], format: :csv), class: 'btn' do
         = glyph :download
         CSV
+
   - if @financial_transactions.total_pages > 1
     .btn-group= items_per_page wrap: false
+
 = pagination_links_remote @financial_transactions
+
 %table.table.table-striped
   %thead
     %tr

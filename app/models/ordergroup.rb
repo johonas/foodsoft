@@ -80,6 +80,10 @@ class Ordergroup < Group
     account_balance - value_of_open_orders(exclude) - value_of_finished_orders(exclude)
   end
 
+  def account_balance_on(date)
+    financial_transactions.where('created_on <= ?', date.to_datetime.end_of_day).sum(:amount)
+  end
+
   # Creates a new FinancialTransaction for this Ordergroup and updates the account_balance accordingly.
   # Throws an exception if it fails.
   def add_financial_transaction!(amount, note, user, transaction_type, link = nil)

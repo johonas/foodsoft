@@ -3,7 +3,6 @@ class Finance::FinancialTransactionsController < ApplicationController
   before_filter :authenticate_finance
   before_filter :find_ordergroup, :except => [:new_collection, :create_collection, :index_collection]
   inherit_resources
-#  belongs_to :ordergroup
 
   def index
     if params['sort']
@@ -28,6 +27,16 @@ class Finance::FinancialTransactionsController < ApplicationController
       format.js; format.html { render }
       format.csv do
         send_data FinancialTransactionsCsv.new(@financial_transactions_all).to_csv, filename: 'transactions.csv', type: 'text/csv'
+      end
+      format.pdf do
+        from = params[:q].try(:[], :created_on_gteq)
+        to = params[:q].try(:[], :created_on_lteq)
+
+        from = from.blank? ? nil : DateTime.strptime(from, '%Y-%m-%d')
+        to = to.blank? ? nil : DateTime.strptime(to, '%Y-%m-%d')
+
+        pdf = FinancialTransactions.new(@ordergroup, @financial_transactions_all, from, to)
+        send_data pdf.to_pdf, filename: pdf.filename, type: 'application/pdf'
       end
     end
   end

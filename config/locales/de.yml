@@ -870,6 +870,14 @@ de:
       filename: Bestellung %{name}-%{date} - Sortiermatrix
       heading: Artikelübersicht (%{count})
       title: 'Sortiermatrix der Bestellung: %{name}, beendet am %{date}'
+    financial_transaction:
+      filename: kontoauszug_%{name}
+      title: Kontoauszug für %{name}
+      table_name: Kontoauszug %{from} - %{to}
+      credit: Gutschrift
+      debit: Belastung
+      balance: Saldo
+      opening_balance: Saldovortrag
   errors:
     general: Ein Problem ist aufgetreten.
     general_again: Ein Fehler ist aufgetreten. Bitte erneut versuchen.
@@ -1030,6 +1038,7 @@ de:
         title: Konten verwalten
       ordergroups:
         account_statement: Kontoauszug
+        year_statement: Jahresauszug
         new_transaction: Neue Transaktion
     update:
       notice: Rechnung wurde aktualisiert.
@@ -1179,6 +1188,9 @@ de:
     tasks:
       required_users: Es fehlen %{count} Mitstreiterinnen!
       task_title: "%{name} (%{duration}h)"
+    finance:
+      ordergroups:
+        transactions_pdf: PDF
   home:
     apple_bar:
       desc: 'Abgebildet ist das Verhältnis von erledigten Aufgaben zu dem Bestellvolumen Deiner Bestellgruppe im Vergleich zum Durchschnitt in der Foodcoop. Konkret: Pro %{amount} Bestellsumme solltest Du eine Aufgabe machen!'

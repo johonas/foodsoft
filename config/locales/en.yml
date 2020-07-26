@@ -823,6 +823,14 @@ en:
       filename: Order %{name}-%{date} - sorting matrix
       heading: Article overview (%{count})
       title: 'Order sorting matrix: %{name}, closed at %{date}'
+    financial_transaction:
+      filename: statement_%{name}
+      title: Statement for %{name}
+      table_name: Statement %{from} - %{to}
+      credit: Credit
+      debit: Debit
+      balance: Balance
+      opening_balance: Opening balance
   errors:
     general: A problem has occured.
     general_again: A problem has occured. Please try again.
@@ -921,6 +929,7 @@ en:
           notice: '%{count} new transactions have been imported'
       index:
         account_statement: Account statement
+        year_statement: Year statement
         title: Bank Accounts
     bank_transactions:
       index:
@@ -1141,6 +1150,9 @@ en:
     tasks:
       required_users: "%{count} members are still needed!"
       task_title: "%{name} (%{duration}h)"
+    finance:
+      ordergroups:
+        transactions_pdf: PDF
   home:
     apple_bar:
       desc: 'This shows the proportion of completed tasks to the volume of orders for your ordergroup in comparison to the average of the Foodcoop. In practice: for every %{amount} of total orders, you should execute a task!'

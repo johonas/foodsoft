@@ -17,8 +17,8 @@
         %td
           = form_tag depot_export_bestellrunde_path(bestellrunde), :method => :get, :style => 'margin: 0' do
             = select_tag :depot_id, options_for_select(Depot.natural_order.map{ |d| [d.name, d.id]})
-            = submit_tag t('report.export')
+            = submit_tag t('report.export'), class: 'btn btn-mini'
         %td
           = form_tag supplier_export_bestellrunde_path(bestellrunde), :method => :get, :style => 'margin: 0' do
             = select_tag :supplier_id, options_for_select(Supplier.undeleted.order(:name).map{ |s| [s.name, s.id]})
-            = submit_tag t('report.export')
+            = submit_tag t('report.export'), class: 'btn btn-mini'

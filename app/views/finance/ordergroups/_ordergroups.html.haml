@@ -22,3 +22,15 @@
         %td
           = link_to t('.new_transaction'), new_finance_ordergroup_transaction_path(ordergroup), class: 'btn btn-mini'
           = link_to t('.account_statement'), finance_ordergroup_transactions_path(ordergroup), class: 'btn btn-mini'
+
+          .btn-group
+            %a.btn.btn-mini.dropdown-toggle{ 'data-toggle' => 'dropdown', href: '#' }
+              = t('.year_statement')
+              %span.caret
+
+            %ul.dropdown-menu
+              - available_years.each do |year|
+                %li
+                  - search = { q: { created_on_gteq: Date.new(year, 1, 1), created_on_lteq: Date.new(year, 12, 31) } }
+                  = link_to year, finance_ordergroup_transactions_path(ordergroup, search), style: 'display: inline-block'
+                  = transactions_pdf(ordergroup, search, style: 'display: inline-block')

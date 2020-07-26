@@ -19,6 +19,10 @@ module ApplicationHelper
     I18n.l(time, :format => format) unless (time.nil? || format.nil?)
   end
 
+  def available_years
+    (2018..Date.today.year + 1)
+  end
+
   def format_currency(amount)
     class_name = amount < 0 ? 'negative_amout' : 'positive_amount'
     content_tag :span, number_to_currency(amount), class: class_name
@@ -264,5 +268,10 @@ module ApplicationHelper
     else
       content_tag :i, nil, class: 'icon-unchecked icon-large'
     end
+  end
+
+  def filename_safe(string)
+    string = string.gsub('-', '')
+    string.parameterize('_')
   end
 end
