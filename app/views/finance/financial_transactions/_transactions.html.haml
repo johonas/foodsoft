@@ -3,7 +3,7 @@
 - with_csv = local_assigns[:with_csv]
 .pull-right
   - if with_pdf
-    = transactions_pdf(@ordergroup, params[:q])
+    = transactions_pdf(@ordergroup, { q: params[:q] })
 
   - if with_csv
     .btn-group

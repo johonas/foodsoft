@@ -824,9 +824,9 @@ en:
       heading: Article overview (%{count})
       title: 'Order sorting matrix: %{name}, closed at %{date}'
     financial_transaction:
-      filename: statement_%{name}
-      title: Statement for %{name}
-      table_name: Statement %{from} - %{to}
+      filename: statement_%{from}-%{to}
+      title: Statement
+      table_name: "%{ordergroup} %{from} - %{to}"
       credit: Credit
       debit: Debit
       balance: Balance

@@ -871,9 +871,9 @@ de:
       heading: Artikelübersicht (%{count})
       title: 'Sortiermatrix der Bestellung: %{name}, beendet am %{date}'
     financial_transaction:
-      filename: kontoauszug_%{name}
-      title: Kontoauszug für %{name}
-      table_name: Kontoauszug %{from} - %{to}
+      filename: kontoauszug_%{from}-%{to}
+      title: Kontoauszug
+      table_name: "%{ordergroup} %{from} - %{to}"
       credit: Gutschrift
       debit: Belastung
       balance: Saldo

@@ -19,8 +19,9 @@ class Finance::FinancialTransactionsController < ApplicationController
     end
 
     @q = FinancialTransaction.search(params[:q])
-    @financial_transactions_all = @q.result(distinct: true).includes(:user).order(sort)
+    @financial_transactions_all = @q.result(distinct: true).includes(:user, :financial_transaction_type).order(sort)
     @financial_transactions_all = @financial_transactions_all.where(ordergroup_id: @ordergroup.id) if @ordergroup
+
     @financial_transactions = @financial_transactions_all.page(params[:page]).per(@per_page)
 
     respond_to do |format|
@@ -35,7 +36,7 @@ class Finance::FinancialTransactionsController < ApplicationController
         from = from.blank? ? nil : DateTime.strptime(from, '%Y-%m-%d')
         to = to.blank? ? nil : DateTime.strptime(to, '%Y-%m-%d')
 
-        pdf = FinancialTransactions.new(@ordergroup, @financial_transactions_all, from, to)
+        pdf = FinancialTransactions.new(@financial_transactions_all, from, to)
         send_data pdf.to_pdf, filename: pdf.filename, type: 'application/pdf'
       end
     end

@@ -2,9 +2,12 @@
 class FinancialTransactions < OrderPdf
   include ApplicationHelper
 
-  def initialize(ordergroup, financial_transactions, from, to, options = nil)
-    @ordergroup = ordergroup
-    @financial_transactions = financial_transactions.unscope(:order).order('created_on ASC')
+  def initialize(financial_transactions, from, to, options = nil)
+    @financial_transactions = financial_transactions.unscope(:order)
+                                                    .joins(:ordergroup)
+                                                    .includes(:ordergroup)
+                                                    .order('groups.name, financial_transactions.created_on ASC')
+
     @from = from || @financial_transactions.first.created_on
     @to = to || @financial_transactions.last.created_on
 
@@ -12,22 +15,35 @@ class FinancialTransactions < OrderPdf
   end
 
   def filename
-    I18n.t('documents.financial_transaction.filename', name: filename_safe(@ordergroup.name)) + '.pdf'
+    I18n.t('documents.financial_transaction.filename', from: format_date(@from), to:  format_date(@to)) + '.pdf'
   end
 
   def title
-    I18n.t('documents.financial_transaction.title', name: @ordergroup.name)
+    I18n.t('documents.financial_transaction.title')
   end
 
   def body
-    dimrows = [1]
-    rows = [header_row]
+    rows = nil
+    balance = nil
+    ordergroup = nil
 
-    balance = @ordergroup.account_balance_on(@from - 1.day)
-    rows << ['', '', I18n.t('documents.financial_transaction.opening_balance'), '', '', format_currency(balance)]
+    @financial_transactions.each do |financial_transaction|
+      next if financial_transaction.ordergroup.deleted? || !financial_transaction.ordergroup.active
 
-    @financial_transactions.includes(:user, :ordergroup).each do |t|
-      amount = t.amount
+      if ordergroup != financial_transaction.ordergroup
+        if ordergroup
+          add_table(ordergroup, rows)
+          start_new_page
+        end
+
+        ordergroup = financial_transaction.ordergroup
+
+        rows = [header_row]
+        balance = ordergroup.account_balance_on(@from - 1.day)
+        rows << ['', '', I18n.t('documents.financial_transaction.opening_balance'), '', '', format_currency(balance)]
+      end
+
+      amount = financial_transaction.amount
 
       balance += amount
 
@@ -35,21 +51,29 @@ class FinancialTransactions < OrderPdf
       debit =  amount < 0 ? amount * -1 : nil
 
       rows << [
-        format_date(t.created_on),
-        show_user(t.user),
-        t.note,
+        format_date(financial_transaction.created_on),
+        show_user(financial_transaction.user),
+        financial_transaction.note,
         format_currency(credit),
         format_currency(debit),
         format_currency(balance)
       ]
     end
 
-    nice_table table_name, rows, dimrows do |table|
+    add_table(ordergroup, rows)
+  end
+
+  def add_table(ordergroup, rows)
+    nice_table table_name(ordergroup), rows, [1] do |table|
       table.row(0).font_style = :bold
 
       table.columns(-3..-1).align = :right
+      table.column(0).width = 60
+      table.column(-1).width = 47
+      table.column(-2).width = 49
+      table.column(-3).width = 50
 
-      @financial_transactions.count.times do |index|
+      rows.length.times do |index|
         row_index = index + 2
         table.row(row_index).border_width = 0
         if row_index % 2 == 0
@@ -70,8 +94,8 @@ class FinancialTransactions < OrderPdf
     ]
   end
 
-  def table_name
-    I18n.t('documents.financial_transaction.table_name', from: format_date(@from), to: format_date(@to))
+  def table_name(ordergroup)
+    I18n.t('documents.financial_transaction.table_name', ordergroup: ordergroup.name, from: format_date(@from), to: format_date(@to))
   end
 
   def format_currency(value)
