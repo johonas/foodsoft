@@ -28,6 +28,9 @@ module Reports
 
         order.group_orders.each do |group_order|
 
+          # TODO: Why can there be an GroupOrder without ordergroup?
+          next unless group_order.ordergroup
+
           depot = group_order.ordergroup.depot
 
           raw_data[depot] ||= {}
