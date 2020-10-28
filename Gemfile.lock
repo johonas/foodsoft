@@ -577,6 +577,7 @@ DEPENDENCIES
   ruby-filemagic
   ruby-prof
   ruby-units
+  rubyzip
   sass-rails
   select2-rails
   simple-navigation (~> 3.14.0)

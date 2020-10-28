@@ -25,6 +25,43 @@ class OrdersController < ApplicationController
     end
     @suppliers = Supplier.having_articles.order('suppliers.name')
     @orders = Order.closed.includes(:supplier).reorder(sort).page(params[:page]).per(@per_page)
+
+    respond_to do |format|
+      format.html
+      format.pdf do
+
+
+        filename = case params[:document]
+              when 'groups'   then t('shared.order_download_button.group_pdf')
+              when 'articles' then t('shared.order_download_button.article_pdf')
+              when 'fax'      then t('shared.order_download_button.fax_pdf')
+              when 'matrix'   then t('shared.order_download_button.matrix_pdf')
+              end.split(' ').join('_')
+
+        filename = [
+          I18n.t('.navigation.orders.title'),
+          I18n.t('.orders.index.orders_finished'),
+          filename,
+          DateTime.now.strftime('%Y%m%d')
+        ].join('_').downcase
+
+
+        pdf_zip = PdfZip.new(filename)
+
+        @finished_orders.each do |order|
+          pdf = case params[:document]
+                when 'groups'   then OrderByGroups.new(order)
+                when 'articles' then OrderByArticles.new(order)
+                when 'fax'      then OrderFax.new(order)
+                when 'matrix'   then OrderMatrix.new(order)
+                end
+
+          pdf_zip.add_pdf(pdf)
+        end
+
+        send_data pdf_zip.data, filename: pdf_zip.zip_name, type: pdf_zip.content_type
+      end
+    end
   end
 
   # Gives a view for the results to a specific order

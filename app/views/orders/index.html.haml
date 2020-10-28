@@ -1,6 +1,19 @@
 - title t('.title')
 
 - content_for :actionbar do
+
+  - if @finished_orders.any?
+    .btn-group
+      = link_to '#', class: "btn dropdown-toggle", data: {toggle: 'dropdown'} do
+        = t 'shared.order_download_button.title'
+        %span.caret
+
+      %ul.dropdown-menu
+        %li= orders_pdf(:groups, t('.group_pdf'))
+        %li= orders_pdf(:articles, t('.article_pdf'))
+        %li= orders_pdf(:matrix, t('.matrix_pdf'))
+        %li= orders_pdf(:fax, t('.fax_pdf'))
+
   .btn-group
     = link_to '#', data: {toggle: 'dropdown'}, class: 'btn btn-primary dropdown-toggle' do
       = t '.new_order'

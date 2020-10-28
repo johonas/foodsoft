@@ -18,6 +18,11 @@ module OrdersHelper
     link_to text, order_path(order, document: document, format: :pdf), options
   end
 
+  def orders_pdf(document, text, options={})
+    options = options.merge(title: I18n.t('helpers.orders.order_pdf'))
+    link_to text, orders_path(document: document, format: :pdf), options
+  end
+
   def options_for_suppliers_to_select
     options = [[I18n.t('helpers.orders.option_choose')]]
     options += Supplier.map {|s| [ s.name, url_for(action: "new", supplier_id: s)] }

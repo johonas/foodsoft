@@ -54,6 +54,7 @@ gem 'exception_notification'
 gem 'gaffe'
 gem 'ruby-filemagic'
 gem 'midi-smtp-server'
+gem 'rubyzip'
 
 gem 'axlsx', git: 'https://github.com/randym/axlsx.git', ref: 'c8ac844'
 gem 'axlsx_rails'
