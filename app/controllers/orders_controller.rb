@@ -40,7 +40,7 @@ class OrdersController < ApplicationController
 
         filename = [
           I18n.t('.navigation.orders.title'),
-          I18n.t('.orders.index.orders_finished'),
+          I18n.t(".orders.index.orders_#{params[:state]}"),
           filename,
           DateTime.now.strftime('%Y%m%d')
         ].join('_').downcase
@@ -48,7 +48,12 @@ class OrdersController < ApplicationController
 
         pdf_zip = PdfZip.new(filename)
 
-        @finished_orders.each do |order|
+        orders = case params[:state]
+                 when 'open' then @open_orders
+                 when 'finished' then @finished_orders
+                 end
+
+        orders.each do |order|
           pdf = case params[:document]
                 when 'groups'   then OrderByGroups.new(order)
                 when 'articles' then OrderByArticles.new(order)

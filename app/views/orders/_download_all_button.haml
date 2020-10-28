@@ -1,0 +1,10 @@
+.btn-group
+  = link_to '#', class: "btn dropdown-toggle", data: {toggle: 'dropdown'} do
+    = t 'shared.order_download_button.title'
+    %span.caret
+
+  %ul.dropdown-menu
+    %li= orders_pdf(:groups,   state, t('.group_pdf'))
+    %li= orders_pdf(:articles, state, t('.article_pdf'))
+    %li= orders_pdf(:matrix,   state, t('.matrix_pdf'))
+    %li= orders_pdf(:fax,      state, t('.fax_pdf'))

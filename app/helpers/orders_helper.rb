@@ -18,9 +18,9 @@ module OrdersHelper
     link_to text, order_path(order, document: document, format: :pdf), options
   end
 
-  def orders_pdf(document, text, options={})
+  def orders_pdf(document, state, text, options={})
     options = options.merge(title: I18n.t('helpers.orders.order_pdf'))
-    link_to text, orders_path(document: document, format: :pdf), options
+    link_to text, orders_path(document: document, state: state, format: :pdf), options
   end
 
   def options_for_suppliers_to_select

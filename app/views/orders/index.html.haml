@@ -1,19 +1,6 @@
 - title t('.title')
 
 - content_for :actionbar do
-
-  - if @finished_orders.any?
-    .btn-group
-      = link_to '#', class: "btn dropdown-toggle", data: {toggle: 'dropdown'} do
-        = t 'shared.order_download_button.title'
-        %span.caret
-
-      %ul.dropdown-menu
-        %li= orders_pdf(:groups, t('.group_pdf'))
-        %li= orders_pdf(:articles, t('.article_pdf'))
-        %li= orders_pdf(:matrix, t('.matrix_pdf'))
-        %li= orders_pdf(:fax, t('.fax_pdf'))
-
   .btn-group
     = link_to '#', data: {toggle: 'dropdown'}, class: 'btn btn-primary dropdown-toggle' do
       = t '.new_order'
@@ -25,8 +12,12 @@
 .well
   - if not @open_orders.empty?
     %h2= t '.orders_open'
+    = render partial: 'download_all_button', locals: { state: :open}
+
   - elsif not @finished_orders.empty?
     %h2= t '.orders_finished'
+    = render partial: 'download_all_button', locals: { state: :finished}
+
   - else
     = t '.no_open_or_finished_orders'
   - unless @open_orders.empty? and @finished_orders.empty?
@@ -62,6 +53,7 @@
             %tr
               %td{colspan: 6}
                 %h2= t '.orders_finished'
+
           - for order in @finished_orders
             %tr
               %td= order.name
