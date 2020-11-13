@@ -99,6 +99,7 @@ Foodsoft::Application.routes.draw do
         get :for_depot
         get :depot_export
         get :supplier_export
+        get :all_supplier_export
         get :distribution_export
       end
     end

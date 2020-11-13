@@ -1,6 +1,5 @@
-class BestellrundenController < InheritedResources::Base
+class BestellrundenController < ApplicationController
   before_filter :authenticate_verteilen, :except => :for_depot
-
 
   def index
     @bestellrunden = Bestellrunde.order('id desc').all
@@ -31,6 +30,18 @@ class BestellrundenController < InheritedResources::Base
     rescue Reports::NoDataException
       redirect_to bestellrunden_path, flash: { error: I18n.t('report.no_data') }
     end
+  end
+
+  def all_supplier_export
+    xls_zip = XlsZip.new("bestellrunde_#{bestellrunde.starts}_alle_lieferanten")
+
+    Supplier.undeleted.having_articles.each do |supplier|
+      filename = "bestellrunde_#{bestellrunde.starts}_lieferant_#{supplier.name.downcase.gsub(' ', '_')}.xlsx"
+      xls = Reports::BestellrundeSupplier.new(bestellrunde, supplier, filename).generate
+      xls_zip.add_file(xls)
+    end
+
+    send_data xls_zip.data, filename: xls_zip.zip_name, type: xls_zip.content_type
   end
 
   def for_depot

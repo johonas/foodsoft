@@ -1075,6 +1075,7 @@ de:
   report:
     no_data: Dieser Report enthält keine Daten
     export: Exportieren
+    export_all: Alle exportieren
   group_order_articles:
     form:
       amount_change_for: Mengenänderung für %{article}

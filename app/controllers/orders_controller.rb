@@ -29,8 +29,6 @@ class OrdersController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-
-
         filename = case params[:document]
               when 'groups'   then t('shared.order_download_button.group_pdf')
               when 'articles' then t('shared.order_download_button.article_pdf')
@@ -61,7 +59,7 @@ class OrdersController < ApplicationController
                 when 'matrix'   then OrderMatrix.new(order)
                 end
 
-          pdf_zip.add_pdf(pdf)
+          pdf_zip.add_file(pdf)
         end
 
         send_data pdf_zip.data, filename: pdf_zip.zip_name, type: pdf_zip.content_type
