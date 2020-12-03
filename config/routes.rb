@@ -153,6 +153,8 @@ Foodsoft::Application.routes.draw do
       end
     end
 
+    resources :article_stock_changes
+
     resources :article_categories
 
     ########### Finance

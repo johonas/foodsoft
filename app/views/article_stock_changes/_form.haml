@@ -1,0 +1,13 @@
+= simple_form_for @article_stock_change, remote: true do |f|
+  = f.hidden_field :article_id
+
+  .modal-header
+    = close_button :modal
+    %h3= "Lager-Anpassung für #{@article_stock_change.article.name}"
+
+  .modal-body
+    = f.input :quantity, label: 'Anpassung +/-', autofocus: true, hint: 'Anzahl Einheiten, nicht Gebinde'
+
+  .modal-footer
+    = link_to t('ui.close'), '#', class: 'btn', data: {dismiss: 'modal'}
+    = f.submit 'Anpassen', class: 'btn btn-primary'

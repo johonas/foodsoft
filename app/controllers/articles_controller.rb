@@ -227,6 +227,11 @@ class ArticlesController < ApplicationController
     end
   end
 
+  def stock_change
+    @article = Article.find(params[:id])
+    render action: 'stock_change', :layout => false
+  end
+
   private
 
   # @return [Number] Number of articles not taken into account when syncing (having no number)

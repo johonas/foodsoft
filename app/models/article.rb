@@ -44,6 +44,8 @@ class Article < ActiveRecord::Base
   #   @return [Array<ArticlePrice>] Price history (current price first).
   has_many :article_prices, -> { order("created_at DESC") }
 
+  has_many :article_stock_changes, dependent: :destroy
+
   # Replace numeric seperator with database format
   localize_input_of :price, :tax, :deposit
   # Get rid of unwanted whitespace. {Unit#new} may even bork on whitespace.
@@ -210,6 +212,13 @@ class Article < ActiveRecord::Base
   def mark_as_deleted
     check_article_in_use
     update_column :deleted_at, Time.now
+  end
+
+  # Returns stock count
+  def stock_quantity
+    if article_stock_changes.any?
+      article_stock_changes.pluck(:quantity).inject(0) { |total, quantity| total + quantity }
+    end
   end
 
   protected
