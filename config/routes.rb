@@ -153,7 +153,11 @@ Foodsoft::Application.routes.draw do
       end
     end
 
-    resources :article_stock_changes
+    resources :article_stock_changes do
+      collection do
+        get 'journal/:article_id', action: :journal, as: :journal
+      end
+    end
 
     resources :article_categories
 

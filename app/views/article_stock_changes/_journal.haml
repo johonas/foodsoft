@@ -1,0 +1,36 @@
+.modal-header
+  = close_button :modal
+  %h3= "Lager Verlauf für #{@article.name}"
+
+.modal-body
+
+  %table#articles_table.table.table-hover
+    %thead
+      %tr
+        %th= 'Datum'
+        %th
+          .text-right= 'Anpassung'
+        %th= 'Bestellung'
+        %th= 'Benutzer'
+
+    %tbody#listbody
+      - @article.article_stock_changes.each do |article_stock_change|
+        %tr
+          %td= format_time article_stock_change.created_at
+          %td
+            .text-right{ class: article_stock_change.quantity > 0 ? 'text-success' : 'text-error' }
+              = "#{article_stock_change.quantity < 0 ? '- ' : '+' }#{article_stock_change.quantity.abs}"
+          %td= article_stock_change.order&.bestellrunde&.label
+          %td= article_stock_change.created_by&.display
+
+      %tr
+        %td
+          %strong Total
+        %td
+          .text-right
+            %strong= @article.stock_quantity
+        %td
+        %td
+
+.modal-footer
+  = link_to t('ui.close'), '#', class: 'btn', data: {dismiss: 'modal'}

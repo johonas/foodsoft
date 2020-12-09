@@ -8,7 +8,6 @@ class ArticleStockChangesController < ApplicationController
   def create
     @article_stock_change = ArticleStockChange.new(article_stock_change_params)
 
-
     if @article_stock_change.valid? && @article_stock_change.save
       @article = @article_stock_change.article
       @supplier = @article_stock_change.article.supplier
@@ -16,6 +15,11 @@ class ArticleStockChangesController < ApplicationController
     else
       render action: :new, layout: false
     end
+  end
+
+  def journal
+    @article = Article.find(params[:article_id])
+    render :journal, layout: false
   end
 
   private
