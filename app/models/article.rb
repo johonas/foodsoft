@@ -221,20 +221,20 @@ class Article < ActiveRecord::Base
   # Returns stock count
   def stock_quantity
     if article_stock_changes.any?
-      @stock_quantity ||= article_stock_changes.pluck(:quantity).inject(0) { |total, quantity| total + quantity }
+      @stock_quantity = article_stock_changes.pluck(:quantity).inject(0) { |total, quantity| total + quantity }
     end
   end
 
-  def order_from_stock!(ordered_quantity, order)
+  def order_from_stock!(ordered_quantity, order_article)
     return unless in_stock?
 
     # If ordered more than in stock: use whole stock, otherwise use ordered quantity
     from_stock = stock_quantity >= ordered_quantity ? ordered_quantity : stock_quantity
 
     ArticleStockChange.create!(
-      article_id: id,
-      quantity:   -from_stock,
-      order_id:   order.id
+      article_id:       id,
+      quantity:         -from_stock,
+      order_article_id: order_article.id
     )
 
     return from_stock

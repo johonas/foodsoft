@@ -32,12 +32,12 @@ ActiveRecord::Schema.define(version: 20201209140956) do
   add_index "article_prices", ["article_id"], name: "index_article_prices_on_article_id", using: :btree
 
   create_table "article_stock_changes", force: :cascade do |t|
-    t.integer  "article_id",    limit: 4, null: false
-    t.integer  "created_by_id", limit: 4
-    t.integer  "order_id",      limit: 4
-    t.integer  "quantity",      limit: 4, null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.integer  "article_id",       limit: 4, null: false
+    t.integer  "created_by_id",    limit: 4
+    t.integer  "order_article_id", limit: 4
+    t.integer  "quantity",         limit: 4, null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "articles", force: :cascade do |t|

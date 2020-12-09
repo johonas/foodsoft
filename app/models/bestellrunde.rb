@@ -5,8 +5,9 @@ class Bestellrunde < ActiveRecord::Base
     return Bestellrunde.bestellrunden[self.season.to_sym][:label]
   end
 
+  include ApplicationHelper
   def label
-    "#{self.starts}"
+    "#{format_date(starts)} - #{format_date(ends)}"
   end
 
   def self.selectable(order=nil)

@@ -61,7 +61,7 @@ class OrderArticle < ActiveRecord::Base
     if quantity > 0 && !order.stockit?
       fail 'Article already has stock_quantity set' unless stock_quantity.nil?
 
-      if (ordered_from_stock = article.order_from_stock!(quantity, order))
+      if (ordered_from_stock = article.order_from_stock!(quantity, self))
         update_attribute(:stock_quantity, ordered_from_stock)
       end
     end
