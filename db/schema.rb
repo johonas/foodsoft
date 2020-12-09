@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201203212801) do
+ActiveRecord::Schema.define(version: 20201209140956) do
 
   create_table "article_categories", force: :cascade do |t|
     t.string "name",        limit: 255, default: "", null: false
@@ -336,6 +336,7 @@ ActiveRecord::Schema.define(version: 20201203212801) do
     t.integer "order_id",         limit: 4, default: 0, null: false
     t.integer "article_id",       limit: 4, default: 0, null: false
     t.integer "quantity",         limit: 4, default: 0, null: false
+    t.integer "stock_quantity",   limit: 4
     t.integer "tolerance",        limit: 4, default: 0, null: false
     t.integer "units_to_order",   limit: 4, default: 0, null: false
     t.integer "lock_version",     limit: 4, default: 0, null: false

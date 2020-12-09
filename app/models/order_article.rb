@@ -53,6 +53,30 @@ class OrderArticle < ActiveRecord::Base
     end
   end
 
+  def order_finished!
+    fail 'Order not finished' unless order.finished?
+
+    update_attribute(:article_price, article.article_prices.first)
+
+    if quantity > 0 && !order.stockit?
+      fail 'Article already has stock_quantity set' unless stock_quantity.nil?
+
+      if (ordered_from_stock = article.order_from_stock!(quantity, order))
+        update_attribute(:stock_quantity, ordered_from_stock)
+      end
+    end
+
+    group_order_articles.each do |group_order_article|
+      group_order_article.save_results!
+      # Delete no longer required order-history (group_order_article_quantities) and
+      # TODO: Do we need articles, which aren't ordered? (units_to_order == 0 ?)
+      #    A: Yes, we do - for redistributing articles when the number of articles
+      #       delivered changes, and for statistics on popular articles. Records
+      #       with both tolerance and quantity zero can be deleted.
+      #goa.group_order_article_quantities.clear
+    end
+  end
+
   # Returns how many units of the belonging article need to be ordered given the specified order quantity and tolerance.
   # This is determined by calculating how many units can be ordered from the given order quantity, using
   # the tolerance to order an additional unit if the order quantity is not quiet sufficient.

@@ -191,37 +191,28 @@ class Order < ActiveRecord::Base
   # Finishes this order. This will set the order state to "finish" and the end property to the current time.
   # Ignored if the order is already finished.
   def finish!(user)
-    unless finished?
-      Order.transaction do
-        # set new order state (needed by notify_order_finished)
-        update_attributes!(:state => 'finished', :ends => Time.now, :updated_by => user)
+    return if finished?
 
-        # Update order_articles. Save the current article_price to keep price consistency
-        # Also save results for each group_order_result
-        # Clean up
-        order_articles.includes(:article).each do |oa|
-          oa.update_attribute(:article_price, oa.article.article_prices.first)
-          oa.group_order_articles.each do |goa|
-            goa.save_results!
-            # Delete no longer required order-history (group_order_article_quantities) and
-            # TODO: Do we need articles, which aren't ordered? (units_to_order == 0 ?)
-            #    A: Yes, we do - for redistributing articles when the number of articles
-            #       delivered changes, and for statistics on popular articles. Records
-            #       with both tolerance and quantity zero can be deleted.
-            #goa.group_order_article_quantities.clear
-          end
-        end
+    Order.transaction do
+      # set new order state (needed by notify_order_finished)
+      update_attributes!(:state => 'finished', :ends => Time.now, :updated_by => user)
 
-        # Update GroupOrder prices
-        group_orders.each(&:update_price!)
+      # Update order_articles. Save the current article_price to keep price consistency
+      # Also save results for each group_order_result
+      # Clean up
+      order_articles.includes(:article).each do |order_article|
+        order_article.order_finished!
+      end
 
-        # Stats
-        ordergroups.each(&:update_stats!)
+      # Update GroupOrder prices
+      group_orders.each(&:update_price!)
 
-        # Notifications
-        if FoodsoftConfig[:send_order_finish_mail]
-          Resque.enqueue(UserNotifier, FoodsoftConfig.scope, 'finished_order', self.id)
-        end
+      # Stats
+      ordergroups.each(&:update_stats!)
+
+      # Notifications
+      if FoodsoftConfig[:send_order_finish_mail]
+        Resque.enqueue(UserNotifier, FoodsoftConfig.scope, 'finished_order', self.id)
       end
     end
   end
