@@ -9,7 +9,7 @@ class Finance::OrdergroupsController < Finance::BaseController
       sort = "name"
     end
 
-    @ordergroups = Ordergroup.undeleted.active.order(sort)
+    @ordergroups = Ordergroup.undeleted.order(sort)
     @ordergroups = @ordergroups.include_transaction_class_sum
     @ordergroups = @ordergroups.where('groups.name LIKE ?', "%#{params[:query]}%") unless params[:query].nil?
 
