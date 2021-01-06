@@ -40,13 +40,11 @@ class OrderArticle < ActiveRecord::Base
     {:quantity => quantity, :price => quantity * price.fc_price}
   end
 
-  # Update quantity/tolerance/units_to_order from group_order_articles
+  # Update quantity/units_to_order from group_order_articles
   def update_results!
     if order.open?
       self.quantity = group_order_articles.collect(&:quantity).sum
-      self.tolerance = group_order_articles.collect(&:tolerance).sum
-      self.units_to_order = calculate_units_to_order(quantity, tolerance)
-      enforce_boxfill if order.boxfill?
+      self.units_to_order = (self.quantity / price.unit_quantity.to_f).ceil
       save!
     elsif order.finished?
       update_attribute(:units_to_order, group_order_articles.collect(&:result).sum)
@@ -65,41 +63,6 @@ class OrderArticle < ActiveRecord::Base
         update_attribute(:stock_quantity, ordered_from_stock)
       end
     end
-
-    group_order_articles.each do |group_order_article|
-      group_order_article.save_results!
-      # Delete no longer required order-history (group_order_article_quantities) and
-      # TODO: Do we need articles, which aren't ordered? (units_to_order == 0 ?)
-      #    A: Yes, we do - for redistributing articles when the number of articles
-      #       delivered changes, and for statistics on popular articles. Records
-      #       with both tolerance and quantity zero can be deleted.
-      #goa.group_order_article_quantities.clear
-    end
-  end
-
-  # Returns how many units of the belonging article need to be ordered given the specified order quantity and tolerance.
-  # This is determined by calculating how many units can be ordered from the given order quantity, using
-  # the tolerance to order an additional unit if the order quantity is not quiet sufficient.
-  # There must always be at least one item in a unit that is an ordered quantity (no units are ever entirely
-  # filled by tolerance items only).
-  #
-  # Example:
-  #
-  # unit_quantity | quantity | tolerance | calculate_units_to_order
-  # --------------+----------+-----------+-----------------------
-  #      4        |    0     |     2     |           0
-  #      4        |    0     |     5     |           0
-  #      4        |    2     |     2     |           1
-  #      4        |    4     |     2     |           1
-  #      4        |    4     |     4     |           1
-  #      4        |    5     |     3     |           2
-  #      4        |    5     |     4     |           2
-  #
-  def calculate_units_to_order(quantity, tolerance = 0)
-    unit_size = price.unit_quantity
-    units = quantity / unit_size
-    remainder = quantity % unit_size
-    units += ((remainder > 0) && (remainder + tolerance >= unit_size) ? 1 : 0)
   end
 
   # Calculate price for ordered quantity.
@@ -127,24 +90,16 @@ class OrderArticle < ActiveRecord::Base
   # redistribute articles over ordergroups
   #   quantity       Number of units to distribute
   #   surplus        What to do when there are more articles than ordered quantity
-  #                    :tolerance   fill member orders' tolerance
   #                    :stock       move to stock
   #                    nil          nothing; for catching the remaining count
   #   update_totals  Whether to update group_order and ordergroup totals
   # returns array with counts for each surplus method
-  def redistribute(quantity, surplus = [:tolerance], update_totals = true)
+  def redistribute(quantity, surplus = [:stock], update_totals = true)
     qty_left = quantity
     counts = [0] * surplus.length
-
-    if surplus.index(:tolerance).nil?
-      qty_for_members = [qty_left, self.quantity].min
-    else
-      qty_for_members = [qty_left, self.quantity+self.tolerance].min
-      counts[surplus.index(:tolerance)] = [0, qty_for_members-self.quantity].max
-    end
+    qty_for_members = [qty_left, self.quantity].min
 
     # Recompute
-    group_order_articles.each {|goa| goa.save_results! qty_for_members }
     qty_left -= qty_for_members
 
     # if there's anything left, move to stock if wanted
@@ -210,20 +165,6 @@ class OrderArticle < ActiveRecord::Base
     @update_global_price = (value == true || value == '1') ?  true : false
   end
 
-  # @return [Number] Units missing for the last +unit_quantity+ of the article.
-  def missing_units
-    _missing_units(price.unit_quantity, quantity, tolerance)
-  end
-
-  def missing_units_was
-    _missing_units(price.unit_quantity, quantity_was, tolerance_was)
-  end
-
-  # Check if the result of any associated GroupOrderArticle was overridden manually
-  def result_manually_changed?
-    group_order_articles.any? {|goa| goa.result_manually_changed?}
-  end
-
   private
 
   def article_and_price_exist
@@ -244,28 +185,5 @@ class OrderArticle < ActiveRecord::Base
     # in case of performance issues, update only ordergroups, which ordered this article
     # CAUTION: in after_destroy callback related records (e.g. group_order_articles) are already non-existent
     order.group_orders.each(&:update_price!)
-  end
-
-  # Throws an exception when the changed article decreases the amount of filled boxes.
-  def enforce_boxfill
-    # Either nothing changes, or the tolerance increases,
-    # missing_units decreases and the amount doesn't decrease, or
-    # tolerance was moved to quantity. Only then are changes allowed in the boxfill phase.
-    delta_q = quantity - quantity_was
-    delta_t = tolerance - tolerance_was
-    delta_mis = missing_units - missing_units_was
-    delta_box = units_to_order - units_to_order_was
-    unless (delta_q == 0 && delta_t >= 0) ||
-           (delta_mis < 0 && delta_box >= 0 && delta_t >= 0) ||
-           (delta_q > 0 && delta_q == -delta_t)
-      raise ActiveRecord::RecordNotSaved.new("Change not acceptable in boxfill phase for '#{article.name}', sorry.", self)
-    end
-  end
-
-  def _missing_units(unit_quantity, quantity, tolerance)
-    units = unit_quantity - ((quantity  % unit_quantity) + tolerance)
-    units = 0 if units < 0
-    units = 0 if units == unit_quantity
-    units
   end
 end

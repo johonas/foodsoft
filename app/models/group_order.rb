@@ -39,12 +39,7 @@ class GroupOrder < ActiveRecord::Base
             :unit => order_article.article.unit_quantity,
             :quantity => (goa ? goa.quantity : 0),
             :others_quantity => order_article.quantity - (goa ? goa.quantity : 0),
-            :used_quantity => (goa ? goa.result(:quantity) : 0),
-            :tolerance => (goa ? goa.tolerance : 0),
-            :others_tolerance => order_article.tolerance - (goa ? goa.tolerance : 0),
-            :used_tolerance => (goa ? goa.result(:tolerance) : 0),
             :total_price => (goa ? goa.total_price : 0),
-            :missing_units => order_article.missing_units,
             :quantity_available => (order.stockit? ? order_article.article.quantity_available : 0)
         }
       end
@@ -60,8 +55,8 @@ class GroupOrder < ActiveRecord::Base
 
       # Get ordered quantities and update group_order_articles/_quantities...
       if group_order_articles_attributes
-        quantities = group_order_articles_attributes.fetch(order_article.id.to_s, {:quantity => 0, :tolerance => 0})
-        group_order_article.update_quantities(quantities[:quantity].to_i, quantities[:tolerance].to_i)
+        quantities = group_order_articles_attributes.fetch(order_article.id.to_s, { :quantity => 0 })
+        group_order_article.update_quantities(quantities[:quantity].to_i)
       end
 
       # Also update results for the order_article

@@ -124,11 +124,6 @@ class Supplier < ActiveRecord::Base
     end
   end
 
-  # @return [Boolean] Whether there are articles that would use tolerance (unit_quantity > 1)
-  def has_tolerance?
-    articles.where('articles.unit_quantity > 1').any?
-  end
-
   protected
 
   # make sure the shared_sync_method is allowed for the shared supplier

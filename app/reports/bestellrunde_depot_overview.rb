@@ -21,7 +21,6 @@ module Reports
         column :unit, 'Gebinde', :width => 13, :type => :string
         column :price, 'Einzelpreis', :width => 13, :style => :currency
         column :ordered, 'Bestellt', :width => 13, :type => :string
-        column :received, 'Erhalten', :width => 13, :type => :string
         column :total_price, 'Summe', :width => 13, :style => :currency
       end
 
@@ -41,15 +40,12 @@ module Reports
               r = get_order_results(oa, group_order.id)
 
               quantity = r[:quantity]
-              quantity = "#{quantity} + #{r[:tolerance]}" if oa.price.unit_quantity > 1
-              received = order.open? ? '' : r[:result]
 
               data << {
                 :name => oa.article.name,
                 :unit => "#{oa.price.unit_quantity} x #{oa.article.unit}",
                 :price => oa.price.fc_price,
                 :ordered => quantity,
-                :received => received,
                 :total_price => r[:sub_total]
               }
             end

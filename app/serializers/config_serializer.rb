@@ -4,8 +4,7 @@ class ConfigSerializer < ActiveModel::Serializer
   attributes :name, :homepage, :contact
 
   # settings
-  attributes :currency_unit, :currency_space, :default_locale, :price_markup,
-             :tolerance_is_costly, :use_apple_points, :use_tolerance
+  attributes :currency_unit, :currency_space, :default_locale, :price_markup, :use_apple_points
 
   # layout
   attributes :page_footer_html, :webstats_tracking_code_html

@@ -21,9 +21,9 @@ class OrderByArticles < OrderPdf
       ]]
 
       each_group_order_article_for_order_article(order_article) do |goa|
-        dimrows << rows.length if goa.result == 0
+        dimrows << rows.length if goa.quantity == 0
         rows << [goa.group_order.ordergroup_name,
-                 group_order_article_quantity_with_tolerance(goa),
+                 goa.quantity,
                  goa.result,
                  number_to_currency(goa.total_price)]
       end

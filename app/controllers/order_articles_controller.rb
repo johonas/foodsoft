@@ -41,7 +41,7 @@ class OrderArticlesController < ApplicationController
   def destroy
     @order_article = OrderArticle.find(params[:id])
     # only destroy if there are no associated GroupOrders; if we would, the requested
-    # quantity and tolerance would be gone. Instead of destroying, we set all result
+    # quantity would be gone. Instead of destroying, we set all result
     # quantities to zero.
     if @order_article.group_order_articles.count == 0
       @order_article.destroy

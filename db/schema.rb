@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201209140956) do
+ActiveRecord::Schema.define(version: 20210106194542) do
 
   create_table "article_categories", force: :cascade do |t|
     t.string "name",        limit: 255, default: "", null: false
@@ -170,20 +170,16 @@ ActiveRecord::Schema.define(version: 20201209140956) do
   create_table "group_order_article_quantities", force: :cascade do |t|
     t.integer  "group_order_article_id", limit: 4, default: 0, null: false
     t.integer  "quantity",               limit: 4, default: 0
-    t.integer  "tolerance",              limit: 4, default: 0
     t.datetime "created_on",                                   null: false
   end
 
   add_index "group_order_article_quantities", ["group_order_article_id"], name: "index_group_order_article_quantities_on_group_order_article_id", using: :btree
 
   create_table "group_order_articles", force: :cascade do |t|
-    t.integer  "group_order_id",   limit: 4,                         default: 0, null: false
-    t.integer  "order_article_id", limit: 4,                         default: 0, null: false
-    t.integer  "quantity",         limit: 4,                         default: 0, null: false
-    t.integer  "tolerance",        limit: 4,                         default: 0, null: false
-    t.datetime "updated_on",                                                     null: false
-    t.decimal  "result",                     precision: 8, scale: 3
-    t.decimal  "result_computed",            precision: 8, scale: 3
+    t.integer  "group_order_id",   limit: 4, default: 0, null: false
+    t.integer  "order_article_id", limit: 4, default: 0, null: false
+    t.integer  "quantity",         limit: 4, default: 0, null: false
+    t.datetime "updated_on",                             null: false
   end
 
   add_index "group_order_articles", ["group_order_id", "order_article_id"], name: "goa_index", unique: true, using: :btree
@@ -337,7 +333,6 @@ ActiveRecord::Schema.define(version: 20201209140956) do
     t.integer "article_id",       limit: 4, default: 0, null: false
     t.integer "quantity",         limit: 4, default: 0, null: false
     t.integer "stock_quantity",   limit: 4
-    t.integer "tolerance",        limit: 4, default: 0, null: false
     t.integer "units_to_order",   limit: 4, default: 0, null: false
     t.integer "lock_version",     limit: 4, default: 0, null: false
     t.integer "article_price_id", limit: 4
@@ -367,7 +362,6 @@ ActiveRecord::Schema.define(version: 20201209140956) do
     t.integer  "updated_by_user_id", limit: 4
     t.decimal  "foodcoop_result",                  precision: 8, scale: 2
     t.integer  "created_by_user_id", limit: 4
-    t.datetime "boxfill"
     t.integer  "bestellrunde_id",    limit: 4,                                              null: false
     t.integer  "invoice_id",         limit: 4
     t.date     "pickup"

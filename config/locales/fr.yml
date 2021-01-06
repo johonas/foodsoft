@@ -104,7 +104,6 @@ fr:
         name: Nom
         user_tokens: Membres
       order:
-        boxfill: 
         closed_by: Décompté par
         created_by: Établi par
         end_action: 
@@ -558,9 +557,6 @@ fr:
       minimum_balance: 
       name: Le nom de votre coop.
       order_schedule:
-        boxfill:
-          recurr: 
-          time: 
         ends:
           recurr: 
           time: 
@@ -578,8 +574,7 @@ fr:
       tax_default: 
       tolerance_is_costly: 
       use_apple_points: 
-      use_boxfill: 
-      use_current_orders: 
+      use_current_orders:
       use_documents: 
       use_iban: 
       use_messages: 
@@ -613,9 +608,6 @@ fr:
       minimum_balance: 
       name: Nom
       order_schedule:
-        boxfill:
-          recurr: 
-          time: 
         ends:
           recurr: 
           time: 
@@ -632,8 +624,7 @@ fr:
       time_zone: 
       tolerance_is_costly: 
       use_apple_points: 
-      use_boxfill: 
-      use_current_orders: 
+      use_current_orders:
       use_documents: 
       use_iban: 
       use_messages: Messages
@@ -1499,10 +1490,8 @@ fr:
       title: Gestion des commandes
     model:
       close_direct_message: Ordre décomptée sans charger les comptes des membres.
-      error_boxfill_before_ends: 
       error_closed: Cette commande a déjà été décomptée
       error_nosel: Au minimum un article doit être sélectionné.
-      error_starts_before_boxfill: 
       error_starts_before_ends: doit être postérieur à la date de début de la commande (ou bien être laissé vierge)
       notice_close: 'Commande: %{name}, jusqu''au %{ends}'
       stock: Cellier

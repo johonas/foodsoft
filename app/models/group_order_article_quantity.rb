@@ -1,4 +1,4 @@
-# stores the quantity, tolerance and timestamp of an GroupOrderArticle
+# stores the quantity and timestamp of an GroupOrderArticle
 # Considers every update of an article-order, so may rows for one group_order_article ar possible.
 
 class GroupOrderArticleQuantity < ActiveRecord::Base

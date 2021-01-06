@@ -8,7 +8,6 @@
 var modified = false;           // indicates if anything has been clicked on this page
 var groupBalance = 0;           // available group money
 var minimumBalance = 0;         // minimum group balance for the order to be succesful
-var toleranceIsCostly = true;   // default tolerance behaviour
 var isStockit = false;          // Whether the order is from stock oder normal supplier
 
 // Article data arrays:
@@ -16,13 +15,7 @@ var price = new Array();
 var unit = new Array();              // items per order unit
 var itemTotal = new Array();         // total item price
 var quantityOthers = new Array();
-var toleranceOthers = new Array();
-var itemsAllocated = new Array();    // how many items the group has been allocated and should definitely get
 var quantityAvailable = new Array(); // stock_order. how many items are currently in stock
-
-function setToleranceBehaviour(value) {
-    toleranceIsCostly = value;
-}
 
 function setStockit(value) {
     isStockit = value;
@@ -36,14 +29,12 @@ function setMinimumBalance(amount) {
     minimumBalance = amount;
 }
 
-function addData(orderArticleId, itemPrice, itemUnit, itemSubtotal, itemQuantityOthers, itemToleranceOthers, allocated, available) {
+function addData(orderArticleId, itemPrice, itemUnit, itemSubtotal, itemQuantityOthers, available) {
     var i = orderArticleId;
     price[i] = itemPrice;
     unit[i] = itemUnit;
     itemTotal[i] = itemSubtotal;
     quantityOthers[i] = itemQuantityOthers;
-    toleranceOthers[i] = itemToleranceOthers;
-    itemsAllocated[i] = allocated;
     quantityAvailable[i] = available;
 }
 

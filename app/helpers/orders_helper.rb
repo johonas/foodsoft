@@ -94,16 +94,8 @@ module OrdersHelper
     input_classes += ' package' unless order_article.article_price.unit_quantity == 1
     input_html = form.text_field :units_received, class: input_classes,
       data: {'units-expected' => units_expected},
-      disabled: order_article.result_manually_changed?,
+      disabled: false,
       autocomplete: 'off'
-
-    if order_article.result_manually_changed?
-      input_html = content_tag(:span, class: 'input-prepend intable', title: t('orders.edit_amount.field_locked_title', default: '')) {
-        button_tag(nil, type: :button, class: 'btn unlocker') {
-          content_tag(:i, nil, class: 'icon icon-unlock')
-        } + input_html
-      }
-    end
 
     input_html.html_safe
   end
@@ -128,22 +120,6 @@ module OrdersHelper
       link_to(order_or_supplier.name, stock_articles_path).html_safe
     else
       link_to(@order.supplier.name, supplier_path(@order.supplier)).html_safe
-    end
-  end
-
-  # @param order_article [OrderArticle]
-  # @return [String] CSS class for +OrderArticle+ in table for admins (+used+, +partused+, +unused+ or +unavailable+).
-  def order_article_class(order_article)
-    if order_article.units > 0
-      if order_article.missing_units == 0
-        'used'
-      else
-        'partused'
-      end
-    elsif order_article.quantity > 0
-      'unused'
-    else
-      'unavailable'
     end
   end
 

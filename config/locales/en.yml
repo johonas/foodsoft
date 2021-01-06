@@ -110,7 +110,6 @@ en:
         name: Name
         user_tokens: Members
       order:
-        boxfill: Fill boxes after
         closed_by: Settled by
         created_by: Created by
         end_action: End action
@@ -585,9 +584,6 @@ en:
       minimum_balance: Members can only order when their account balance is above or equal to this amount.
       name: The name of your foodcoop.
       order_schedule:
-        boxfill:
-          recurr: Schedule for when the box-fill phase starts by default.
-          time: Default time when the box-fill phase of the ordering starts.
         ends:
           recurr: Schedule for default order closing date.
           time: Default time when orders are closed.
@@ -605,7 +601,6 @@ en:
       tax_default: Default VAT percentage for new articles.
       tolerance_is_costly: Order as much of the member tolerance as possible (compared to only as much needed to fill the last box). Enabling this also includes the tolerance in the total price of the open member order.
       use_apple_points: When the apple point system is enabled, members are required to do some tasks to be able to keep ordering.
-      use_boxfill: When enabled, near end of an order, members are only able to change their order when increases the total amount ordered. This helps to fill any remaining boxes. You still need to set a box-fill date for the orders.
       use_current_orders: Enable the current_orders plugin. Allows members with the order permission to change member amounts in multiple orders, using three new screens in the Orders menu. Especially useful for pick-up days.
       use_documents: Add a basic document sharing page to the foodcoop menu.
       use_iban: When enabled, supplier and user provide an additonal field for storing the international bank account number.
@@ -640,9 +635,6 @@ en:
       minimum_balance: Minimum balance
       name: Name
       order_schedule:
-        boxfill:
-          recurr: Box fill after
-          time: time
         ends:
           recurr: Order ends
           time: time
@@ -659,7 +651,6 @@ en:
       time_zone: Time zone
       tolerance_is_costly: Tolerance is costly
       use_apple_points: Apple points
-      use_boxfill: Box-fill phase
       use_current_orders: Extra distribute screens
       use_documents: Enable documents
       use_iban: Use IBAN
@@ -1577,10 +1568,8 @@ en:
       title: Manage orders
     model:
       close_direct_message: Order settled without charging member accounts.
-      error_boxfill_before_ends: must be after the box-fill date (or remain empty)
       error_closed: Order was already settled
       error_nosel: At least one article must be selected. You may want to delete the order instead?
-      error_starts_before_boxfill: must be after the start date (or remain empty)
       error_starts_before_ends: must be after the start date (or remain empty)
       notice_close: 'Order: %{name}, until %{ends}'
       stock: Stock

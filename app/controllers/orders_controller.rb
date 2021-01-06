@@ -190,11 +190,10 @@ class OrdersController < ApplicationController
     return if not params[:order_articles]
     # where to leave remainder during redistribution
     rest_to = []
-    rest_to << :tolerance if params[:rest_to_tolerance]
     rest_to << :stock if params[:rest_to_stock]
     rest_to << nil
     # count what happens to the articles:
-    #   changed, rest_to_tolerance, rest_to_stock, left_over
+    #   changed, rest_to_stock, left_over
     counts = [0] * 4
     cunits = [0] * 4
     # This was once wrapped in a transaction, but caused
@@ -220,7 +219,6 @@ class OrdersController < ApplicationController
     return nil if counts[0] == 0
     notice = []
     notice << I18n.t('orders.update_order_amounts.msg1', count: counts[0], units: cunits[0])
-    notice << I18n.t('orders.update_order_amounts.msg2', count: counts[1], units: cunits[1]) if params[:rest_to_tolerance]
     notice << I18n.t('orders.update_order_amounts.msg3', count: counts[2], units: cunits[2]) if params[:rest_to_stock]
     if counts[3]>0 || cunits[3]>0
       notice << I18n.t('orders.update_order_amounts.msg4', count: counts[3], units: cunits[3])

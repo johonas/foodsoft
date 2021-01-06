@@ -123,7 +123,6 @@ de:
         user_tokens: Mitglieder
         active: Aktiv
       order:
-        boxfill: Kistenfüllen ab
         closed_by: Abgerechnet von
         created_by: Erstellt von
         end_action: Endeaktion
@@ -632,9 +631,6 @@ de:
       minimum_balance: Mitglieder können nur bestellen, wenn ihr Kontostand mindestens diesem Betrag entspricht.
       name: Der Name Deiner Foodcoop
       order_schedule:
-        boxfill:
-          recurr: Standarddatum für den Begin der Kistenauffüllphase
-          time: Standardzeit für den Begin der Kistenauffüllphase
         ends:
           recurr: Standarddatum für den Bestellschluss
           time: Standardzeit für den Bestellschluss
@@ -652,7 +648,6 @@ de:
       tax_default: Standard Mehrwertsteuersatz für neue Artikel
       tolerance_is_costly: Eine möglichst große Menge im Rahmen der Tolerenz bestellen. Wenn dies nicht aktiviert ist, wird im Rahmen der Toleranz nur so viel bestellt, dass damit komplette Einheiten (Boxen) bestellt werden können. Die Option wirkt sich auch auf die Toleranz des Gesamtpreises einer offenen Mitgliederbestellung aus.
       use_apple_points: Wenn das Apfel Punktesystem aktiviert ist, ist es erforderlich, dass Mitglieder Aufgaben erledigen um bestellen zu können.
-      use_boxfill: Wenn aktiviert, können Benutzer nahe am Ende der Bestellung diese nur mehr so verändern, dass sich die Gesamtsumme erhöht. Dies hilft beim auffüllen der verbleibenden Kisten. Es muss trotzdem noch das Kistenauffülldatum bei der Bestellung gesetzt werden.
       use_current_orders: Aktiviere Plugin zur erweiterten Bearbeitung laufender Bestellungen. Dies erlaubt Mitgliedern mit Bestellrechten, mehrere Bestellungen gleichzeitig zu bearbeiten (in drei zusätzlichen Ansichten unter dem Menüpunkt Bestellungen). Insbesondere hilfreich für Anpassungen an Liefertagen.
       use_documents: Einfache Dokumentenverwaltung aktivieren
       use_iban: Zusätzlich Feld für die internationale Kontonummer bei Benutzern und Lieferanten anzeigen
@@ -687,9 +682,6 @@ de:
       minimum_balance: Minimaler Kontostand
       name: Name
       order_schedule:
-        boxfill:
-          recurr: Kistenauffüllen ab
-          time: Zeit
         ends:
           recurr: Bestellschluss
           time: Zeit
@@ -706,7 +698,6 @@ de:
       time_zone: Zeitzone
       tolerance_is_costly: Bestelltoleranz maximal ausnutzen, um möglichst große Mengen zu bestellen
       use_apple_points: Apfelpunkte verwenden
-      use_boxfill: Kistenauffüllphase
       use_current_orders: Erweiterte Bearbeitungsansicht
       use_documents: Dokumente verwenden
       use_iban: IBAN verwenden
@@ -1574,6 +1565,7 @@ de:
       article_count: 'Bestellte Artikel:'
       prices: Netto-/Bruttopreis
       prices_sum: 'Summe (Netto/Brutto-Preise):'
+      members: Einheiten
       units_full: Volle Gebinde
       units_ordered: Bestellte Einheiten
     create:
@@ -1614,10 +1606,8 @@ de:
       title: Bestellungen verwalten
     model:
       close_direct_message: Die Bestellung wurde abgechlossen, ohne die Mitgliederkonten zu belasten.
-      error_boxfill_before_ends: muss nach dem Kistenauffülldatum liegen (oder leer bleiben)
       error_closed: Bestellung wurde schon abgerechnet
       error_nosel: Es muss mindestens ein Artikel ausgewählt sein.
-      error_starts_before_boxfill: muss nach dem Bestellstart liegen (oder leer bleiben)
       error_starts_before_ends: muss nach dem Bestellstart liegen (oder leer bleiben)
       notice_close: 'Bestellung: %{name}, bis %{ends}'
       stock: Lager

@@ -41,7 +41,7 @@ class Order < ActiveRecord::Base
   # Allow separate inputs for date and time
   #   with workaround for https://github.com/einzige/date_time_attribute/issues/14
   include DateTimeAttributeValidate
-  date_time_attribute :starts, :boxfill, :ends
+  date_time_attribute :starts, :ends
 
   def stockit?
     supplier_id == 0
@@ -96,14 +96,6 @@ class Order < ActiveRecord::Base
 
   def closed?
     state == "closed"
-  end
-
-  def boxfill?
-    FoodsoftConfig[:use_boxfill] && open? && boxfill.present? && boxfill < Time.now
-  end
-
-  def is_boxfill_useful?
-    FoodsoftConfig[:use_boxfill] && supplier.try(:has_tolerance?)
   end
 
   def expired?
@@ -289,7 +281,7 @@ class Order < ActiveRecord::Base
   def keep_ordered_articles
     chosen_order_articles = order_articles.where(article_id: article_ids)
     to_be_removed = order_articles - chosen_order_articles
-    to_be_removed_but_ordered = to_be_removed.select { |a| a.quantity > 0 || a.tolerance > 0 }
+    to_be_removed_but_ordered = to_be_removed.select { |a| a.quantity > 0 }
     unless to_be_removed_but_ordered.empty? || ignore_warnings
       errors.add(:articles, I18n.t(stockit? ? 'orders.model.warning_ordered_stock' : 'orders.model.warning_ordered'))
       @erroneous_article_ids = to_be_removed_but_ordered.map { |a| a.article_id }

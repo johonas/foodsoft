@@ -50,10 +50,6 @@ default: &defaults
   # default vat percentage for new articles
   tax_default: 7.0
 
-  # tolerance order option: If set to false, article tolerance values do not count
-  # for total article price as long as the order is not finished.
-  tolerance_is_costly: false
-
   # Ordergroups, which have less than 75 apples should not be allowed to make new orders
   # Comment out this option to activate this restriction
   #stop_ordering_under: 75

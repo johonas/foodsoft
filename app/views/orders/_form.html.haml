@@ -3,7 +3,6 @@
   = f.association :bestellrunde, :collection => Bestellrunde.selectable(@order)
 
   .fold-line
-    = f.input :boxfill, as: :date_picker_time if @order.is_boxfill_useful?
     = f.input :pickup, as: :date_picker, input_html: {class: 'input-small'}
 
   = f.input :end_action, collection: Order.end_actions,include_blank: false,

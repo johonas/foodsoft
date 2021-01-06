@@ -104,7 +104,6 @@ nl:
         name: Naam
         user_tokens: Leden
       order:
-        boxfill: Dozen vullen na
         closed_by: Afgerekend door
         created_by: Geopend door
         end_action: Sluitingsactie
@@ -557,9 +556,6 @@ nl:
       minimum_balance: Leden kunnen slechts bestellen wanneer hun tegoed groter of gelijk is aan dit bedrag.
       name: De naam van de foodcoop.
       order_schedule:
-        boxfill:
-          recurr: Standaard rooster voor wanneer dozen vullen begint.
-          time: Standaard tijd voor wanneer dozen vullen begint.
         ends:
           recurr: Schema voor datum waarop de bestelling sluit.
           time: Standaard tijd wanneer de bestelling sluit.
@@ -577,7 +573,6 @@ nl:
       tax_default: Standaard BTW percentage voor nieuwe artikelen.
       tolerance_is_costly: Bestel zoveel artikelen als mogelijk in de tolerantie (in plaats van net genoeg om de laatste doos te vullen). Dit zorgt er ook voor dat de tolerantie in de prijs van open ledenbestellingen wordt meegenomen.
       use_apple_points: Wanneer het appelpunten systeem is geactiveerd, kunnen leden slechts bestellen wanneer ze meewerken aan taken.
-      use_boxfill: Wanneer dit aan staat, kunnen gebruikers aan het einde van de bestelfase hun bestelling alleen wijzigen als het de totale bestelling vergroot. Dit helpt om dozen te vullen. Bij de bestelling moet nog wel de dozen-vul-datum ingevuld worden.
       use_current_orders: De current_orders plugin aanzetten. Hiermee kunnen leden met bestelling-toegang bestelaantallen van leden aanpassen in meerdere bestellingen tegelijk. Hiervoor zijn drie nieuwe items in het Bestellingen-menu. Bedoeld voor gebruik op een ophaaldag.
       use_documents: Geeft een simpele manier om documenten te delen in het foodcoop menu.
       use_iban: Om leverancier en gebruiker een extra veld te geven voor het internationale bankrekeningnummer (IBAN).
@@ -612,9 +607,6 @@ nl:
       minimum_balance: Minimum tegoed
       name: Naam
       order_schedule:
-        boxfill:
-          recurr: Dozen vullen na
-          time: tijd
         ends:
           recurr: Bestelling sluit
           time: tijd
@@ -631,7 +623,6 @@ nl:
       time_zone: Tijdzone
       tolerance_is_costly: Tolerantie is duur
       use_apple_points: Appelpunten
-      use_boxfill: Dozen vullen fase
       use_current_orders: Extra verdeelschermen
       use_documents: Documenten delen
       use_iban: IBAN gebruiken
@@ -1501,10 +1492,8 @@ nl:
       title: Bestellingen beheren
     model:
       close_direct_message: Bestelling afgerekend zonder bedragen in rekening te brengen bij huishoudens.
-      error_boxfill_before_ends: moet na de dozen-vul-datum zijn (of leeg blijven)
       error_closed: Bestelling was al afgerekend
       error_nosel: Er moet minstens één artikel geselecteerd zijn. Mogelijk wil je de bestelling verwijderen?
-      error_starts_before_boxfill: moet na de startdatum zijn (of leeg blijven)
       error_starts_before_ends: moet na de startdatum zijn (of niet ingevuld worden)
       notice_close: 'Bestelling: %{name}, tot %{ends}'
       stock: Voorraad

@@ -48,9 +48,9 @@ class GroupOrderArticlesController < ApplicationController
   end
 
   def destroy
-    # only destroy if quantity and tolerance was zero already, so that we don't
+    # only destroy if quantity was zero already, so that we don't
     # lose what the user ordered, if any
-    if @group_order_article.quantity > 0 || @group_order_article.tolerance >0
+    if @group_order_article.quantity > 0
       @group_order_article.update_attribute(:result, 0)
     else
       @group_order_article.destroy

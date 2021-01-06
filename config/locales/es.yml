@@ -104,7 +104,6 @@ es:
         name: Nombre
         user_tokens: Miembros
       order:
-        boxfill: Repartir cajas después
         closed_by: Cerrado por
         created_by: Creado por
         end_action: Acción final
@@ -559,9 +558,6 @@ es:
       minimum_balance: Los miembros sólo pueden hacer pedidos cuando su balance de cuenta está por encima o igual a esta cantidad.
       name: El nombre de tu cooperativa.
       order_schedule:
-        boxfill:
-          recurr: Programa cuándo la fase de llenado de cajas comienza por defecto.
-          time: 
         ends:
           recurr: 
           time: Fecha por defecto cuando se cierran los pedidos.
@@ -579,8 +575,7 @@ es:
       tax_default: Porcentaje por defecto del IVA para artículos nuevos.
       tolerance_is_costly: Pide lo que más permita la tolerancia de los miembros (en lugar de sólo lo necesario para llenar la última caja). Permitir esto también incluye la tolerancia en el precio final del pedido abierto de cada miembro.
       use_apple_points: Cuando el sistema de puntos-manzana está habilitado los miembros deberán realizar algunas tareas para poder hacer pedidos.
-      use_boxfill: Cuando está activado, cerca del cierre de un pedido los miembros no podrán cambiar su pedido a menos que se incremente el valor pedido total. Esto ayudará a llenar las cajas que faltan. Igualmente deberás decidir una fecha de llenado de cajas para los pedidos.
-      use_current_orders: 
+      use_current_orders:
       use_documents: Agregar una página básica de compartir documentos al menú de la cooperativa.
       use_iban: Cuando esta opción está habilitada, el proveedor y el usuario pueden guardan también su número de cuenta bancaria internacional (IBAN).
       use_messages: Permitir que los miembros de comuniquen unos con otros dentro de Foodsoft.
@@ -614,9 +609,6 @@ es:
       minimum_balance: Balance mínimo
       name: Nombre
       order_schedule:
-        boxfill:
-          recurr: Llenar las cajas luego
-          time: hora
         ends:
           recurr: Pedido termin
           time: hora
@@ -633,7 +625,6 @@ es:
       time_zone: Zona horaria
       tolerance_is_costly: La tolerancia es prioritaria
       use_apple_points: Puntos-manzana
-      use_boxfill: Fase de llenar las cajas
       use_current_orders: Pantallas extra de distribución
       use_documents: Activar documentos
       use_iban: Usar IBAN
@@ -1499,11 +1490,9 @@ es:
       title: Maneja los pedidos
     model:
       close_direct_message: Pedido cerrado sin cobrar a las cuentas de los miembros.
-      error_boxfill_before_ends: debe ser después de la fecha de llenado de cajas (o permanecer vacía)
       error_closed: El pedido ya estaba cerrado
       error_nosel: Debes seleccionar al menos un artículo. Quizás quieres borrar el pedido?
-      error_starts_before_boxfill: tiene que ser después de la fecha de comienzo (o estar vacío)
-      error_starts_before_ends: 
+      error_starts_before_ends:
       notice_close: 'Pedido: %{name}, hasta %{ends}'
       stock: Stock
       warning_ordered: 'Cuidado: los artículos marcados en rojo ya han sido pedidos en este pedido abierto. Si los deseleccionas aquí, todos los pedidos actuales de estos artículos se borrarán. Para proceder, confirma abajo.'

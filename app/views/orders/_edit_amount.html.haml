@@ -12,7 +12,7 @@
     %td.article_price
       = number_to_currency order_article.article_price.price
       = article_price_change_hint(order_article)
-    %td #{order_article.quantity} + #{order_article.tolerance}
+    %td= order_article.quantity
     %td
       = order_article.units_to_order
       = pkg_helper order_article.article
