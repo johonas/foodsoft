@@ -150,8 +150,8 @@ class OrdersController < ApplicationController
     order = Order.find(params[:id])
     order.finish!(@current_user)
     redirect_to order, notice: I18n.t('orders.finish.notice')
-  rescue => error
-    redirect_to orders_url, alert: I18n.t('errors.general_msg', :msg => error.message)
+  # rescue => error
+  #   redirect_to orders_url, alert: I18n.t('errors.general_msg', :msg => error.message)
   end
 
   # Send a order to the supplier.

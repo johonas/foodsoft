@@ -30,13 +30,14 @@ class OrderArticle < ActiveRecord::Base
   def units
     return units_received unless units_received.nil?
     return units_billed unless units_billed.nil?
+    return calc_units_to_order if order.open?
     units_to_order
   end
 
   # Count quantities of belonging group_orders.
   # In balancing this can differ from ordered (by supplier) quantity for this article.
   def group_orders_sum
-    quantity = group_order_articles.collect(&:result).sum
+    quantity = group_order_articles.collect(&:quantity).sum
     {:quantity => quantity, :price => quantity * price.fc_price}
   end
 
@@ -44,11 +45,26 @@ class OrderArticle < ActiveRecord::Base
   def update_results!
     if order.open?
       self.quantity = group_order_articles.collect(&:quantity).sum
-      self.units_to_order = (self.quantity / price.unit_quantity.to_f).ceil
+      self.units_to_order = calc_units_to_order
       save!
     elsif order.finished?
-      update_attribute(:units_to_order, group_order_articles.collect(&:result).sum)
+      update_attribute(:units_to_order, calc_units_to_order)
     end
+  end
+
+  def calc_units_to_order
+    if self.quantity <= quantity_from_stock
+      units_to_order = 0
+    else
+      units_to_order = ((self.quantity - quantity_from_stock) / price.unit_quantity.to_f).ceil
+    end
+
+    units_to_order
+  end
+
+  def quantity_from_stock
+    stock = order.open? ? article.stock_quantity : stock_quantity
+    stock >= self.quantity ? self.quantity : stock
   end
 
   def order_finished!
@@ -57,12 +73,14 @@ class OrderArticle < ActiveRecord::Base
     update_attribute(:article_price, article.article_prices.first)
 
     if quantity > 0 && !order.stockit?
-      fail 'Article already has stock_quantity set' unless stock_quantity.nil?
+      # fail 'Article already has stock_quantity set' unless stock_quantity.nil?
 
       if (ordered_from_stock = article.order_from_stock!(quantity, self))
         update_attribute(:stock_quantity, ordered_from_stock)
       end
     end
+
+    update_results!
   end
 
   # Calculate price for ordered quantity.

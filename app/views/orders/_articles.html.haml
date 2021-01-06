@@ -8,6 +8,7 @@
         %th= t '.units_ordered'
       - else
         %th= t '.members'
+        %th= 'Aus Lager'
         %th= t '.units_full'
     - total_net, total_gross, counter = 0, 0, 0
   %tbody.list
@@ -31,7 +32,8 @@
           - if order.stockit?
             %td= units
           - else
-            %td= "#{order_article.quantity}"
+            %td= order_article.quantity
+            %td= order_article.quantity_from_stock
             %td{title: units_history_line(order_article, plain: true)}
               = units
               = pkg_helper order_article.price
