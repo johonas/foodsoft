@@ -64,7 +64,7 @@ class OrderArticle < ActiveRecord::Base
 
   def quantity_from_stock
     stock = order.open? ? article.stock_quantity : stock_quantity
-    stock >= self.quantity ? self.quantity : stock
+    stock || 0 >= self.quantity ? self.quantity : stock
   end
 
   def order_finished!
