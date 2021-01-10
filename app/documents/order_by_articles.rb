@@ -16,7 +16,6 @@ class OrderByArticles < OrderPdf
       rows = [[
         GroupOrder.human_attribute_name(:ordergroup),
         GroupOrderArticle.human_attribute_name(:ordered),
-        GroupOrderArticle.human_attribute_name(:received),
         GroupOrderArticle.human_attribute_name(:total_price)
       ]]
 
@@ -24,7 +23,6 @@ class OrderByArticles < OrderPdf
         dimrows << rows.length if goa.quantity == 0
         rows << [goa.group_order.ordergroup_name,
                  goa.quantity,
-                 goa.result,
                  number_to_currency(goa.total_price)]
       end
       next unless rows.length > 1
@@ -34,7 +32,7 @@ class OrderByArticles < OrderPdf
       nice_table name, rows, dimrows do |table|
         table.column(0).width = bounds.width / 2
         table.columns(1..-1).align = :right
-        table.column(2).font_style = :bold
+        table.column(1).font_style = :bold
       end
     end
   end

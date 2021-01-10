@@ -74,7 +74,8 @@
         %th= heading_helper Article, :name
         %th{style: "width:4.5em;"}= t '.price'
         %th{style: "width:4.5em;"}= heading_helper Article, :unit
-        %th#col_required= heading_helper GroupOrderArticle, :quantity
+        %th#col_required
+          %abbr{ title: t('.quantity_title') }= heading_helper GroupOrderArticle, :quantity
         %th{style: "width:15px;"}= heading_helper GroupOrderArticle, :total_price
 
     %tbody.list

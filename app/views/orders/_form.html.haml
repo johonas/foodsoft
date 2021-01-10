@@ -25,11 +25,12 @@
         %th= heading_helper Article, :origin
         %th= heading_helper Article, :manufacturer
         %th= heading_helper Article, :units
+        %th= heading_helper Article, :stock_quantity
       %th= t '.prices'
     - for category_name, articles in @order.articles_for_ordering
       %tr.article-category
         %td
-        %td{:colspan => "6", :style => "text-align:left"}
+        %td{:colspan => "7", :style => "text-align:left"}
           = category_name
           %i.icon-tag
       - for article in articles
@@ -53,13 +54,14 @@
               = article.unit
               - if article.unit_quantity > 1
                 %span{style: 'color: grey'} &times; #{article.unit_quantity}#{pkg_helper_icon}
+            %td= article.stock_quantity
           %td= "#{number_to_currency(article.price)} / #{number_to_currency(article.fc_price)}"
     %tr
       %td
         = check_box_tag 'checkall', "1", false, { 'data-check-all' => '#articleList' }
         -# also when all are deselected, make sure this parameter is sent (controller removes empty values again)
         = hidden_field_tag "order[article_ids][]", nil
-      %td{:colspan => "6"}= t '.select_all'
+      %td{:colspan => "7"}= t '.select_all'
 
   - if (@template_orders && !@template_orders.empty?)
     = render :partial => 'template_orders_script'

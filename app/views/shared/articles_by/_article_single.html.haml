@@ -1,7 +1,7 @@
 %tbody{id: "oa_#{order_article.id}"}
   - if not defined?(heading) or heading
     %tr.list-heading
-      %th{:colspan => "4"}>
+      %th{:colspan => "3"}>
         %h4.name.pull-left
           = order_article.article.name
           %small

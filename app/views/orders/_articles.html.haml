@@ -8,8 +8,10 @@
         %th= t '.units_ordered'
       - else
         %th= t '.members'
-        %th= 'Aus Lager'
-        %th= t '.units_full'
+
+        - unless order.open?
+          %th= heading_helper OrderArticle, :quantity_from_stock
+          %th= t '.units_full'
     - total_net, total_gross, counter = 0, 0, 0
   %tbody.list
     - order.articles_grouped_by_category.each do |category_name, order_articles|
@@ -33,10 +35,11 @@
             %td= units
           - else
             %td= order_article.quantity
-            %td= order_article.quantity_from_stock
-            %td{title: units_history_line(order_article, plain: true)}
-              = units
-              = pkg_helper order_article.price
+            - unless order.open?
+              %td= order_article.quantity_from_stock
+              %td{title: units_history_line(order_article, plain: true)}
+                = units
+                = pkg_helper order_article.price
 %p
   = t '.prices_sum'
   = "#{number_to_currency(total_net)} / #{number_to_currency(total_gross)}"

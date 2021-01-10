@@ -97,7 +97,7 @@ class OrderPdf < RenderPDF
       # get quantity for each article and ordergroup
       goa_records = group_order_articles(group_ids)
         .group('group_order_articles.order_article_id, group_orders.ordergroup_id')
-        .pluck('group_order_articles.order_article_id', 'group_orders.ordergroup_id', 'SUM(COALESCE(group_order_articles.result, group_order_articles.quantity))')
+        .pluck('group_order_articles.order_article_id', 'group_orders.ordergroup_id', 'SUM(group_order_articles.quantity)')
 
       # transform the flat list of results in a hash (with the article as key), which contains an array for all ordergroups
       results = goa_records.group_by(&:first).transform_values do |value|

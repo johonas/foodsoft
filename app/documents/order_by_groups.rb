@@ -17,22 +17,20 @@ class OrderByGroups < OrderPdf
         OrderArticle.human_attribute_name(:article),
         Article.human_attribute_name(:supplier),
         GroupOrderArticle.human_attribute_name(:ordered),
-        GroupOrderArticle.human_attribute_name(:received),
         GroupOrderArticle.human_attribute_name(:unit_price),
         GroupOrderArticle.human_attribute_name(:total_price)
       ]]
 
       each_group_order_article_for_ordergroup(oa_id) do |goa|
-        dimrows << rows.length if goa.result == 0
+        dimrows << rows.length if goa.quantity == 0
         rows <<  [goa.order_article.article.name,
                   goa.order_article.article.supplier.name,
                   goa.quantity,
-                  goa.result,
                   order_article_price_per_unit(goa.order_article),
                   number_to_currency(goa.total_price)]
       end
       next unless rows.length > 1
-      rows << [nil, nil, nil, nil, nil, number_to_currency(oa_total)]
+      rows << [nil, nil, nil, nil, number_to_currency(oa_total)]
 
       rows.each { |row| row.delete_at 1 } unless @options[:show_supplier]
 
@@ -48,7 +46,7 @@ class OrderByGroups < OrderPdf
           table.column(0).width = bounds.width / 2
         end
 
-        table.columns(-4..-1).align = :right
+        table.columns(-3..-1).align = :right
         table.column(-3).font_style = :bold
         table.column(-1).font_style = :bold
       end

@@ -12,7 +12,7 @@
 .well
   - if not @open_orders.empty?
     %h2= t '.orders_open'
-    = render partial: 'download_all_button', locals: { state: :open}
+    -# = render partial: 'download_all_button', locals: { state: :open}
 
   - elsif not @finished_orders.empty?
     %h2= t '.orders_finished'

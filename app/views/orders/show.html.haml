@@ -66,22 +66,27 @@
 
     - unless @order.open?
       = render 'shared/order_download_button', order: @order, klass: ''
+
     - if @order.open?
       = link_to t('.action_end'), finish_order_path(@order), method: :post, class: 'btn btn-success',
         data: {confirm: t('.confirm_end', order: @order.name)}
+
       - if @order.stock_group_order
         = link_to t('.stock_order'), edit_group_order_path(@order.stock_group_order, :order_id => @order.id), class: 'btn'
-      - else
-        = link_to t('.stock_order'), new_group_order_path(:order_id => @order.id, :stock_order => true), class: 'btn'
+      -# - else
+      -#  = link_to t('.stock_order'), new_group_order_path(:order_id => @order.id, :stock_order => true), class: 'btn'
+
       = link_to t('ui.edit'), edit_order_path(@order), class: 'btn'
+
     - elsif not @order.closed? and not @order.stockit?
       = link_to t('.send_to_supplier'), send_result_to_supplier_order_path(@order), method: :post,
         class: "btn#{' btn-primary' unless @order.last_sent_mail}",
         data: {confirm: @order.last_sent_mail && t('.confirm_send_to_supplier', when: format_time(@order.last_sent_mail)) }
+
       = receive_button @order
+
     - unless @order.closed?
-      = link_to t('ui.delete'), @order, data: {confirm: t('.confirm_delete')}, method: :delete,
-        class: 'btn btn-danger'
+      = link_to t('ui.delete'), @order, data: {confirm: t('.confirm_delete')}, method: :delete, class: 'btn btn-danger'
 
 %section#articles_table
   = render @partial, order: @order

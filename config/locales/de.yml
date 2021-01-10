@@ -6,6 +6,7 @@ de:
         availability: Artikel ist verfügbar?
         availability_short: verf.
         deposit: Pfand
+        stock_quantity: An Lager
         fc_price: Endpreis
         fc_price_desc: Preis incl. MwSt, Pfand und Foodcoop-Aufschlag.
         fc_price_short: FC-Preis
@@ -150,6 +151,7 @@ de:
         units_to_order: Bestellte Gebinde
         units_to_order_short: Bestellt
         update_global_price: Globalen Preis aktualisieren
+        quantity_from_stock: Aus Lager
       order_comment:
         text: Kommentiere diese Bestellung ...
       ordergroup:
@@ -1100,6 +1102,7 @@ de:
       units: Gebinde
       units_full: Volle Gebinde
       units_total: Gesamt-Einheiten
+      quantity_title: Menge (Einzelne Einheiten, nicht Gebinde)
     index:
       closed_orders:
         more: mehr...
@@ -1126,7 +1129,7 @@ de:
         order_now: Das ist Deine Chance!
         order_open: Zu Erhalten
         ordered: Bestellt
-        ordered_title: Menge + Toleranz
+        ordered_title: Menge (Einzelne Einheiten, nicht Gebinde)
         show_hide: Zeige/Verstecke nicht bestellte Artikel
         show_note: Notiz zeigen
         title: Artikelübersicht
@@ -1565,8 +1568,8 @@ de:
       article_count: 'Bestellte Artikel:'
       prices: Netto-/Bruttopreis
       prices_sum: 'Summe (Netto/Brutto-Preise):'
-      members: Einheiten
-      units_full: Volle Gebinde
+      members: Einheiten bestellt
+      units_full: Gebinde zu bestellen
       units_ordered: Bestellte Einheiten
     create:
       notice: Die Bestellung wurde erstellt.
@@ -1668,6 +1671,7 @@ de:
     update_order_amounts:
       msg1: "%{count} Artikel (%{units} Einheiten) aktualisiert"
       msg2: "%{count} (%{units}) Toleranzmenge"
+      msg3: "%{count} (%{units}) Ins lager"
       msg4: "%{count} (%{units}) übrig"
   pages:
     all:

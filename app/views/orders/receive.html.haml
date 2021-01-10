@@ -11,7 +11,7 @@
           contentType: 'application/json; charset=UTF-8'
         });
       });
-      
+
       $(document).on('OrderArticle#create', function(e) {
         $.ajax({
           url: '#{receive_on_order_article_create_order_path(@order)}',
@@ -33,8 +33,8 @@
       %b.checkbox.inline
         = t '.surplus_options'
       = label_tag :rest_to_stock, class: 'checkbox inline' do
-        = check_box_tag :rest_to_stock, 1, false, disabled: true
-        %span{style: 'color: grey'}= t '.rest_to_stock'
+        = check_box_tag :rest_to_stock, 1, true
+        %span= t '.rest_to_stock'
     .pull-right
       = submit_tag t('.submit'), class: 'btn btn-primary'
       = link_to t('ui.or_cancel'), order_path(@order)

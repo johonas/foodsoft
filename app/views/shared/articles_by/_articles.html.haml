@@ -4,11 +4,10 @@
       %th{:style => 'width:70%'}= Ordergroup.model_name.human
       %th.center
         %acronym{:title => t('shared.articles.ordered_desc')}= t 'shared.articles.ordered'
-      %th.center
-        %acronym{:title => t('shared.articles.received_desc')}= t 'shared.articles.received'
       %th= t 'shared.articles_by.price'
 
-  - for order_article in order.order_articles.ordered.includes([:article, :article_price])
+  - for order_article in order.order_articles.includes([:article, :article_price])
     = render 'shared/articles_by/article_single', order_article: order_article, edit: (edit rescue nil)
-    %tr
-      %td{colspan: 4}
+
+  %tr
+    %td{colspan: 4}

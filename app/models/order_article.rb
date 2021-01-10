@@ -15,7 +15,7 @@ class OrderArticle < ActiveRecord::Base
 
   _ordered_sql = "order_articles.units_to_order > 0 OR order_articles.units_billed > 0 OR order_articles.units_received > 0"
   scope :ordered, -> { where(_ordered_sql) }
-  scope :ordered_or_member, -> { includes(:group_order_articles).where("#{_ordered_sql} OR order_articles.quantity > 0 OR group_order_articles.result > 0") }
+  scope :ordered_or_member, -> { includes(:group_order_articles).where("#{_ordered_sql} OR order_articles.quantity > 0") }
 
   before_create :init_from_balancing
   after_destroy :update_ordergroup_prices
@@ -119,14 +119,15 @@ class OrderArticle < ActiveRecord::Base
 
     # Recompute
     qty_left -= qty_for_members
+    qty_left += self.stock_quantity
 
+    ArticleStockChange.where(order_article: self).where('quantity > 0').destroy_all
     # if there's anything left, move to stock if wanted
     if qty_left > 0 && surplus.index(:stock)
       counts[surplus.index(:stock)] = qty_left
-      # 1) find existing stock article with same name, unit, price
-      # 2) if not found, create new stock article
-      #      avoiding duplicate stock article names
+      ArticleStockChange.create!(article: self.article, order_article: self, quantity: qty_left)
     end
+
     if qty_left > 0 && surplus.index(nil)
       counts[surplus.index(nil)] = qty_left
     end
