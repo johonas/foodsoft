@@ -59,6 +59,7 @@
             - order_articles.each do |oa|
               - # get the order-results for the ordergroup
               - r = get_order_results(oa, @group_order.id)
+              - next unless r[:quantity] > 0
               %tr{class: cycle('even', 'odd', name: 'articles')}
                 %td{style: "width:40%"}
                   = oa.article.name

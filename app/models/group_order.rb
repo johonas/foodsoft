@@ -56,7 +56,7 @@ class GroupOrder < ActiveRecord::Base
       # Get ordered quantities and update group_order_articles/_quantities...
       if group_order_articles_attributes
         quantities = group_order_articles_attributes.fetch(order_article.id.to_s, { :quantity => 0 })
-        group_order_article.update_quantities(quantities[:quantity].to_i)
+        group_order_article.update_quantity!(quantities[:quantity].to_i)
       end
 
       # Also update results for the order_article

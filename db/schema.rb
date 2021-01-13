@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210106194542) do
+ActiveRecord::Schema.define(version: 20210113154104) do
 
   create_table "article_categories", force: :cascade do |t|
     t.string "name",        limit: 255, default: "", null: false
@@ -166,14 +166,6 @@ ActiveRecord::Schema.define(version: 20210106194542) do
   end
 
   add_index "financial_transactions", ["ordergroup_id"], name: "index_financial_transactions_on_ordergroup_id", using: :btree
-
-  create_table "group_order_article_quantities", force: :cascade do |t|
-    t.integer  "group_order_article_id", limit: 4, default: 0, null: false
-    t.integer  "quantity",               limit: 4, default: 0
-    t.datetime "created_on",                                   null: false
-  end
-
-  add_index "group_order_article_quantities", ["group_order_article_id"], name: "index_group_order_article_quantities_on_group_order_article_id", using: :btree
 
   create_table "group_order_articles", force: :cascade do |t|
     t.integer  "group_order_id",   limit: 4, default: 0, null: false

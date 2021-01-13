@@ -30,7 +30,7 @@ class OrderArticle < ActiveRecord::Base
   def units
     return units_received unless units_received.nil?
     return units_billed unless units_billed.nil?
-    return calc_units_to_order if order.open?
+    return calc_units if order.open?
     units_to_order
   end
 
@@ -52,6 +52,10 @@ class OrderArticle < ActiveRecord::Base
     end
   end
 
+  def calc_units
+    (self.quantity / price.unit_quantity.to_f).ceil
+  end
+
   def calc_units_to_order
     if self.quantity <= quantity_from_stock
       units_to_order = 0
@@ -64,7 +68,8 @@ class OrderArticle < ActiveRecord::Base
 
   def quantity_from_stock
     stock = order.open? ? article.stock_quantity : stock_quantity
-    stock || 0 >= self.quantity ? self.quantity : stock
+    stock ||= 0
+    stock >= self.quantity ? self.quantity : stock
   end
 
   def order_finished!
@@ -73,7 +78,7 @@ class OrderArticle < ActiveRecord::Base
     update_attribute(:article_price, article.article_prices.first)
 
     if quantity > 0 && !order.stockit?
-      # fail 'Article already has stock_quantity set' unless stock_quantity.nil?
+      fail 'Article already has stock_quantity set' unless stock_quantity.nil?
 
       if (ordered_from_stock = article.order_from_stock!(quantity, self))
         update_attribute(:stock_quantity, ordered_from_stock)

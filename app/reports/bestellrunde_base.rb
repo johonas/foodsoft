@@ -44,7 +44,7 @@ module Reports
             article.stock = order.stockit?
 
             raw_data[depot][article] ||= {}
-            raw_data[depot][article][group_order.ordergroup] = group_order_article.result
+            raw_data[depot][article][group_order.ordergroup] = group_order_article.quantity
           end
         end
       end
