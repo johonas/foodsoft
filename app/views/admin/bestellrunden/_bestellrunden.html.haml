@@ -1,8 +1,14 @@
+- if Bestellrunde.count > 20
+  = items_per_page
+
+= pagination_links_remote @bestellrunden
+
 %table.table.table-striped
   %thead
     %tr
-      %th= heading_helper Bestellrunde, :starts
-      %th= heading_helper Bestellrunde, :ends
+      %th= sort_link(@q, :starts)
+      %th= sort_link(@q, :ends)
+
   %tbody
     - for bestellrunde in @bestellrunden
       %tr{:class => cycle('even','odd', :name => 'bestellrunden')}
