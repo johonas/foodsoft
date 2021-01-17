@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210117091604) do
+ActiveRecord::Schema.define(version: 20210117094932) do
 
   create_table "article_categories", force: :cascade do |t|
     t.string "name",        limit: 255, default: "", null: false
@@ -32,12 +32,13 @@ ActiveRecord::Schema.define(version: 20210117091604) do
   add_index "article_prices", ["article_id"], name: "index_article_prices_on_article_id", using: :btree
 
   create_table "article_stock_changes", force: :cascade do |t|
-    t.integer  "article_id",       limit: 4, null: false
+    t.integer  "article_id",       limit: 4,   null: false
     t.integer  "created_by_id",    limit: 4
     t.integer  "order_article_id", limit: 4
-    t.integer  "quantity",         limit: 4, null: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.integer  "quantity",         limit: 4,   null: false
+    t.string   "change_type",      limit: 255
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   create_table "articles", force: :cascade do |t|

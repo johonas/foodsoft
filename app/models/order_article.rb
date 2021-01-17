@@ -110,43 +110,18 @@ class OrderArticle < ActiveRecord::Base
     end
   end
 
-  # redistribute articles over ordergroups
-  #   quantity       Number of units to distribute
-  #   surplus        What to do when there are more articles than ordered quantity
-  #                    :stock       move to stock
-  #                    nil          nothing; for catching the remaining count
-  #   update_totals  Whether to update group_order and ordergroup totals
-  # returns array with counts for each surplus method
-  def redistribute(quantity, surplus = [:stock], update_totals = true)
-    qty_left = quantity
-    counts = [0] * surplus.length
-    qty_for_members = [qty_left, self.quantity].min
+  def restock
+    items_ordered  = units_to_order * price.unit_quantity
+    items_received = units_received * price.unit_quantity
 
-    # Recompute
-    qty_left -= qty_for_members
-    qty_left += self.stock_quantity
+    ArticleStockChange.where(order_article: self).destroy_all
 
-    ArticleStockChange.where(order_article: self).where('quantity > 0').destroy_all
     # if there's anything left, move to stock if wanted
-    if qty_left > 0 && surplus.index(:stock)
-      counts[surplus.index(:stock)] = qty_left
-      ArticleStockChange.create!(article: self.article, order_article: self, quantity: qty_left)
+    if items_ordered != items_received
+      ArticleStockChange.create!(article: self.article, order_article: self,
+                                 quantity: items_received - items_ordered,
+                                 change_type: :restock)
     end
-
-    if qty_left > 0 && surplus.index(nil)
-      counts[surplus.index(nil)] = qty_left
-    end
-
-    # Update GroupOrder prices & Ordergroup stats
-    # TODO only affected group_orders, and once after redistributing all articles
-    if update_totals
-      update_ordergroup_prices
-      order.ordergroups.each(&:update_stats!)
-    end
-
-    # TODO notifications
-
-    counts
   end
 
   # Updates order_article and belongings during balancing process

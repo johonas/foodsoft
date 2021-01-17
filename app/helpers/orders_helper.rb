@@ -93,9 +93,10 @@ module OrdersHelper
     input_classes = 'input input-nano units_received'
     input_classes += ' package' unless order_article.article_price.unit_quantity == 1
     input_html = form.text_field :units_received, class: input_classes,
-      data: {'units-expected' => units_expected},
+      data: { 'units-expected' => units_expected },
       disabled: false,
-      autocomplete: 'off'
+      autocomplete: 'off',
+      value: order_article.units_received || units_expected
 
     input_html.html_safe
   end

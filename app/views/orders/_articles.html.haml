@@ -21,6 +21,7 @@
           %i.icon-tag
         %td{:colspan => "9"}
       - order_articles.each do |order_article|
+        - next unless order_article.quantity > 0
         - net_price = order_article.price.price
         - gross_price = order_article.price.gross_price
         - unit_quantity = order_article.price.unit_quantity

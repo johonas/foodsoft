@@ -25,6 +25,6 @@ class ArticleStockChangesController < ApplicationController
   private
 
   def article_stock_change_params
-    { created_by: current_user }.merge(params[:article_stock_change])
+    { created_by: current_user, change_type: :manual }.merge(params[:article_stock_change])
   end
 end

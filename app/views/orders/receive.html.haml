@@ -29,12 +29,6 @@
     = render 'edit_amounts'
 
   .form-actions
-    .pull-left
-      %b.checkbox.inline
-        = t '.surplus_options'
-      = label_tag :rest_to_stock, class: 'checkbox inline' do
-        = check_box_tag :rest_to_stock, 1, true
-        %span= t '.rest_to_stock'
     .pull-right
       = submit_tag t('.submit'), class: 'btn btn-primary'
       = link_to t('ui.or_cancel'), order_path(@order)

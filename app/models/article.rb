@@ -236,7 +236,8 @@ class Article < ActiveRecord::Base
     ArticleStockChange.create!(
       article_id:       id,
       quantity:         -from_stock,
-      order_article_id: order_article.id
+      order_article_id: order_article.id,
+      change_type:      :order
     )
 
     return from_stock

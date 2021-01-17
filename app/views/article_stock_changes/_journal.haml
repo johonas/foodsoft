@@ -1,3 +1,4 @@
+-# TODO: Translate
 .modal-header
   = close_button :modal
   %h3= "Lager Verlauf für #{@article.name}"
@@ -12,6 +13,7 @@
           .text-right= 'Anpassung'
         %th= 'Bestellung'
         %th= 'Benutzer'
+        %th= 'Trigger'
 
     %tbody#listbody
       - @article.article_stock_changes.each do |article_stock_change|
@@ -22,6 +24,7 @@
               = "#{article_stock_change.quantity < 0 ? '- ' : '+' }#{article_stock_change.quantity.abs}"
           %td= article_stock_change.order&.bestellrunde&.label
           %td= article_stock_change.created_by&.display
+          %td= article_stock_change.change_type
 
       %tr
         %td
@@ -29,8 +32,7 @@
         %td
           .text-right
             %strong= @article.stock_quantity
-        %td
-        %td
+        %td{ colspan: 3 }
 
 .modal-footer
   = link_to t('ui.close'), '#', class: 'btn', data: {dismiss: 'modal'}
