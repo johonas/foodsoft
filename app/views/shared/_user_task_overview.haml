@@ -1,0 +1,14 @@
+- current_year = Time.zone.now.year
+- tasks = user.tasks.where('YEAR(due_date) >= ?', current_year)
+
+%h2= "Deine Aufgaben im #{current_year}"
+
+%dl.dl-horizontal
+  %dt{ style: 'text-align: left; width: 80px' }= 'Offen'
+  %dd{ style: 'margin-left: 100px' }= tasks.undone.count
+  %dt{ style: 'text-align: left; width: 80px' }= 'Erledigt'
+  %dd{ style: 'margin-left: 100px' }= tasks.done.count
+  %dt{ style: 'text-align: left; width: 80px' }= 'Total'
+  %dd{ style: 'margin-left: 100px' }= tasks.count
+
+= render partial: 'shared/task_list', locals: { tasks: @current_user.tasks.undone, minimal: true }

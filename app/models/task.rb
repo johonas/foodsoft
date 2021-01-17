@@ -69,19 +69,25 @@ class Task < ActiveRecord::Base
   end
 
   def is_assigned?(user)
-    self.assignments.detect {|ass| ass.user_id == user.id }
+    self.assignments.detect { |ass| ass.user_id == user.id }
   end
 
   def is_accepted?(user)
     self.assignments.detect {|ass| ass.user_id == user.id && ass.accepted }
   end
 
+  def accept!(user, people_count = 1)
+    assignment = is_assigned?(user) || assignments.new(user: user)
+    assignment.update_attribute(:accepted, true)
+    assignment.update_attribute(:people_count, people_count)
+  end
+
   def enough_users_assigned?
-    assignments.to_a.count(&:accepted) >= required_users ? true : false
+    assignments.accepted.sum(:people_count) >= required_users ? true : false
   end
 
   def still_required_users
-    required_users - assignments.to_a.count(&:accepted)
+    required_users - assignments.accepted.sum(:people_count)
   end
 
   # Get users from comma seperated ids

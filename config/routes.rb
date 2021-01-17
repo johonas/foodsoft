@@ -76,7 +76,7 @@ Foodsoft::Application.routes.draw do
         get :workgroup
       end
       member do
-        post :accept
+        match :accept, action: :accept, as: :accept, via: [:get, :patch]
         post :reject
         post :set_done
       end

@@ -6,6 +6,9 @@
 -# placeholder deface to add content using erb[silent]:contains()
 - '<dashboard_top_mark>'
 
+%section
+  = render partial: 'shared/user_task_overview', locals: { user: @current_user }
+
 - unless @unaccepted_tasks.empty? && @next_tasks.empty?
   %section.row-fluid
     - unless @next_tasks.empty?
@@ -15,6 +18,7 @@
           - @next_tasks.each do |task|
             %dt= l task.due_date, format: t('.due_date_format')
             %dd= link_to task.name, task_path(task)
+
     - unless @unaccepted_tasks.empty?
       .span3.well
         %h4= t '.tasks_move.title'

@@ -4,7 +4,6 @@
 - unless @unaccepted_tasks.empty?
   %section
     %h3= t '.title_open'
-    = render 'list', tasks: @unaccepted_tasksm, q: @unaccepted_tasks_q
     = render 'shared/task_list', tasks: @unaccepted_tasks
 
 %section

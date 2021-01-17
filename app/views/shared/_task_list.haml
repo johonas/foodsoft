@@ -1,3 +1,5 @@
+- minimal = defined?(minimal) && minimal
+
 %table.table.table-striped
   %thead
     %tr
@@ -8,9 +10,10 @@
         %th= heading_helper Task, :due_date
       %th
       %th= heading_helper Task, :name
-      %th{:colspan => '2'}
-        = t '.who'
-        %small= t '.who_hint'
+      - unless minimal
+        %th{:colspan => '2'}
+          = t '.who'
+          %small= t '.who_hint'
   %tbody
     - tasks.each do |task|
       - done = task.done ? " done" : ""
@@ -20,20 +23,24 @@
           - if task.periodic?
             %i.icon-repeat{title: t('tasks.repeated')}
         %td= link_to task_title(task), task_path(task)
-        %td
-          = task_assignments task
-          = highlighted_required_users task
-        %td
-          - if !task.is_accepted?(current_user)
-            = link_to t('.accept_task'), accept_task_path(task), method: :post, class: 'btn btn-small'
-            = link_to t('.reject_task'), reject_task_path(task), method: :post, class: 'btn btn-small' if task.is_assigned?(current_user)
-          - elsif !task.done
-            - if current_user.can_finish_task?
-              = link_to set_done_task_path(task), method: :post, class: "btn btn-small",
-                title: t('.mark_done'), data: { confirm: t('.delete')} do
-                %i.icon-ok= t '.done_q'
-            - else
-              = link_to '#', class: "btn btn-small disabled", title: t('.mark_done') do
-                %i.icon-ok= t '.done_q'
-          - elsif
-            %i.icon-ok= t '.done'
+        - unless minimal
+          %td
+            = task_assignments task
+            = highlighted_required_users task
+          %td
+            - if !task.is_accepted?(current_user)
+              = link_to t('.accept_task'), accept_task_path(task), method: :get, class: 'btn btn-small', remote: true
+
+              - if task.is_assigned?(current_user)
+                = link_to t('.reject_task'), reject_task_path(task), method: :post, class: 'btn btn-small'
+
+            - elsif !task.done
+              - if current_user.can_update_task?(task)
+                = link_to set_done_task_path(task), method: :post, class: "btn btn-small",
+                  title: t('.mark_done'), data: { confirm: t('.mark_done')} do
+                  %i.icon-ok= t '.done_q'
+              - else
+                = link_to '#', class: "btn btn-small disabled", title: t('.mark_done') do
+                  %i.icon-ok= t '.done_q'
+            - elsif
+              %i.icon-ok= t '.done'

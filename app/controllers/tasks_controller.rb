@@ -95,13 +95,14 @@ class TasksController < ApplicationController
   # assign current_user to the task and set the assignment to "accepted"
   # if there is already an assignment, only accepted will be set to true
   def accept
-    task = Task.find(params[:id])
-    if ass = task.is_assigned?(current_user)
-      ass.update_attribute(:accepted, true)
+    @task = Task.find(params[:id])
+
+    if request.patch?
+      @task.accept!(current_user, params[:task][:options][:count])
+      render template: 'tasks/accepted', layout: false
     else
-      task.assignments.create(:user => current_user, :accepted => true)
+      render action: :accept, layout: false
     end
-    redirect_to user_tasks_path, :notice => I18n.t('tasks.accept.notice')
   end
 
   # deletes assignment between current_user and given task

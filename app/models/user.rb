@@ -180,10 +180,6 @@ class User < ActiveRecord::Base
     groups.detect {|group| group.role_verteilen?}
   end
 
-  def can_finish_task?
-
-  end
-
   def can_update_task?(task)
     role_admin? || (task.workgroup && member_of?(task.workgroup))
   end

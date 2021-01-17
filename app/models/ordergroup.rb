@@ -55,11 +55,18 @@ class Ordergroup < Group
     orders.joins(:bestellrunde).order('bestellrunden.starts DESC').first
   end
 
-  def tasks_done_for(bestellrunde)
+  def tasks_done_for(bestellrunde_or_year)
     count = 0
     users.each do |user|
-      tasks = user.tasks.done.where(assignments: {accepted: true}).
-        where(["tasks.due_date >= ? AND tasks.due_date <= ?", (bestellrunde.starts - 3.month), (bestellrunde.ends + 3.month)])
+      tasks = user.tasks.done.where(assignments: { accepted: true })
+      if bestellrunde_or_year.is_a?(Bestellrunde)
+        tasks = tasks.where(
+          ["tasks.due_date >= ? AND tasks.due_date <= ?", (bestellrunde_or_year.starts - 3.month), (bestellrunde_or_year.ends + 3.month)]
+        )
+      else
+        tasks = tasks.where('YEAR(due_date) >= ?', bestellrunde_or_year)
+     end
+
       count += tasks.count
     end
 

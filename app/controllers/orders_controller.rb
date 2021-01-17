@@ -112,6 +112,7 @@ class OrdersController < ApplicationController
   # order_articles will be saved in Order.article_ids=()
   def create
     @order = Order.new(params[:order])
+    @order.created_by = @current_user
 
     if @order.save
       flash[:notice] = I18n.t('orders.create.notice')

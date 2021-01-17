@@ -39,7 +39,7 @@
             - unless order.open?
               %td= order_article.quantity_from_stock
               %td{title: units_history_line(order_article, plain: true)}
-                = units
+                = order_article.units_to_order
                 = pkg_helper order_article.price
 %p
   = t '.prices_sum'

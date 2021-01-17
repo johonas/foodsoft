@@ -1,0 +1,24 @@
+-# TODO: Translate
+= simple_form_for @task, remote: true, url: accept_task_path(@task) do |f|
+  = f.hidden_field :id
+
+  .modal-header
+    = close_button :modal
+    %h3= 'Aufgabe übernehmen'
+
+  .modal-body
+    %p
+      %b= @task.name
+
+    Du schreibst dich verbindlich für diese Aufgabe ein. Wir brauchen dich! Kannst du nicht kommen, musst du Ersatz schaffen
+    %br
+    %br
+    Falls du die Aufgabe zusammen mit Menschen erledigtst, die keinen Foodsoft-Account haben kannst du das hier eintragen.
+    %br
+    %br
+    = f.simple_fields_for :options do |o|
+      = o.input :count, as: :integer, input_html: { class: 'input-mini', value: 1, min: 1}, label: 'Anzahl Personen'
+
+  .modal-footer
+    = link_to t('ui.close'), '#', class: 'btn', data: {dismiss: 'modal'}
+    = f.submit 'Aufgabe übernehmen', class: 'btn btn-primary'
