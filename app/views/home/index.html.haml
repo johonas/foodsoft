@@ -33,6 +33,7 @@
         = link_to tasks_path do
           = t '.tasks_open.view_all'
           %i.icon.icon-chevron-right
+
     = render 'shared/task_list', tasks: @unassigned_tasks
 
 - if current_user.ordergroup

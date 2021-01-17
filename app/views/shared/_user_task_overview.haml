@@ -11,4 +11,5 @@
   %dt{ style: 'text-align: left; width: 80px' }= 'Total'
   %dd{ style: 'margin-left: 100px' }= tasks.count
 
-= render partial: 'shared/task_list', locals: { tasks: @current_user.tasks.undone, minimal: true }
+- if @current_user.tasks.undone.any?
+  = render partial: 'shared/task_list', locals: { tasks: @current_user.tasks.undone, minimal: true }
