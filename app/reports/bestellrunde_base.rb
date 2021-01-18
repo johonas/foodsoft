@@ -35,29 +35,28 @@ module Reports
 
           raw_data[depot] ||= {}
           group_order.group_order_articles.each do |group_order_article|
-            article = group_order_article.order_article.article
+            order_article = group_order_article.order_article
 
-            if !@supplier.nil? && article.supplier != @supplier
+            if !@supplier.nil? && order_article.article.supplier != @supplier
               next
             end
 
-            article.stock = order.stockit?
-
-            raw_data[depot][article] ||= {}
-            raw_data[depot][article][group_order.ordergroup] = group_order_article.quantity
+            raw_data[depot][order_article] ||= {}
+            raw_data[depot][order_article][group_order.ordergroup] = group_order_article.quantity
           end
         end
       end
 
-      raw_data.each do |depot, articles|
+      raw_data.each do |depot, order_articles|
         data[depot] = {}
         data[depot][:ordergroups] = SortedSet.new
         data[depot][:articles]    = []
 
-        articles.each do |article, ordergroups|
+        order_articles.each do |order_article, ordergroups|
+          article = order_article.article
           article_row = {}
           article_row[:product] = article.name
-          article_row[:stock] = article.stock ? 'x' : ''
+          article_row[:stock] = order_article.stock_quantity > 0 ? 'x' : ''
           if @supplier.nil?
             article_row[:supplier] = article.supplier.name
           end
