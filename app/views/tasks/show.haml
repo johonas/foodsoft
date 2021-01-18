@@ -24,7 +24,7 @@
         = link_to @task.workgroup.name, workgroup_tasks_path(workgroup_id: @task.workgroup_id)
 %p
   - if !@task.is_accepted?(current_user)
-    = link_to t('.accept_task'), accept_task_path(task), method: :get, class: 'btn btn-small', remote: true
+    = link_to t('.accept_task'), accept_task_path(@task), method: :get, class: 'btn btn-small', remote: true
     - if @task.is_assigned?(current_user)
       = link_to t('.reject_task'), reject_task_path(@task), method: :post, class: 'btn'
 
