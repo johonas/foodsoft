@@ -1,5 +1,9 @@
 class Bestellrunde < ActiveRecord::Base
   has_many :orders
+  has_many :group_orders, through: :orders
+  has_many :ordergroups, through: :group_orders
+  has_many :suppliers, through: :orders
+  has_many :depots, -> { distinct }, through: :ordergroups
 
   def season_label
     return Bestellrunde.bestellrunden[self.season.to_sym][:label]

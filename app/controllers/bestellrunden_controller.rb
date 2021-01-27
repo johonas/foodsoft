@@ -2,7 +2,7 @@ class BestellrundenController < ApplicationController
   before_filter :authenticate_verteilen, :except => :for_depot
 
   def index
-    @bestellrunden = Bestellrunde.order('id desc').all
+    @bestellrunden = Bestellrunde.where(id: Order.pluck(:bestellrunde_id)).order('id desc').all
   end
 
   def distribution_export
@@ -35,7 +35,7 @@ class BestellrundenController < ApplicationController
   def all_supplier_export
     xls_zip = XlsZip.new("bestellrunde_#{bestellrunde.starts}_alle_lieferanten")
 
-    Supplier.undeleted.having_articles.each do |supplier|
+    bestellrunde.suppliers.having_articles.each do |supplier|
       filename = "bestellrunde_#{bestellrunde.starts}_lieferant_#{supplier.name.downcase.gsub(' ', '_')}.xlsx"
       xls = Reports::BestellrundeSupplier.new(bestellrunde, supplier, filename).generate
       xls_zip.add_file(xls)

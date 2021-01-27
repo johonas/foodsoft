@@ -1,7 +1,7 @@
 module Reports
   class BestellrundeBase < Reporting::BaseExcelReport
 
-    def initialize(supplier=nil)
+    def initialize(supplier = nil)
       @supplier = supplier
       super()
     end
@@ -24,26 +24,27 @@ module Reports
       raw_data = {}
       data = {}
 
-      @bestellrunde.orders.each do |order|
+      @bestellrunde.group_orders.preload(ordergroup: :depot, group_order_articles: { order_article: :article }).each do |group_order|
 
-        order.group_orders.each do |group_order|
+        ordergroup = group_order.ordergroup
+        next unless ordergroup
+        depot = ordergroup.depot
+        group_order_articles = group_order.group_order_articles
 
-          # TODO: Why can there be an GroupOrder without ordergroup?
-          next unless group_order.ordergroup
+        if @supplier
+          group_order_articles = group_order.group_order_articles
+                                            .select { |goa| goa.order_article.article.supplier_id == @supplier.id }
+        end
 
-          depot = group_order.ordergroup.depot
+        next if group_order_articles.none?
 
-          raw_data[depot] ||= {}
-          group_order.group_order_articles.each do |group_order_article|
-            order_article = group_order_article.order_article
+        raw_data[depot] ||= {}
 
-            if !@supplier.nil? && order_article.article.supplier != @supplier
-              next
-            end
+        group_order_articles.each do |group_order_article|
+          order_article = group_order_article.order_article
 
-            raw_data[depot][order_article] ||= {}
-            raw_data[depot][order_article][group_order.ordergroup] = group_order_article.quantity
-          end
+          raw_data[depot][order_article] ||= {}
+          raw_data[depot][order_article][ordergroup] = group_order_article.quantity
         end
       end
 
@@ -57,9 +58,7 @@ module Reports
           article_row = {}
           article_row[:product] = article.name
           article_row[:stock] = order_article.stock_quantity && order_article.stock_quantity > 0 ? 'x' : ''
-          if @supplier.nil?
-            article_row[:supplier] = article.supplier.name
-          end
+          article_row[:supplier] = article.supplier.name if @supplier.nil?
           article_row[:unit] = article.unit
 
           ordergroups.each do |ordergroup, amount|
