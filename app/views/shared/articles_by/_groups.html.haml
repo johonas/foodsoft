@@ -12,4 +12,5 @@
       %th= #heading_helper Article, :unit_quantity, short: true
 
   - for group_order in order.group_orders.ordered
+    - next unless group_order.group_order_articles.any?
     = render 'shared/articles_by/group_single', group_order: group_order, edit: (edit rescue nil)
