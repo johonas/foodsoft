@@ -1766,7 +1766,8 @@ de:
       invalid_document: Ungültiger Dokumententyp
       title: Abholungen für %{date}
     index:
-      article_pdf: Artikel PDF
+      article_pdf: Artikel Bestellgruppen PDF
+      article_simple_pdf: Artikel PDF
       group_pdf: Gruppen PDF
       matrix_pdf: Matrix PDF
       title: Abholtage
@@ -1807,7 +1808,8 @@ de:
       total_sum: Gesamtsumme
       who_ordered: Wer hat bestellt?
     order_download_button:
-      article_pdf: Artikel PDF
+      article_pdf: Artikel Bestellgruppen PDF
+      article_simple_pdf: Artikel PDF
       download_file: Download file
       fax_csv: Fax CSV
       fax_pdf: Fax PDF

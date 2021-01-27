@@ -11,15 +11,16 @@
 
 .well
   - if not @open_orders.empty?
-    %h2= t '.orders_open'
-    -# = render partial: 'download_all_button', locals: { state: :open}
+    %h2{ style: 'display: inline-block' }= t '.orders_open'
+    = render partial: 'download_all_button', locals: { state: :open}
 
   - elsif not @finished_orders.empty?
-    %h2= t '.orders_finished'
+    %h2{ style: 'display: inline-block' }= t '.orders_finished'
     = render partial: 'download_all_button', locals: { state: :finished}
 
   - else
     = t '.no_open_or_finished_orders'
+
   - unless @open_orders.empty? and @finished_orders.empty?
     %table.table.table-striped
       %thead
@@ -52,7 +53,8 @@
           - unless @open_orders.empty?
             %tr
               %td{colspan: 6}
-                %h2= t '.orders_finished'
+                %h2{ style: 'display: inline-block' }= t '.orders_finished'
+                = render partial: 'download_all_button', locals: { state: :finished}
 
           - for order in @finished_orders
             %tr

@@ -32,6 +32,7 @@ class OrdersController < ApplicationController
         filename = case params[:document]
               when 'groups'   then t('shared.order_download_button.group_pdf')
               when 'articles' then t('shared.order_download_button.article_pdf')
+              when 'articles_simple' then t('shared.order_download_button.article_simple_pdf')
               when 'fax'      then t('shared.order_download_button.fax_pdf')
               when 'matrix'   then t('shared.order_download_button.matrix_pdf')
               end.split(' ').join('_')
@@ -55,6 +56,7 @@ class OrdersController < ApplicationController
           pdf = case params[:document]
                 when 'groups'   then OrderByGroups.new(order)
                 when 'articles' then OrderByArticles.new(order)
+                when 'articles_simple' then OrderByArticlesSimple.new(order)
                 when 'fax'      then OrderFax.new(order)
                 when 'matrix'   then OrderMatrix.new(order)
                 end
@@ -86,10 +88,11 @@ class OrdersController < ApplicationController
       end
       format.pdf do
         pdf = case params[:document]
-                when 'groups'   then OrderByGroups.new(@order)
-                when 'articles' then OrderByArticles.new(@order)
-                when 'fax'      then OrderFax.new(@order)
-                when 'matrix'   then OrderMatrix.new(@order)
+                when 'groups'          then OrderByGroups.new(@order)
+                when 'articles'        then OrderByArticles.new(@order)
+                when 'articles_simple' then OrderByArticlesSimple.new(@order)
+                when 'fax'             then OrderFax.new(@order)
+                when 'matrix'          then OrderMatrix.new(@order)
               end
         send_data pdf.to_pdf, filename: pdf.filename, type: 'application/pdf'
       end

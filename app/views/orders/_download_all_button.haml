@@ -4,7 +4,8 @@
     %span.caret
 
   %ul.dropdown-menu
-    %li= orders_pdf(:groups,   state, t('.group_pdf'))
-    %li= orders_pdf(:articles, state, t('.article_pdf'))
-    %li= orders_pdf(:matrix,   state, t('.matrix_pdf'))
-    %li= orders_pdf(:fax,      state, t('.fax_pdf'))
+    %li= orders_pdf(:groups,          state, t('shared.order_download_button.group_pdf'))
+    %li= orders_pdf(:articles,        state, t('shared.order_download_button.article_pdf'))
+    %li= orders_pdf(:articles_simple, state, t('shared.order_download_button.article_simple_pdf'))
+    %li= orders_pdf(:matrix,          state, t('shared.order_download_button.matrix_pdf'))
+    %li= orders_pdf(:fax,             state, t('shared.order_download_button.fax_pdf'))
