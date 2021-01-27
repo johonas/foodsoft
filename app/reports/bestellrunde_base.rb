@@ -56,7 +56,7 @@ module Reports
           article = order_article.article
           article_row = {}
           article_row[:product] = article.name
-          article_row[:stock] = order_article.stock_quantity > 0 ? 'x' : ''
+          article_row[:stock] = order_article.stock_quantity && order_article.stock_quantity > 0 ? 'x' : ''
           if @supplier.nil?
             article_row[:supplier] = article.supplier.name
           end
