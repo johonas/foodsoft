@@ -35,9 +35,21 @@ class Mailer < ActionMailer::Base
   def upcoming_tasks(user, task)
     @user = user
     @task = task
+    @next_tasks = Task.order(:due_date).next_assigned_tasks_for(user)
 
     mail to: user,
          subject: I18n.t('mailer.upcoming_tasks.subject')
+  end
+
+  # Sends a welcome email with instructions on how to reset the password.
+  # Assumes user.setResetPasswordToken has been successfully called already.
+  def welcome(user)
+    @user = user
+    @additional_text = additonal_welcome_text(user)
+    @link = new_password_url(id: @user.id, token: @user.reset_password_token)
+
+    mail to: user,
+         subject: I18n.t('mailer.welcome.subject')
   end
 
   # Sends order result for specific Ordergroup
@@ -112,9 +124,7 @@ class Mailer < ActionMailer::Base
 
     reply_email_domain = FoodsoftConfig[:reply_email_domain]
     if reply_email_domain && !args[:return_path] && args[:to].is_a?(String)
-      #TODO: Remove workaround for https://github.com/mikel/mail/issues/39 after next mail release
-      ascii_to = args[:to].encode('ASCII', invalid: :replace, undef: :replace, replace: '_')
-      address = Mail::Parsers::AddressListsParser.parse(ascii_to).addresses.first
+      address = Mail::Parsers::AddressListsParser.parse(args[:to]).addresses.first
       args[:return_path] = "<#{FoodsoftConfig.scope}.bounce+#{address.local}=#{address.domain}@#{reply_email_domain}>"
     end
 
@@ -123,6 +133,12 @@ class Mailer < ActionMailer::Base
 
   def self.deliver_now_with_user_locale(user, &block)
     I18n.with_locale(user.settings['profile']['language']) do
+      self.deliver_now &block
+    end
+  end
+
+  def self.deliver_now_with_default_locale(&block)
+    I18n.with_locale(FoodsoftConfig[:default_locale]) do
       self.deliver_now &block
     end
   end
@@ -138,6 +154,10 @@ class Mailer < ActionMailer::Base
   def add_order_result_attachments(order, options = {})
     attachments['order.pdf'] = OrderFax.new(order, options).to_pdf
     attachments['order.csv'] = OrderCsv.new(order, options).to_csv
+  end
+
+  # separate method to allow plugins to mess with the text
+  def additonal_welcome_text(user)
   end
 
   private

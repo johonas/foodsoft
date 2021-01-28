@@ -1,11 +1,11 @@
-class Invoice < ActiveRecord::Base
+class Invoice < ApplicationRecord
   include CustomFields
 
   belongs_to :supplier
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_user_id'
-  belongs_to :financial_link
-  has_many :deliveries
-  has_many :orders
+  belongs_to :financial_link, optional: true
+  has_many :deliveries, dependent: :nullify
+  has_many :orders, dependent: :nullify
 
   validates_presence_of :supplier_id
   validates_numericality_of :amount, :deposit, :deposit_credit

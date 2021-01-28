@@ -1,9 +1,12 @@
 class SessionsController < ApplicationController
 
-  skip_before_filter :authenticate_role
+  skip_before_action :authenticate
   layout 'login'
-  
+
   def new
+    respond_to do |format|
+      format.html
+    end
   end
 
   def create

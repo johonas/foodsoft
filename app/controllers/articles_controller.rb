@@ -1,6 +1,6 @@
 # encoding: utf-8
 class ArticlesController < ApplicationController
-  before_filter :authenticate_article_meta, :find_supplier
+  before_action :authenticate_article_meta, :find_supplier
 
   def index
     if params['sort']
@@ -21,6 +21,12 @@ class ArticlesController < ApplicationController
     end
 
     @articles = Article.undeleted.where(supplier_id: @supplier, :type => nil).includes(:article_category).order(sort)
+
+    if request.format.csv?
+      send_data ArticlesCsv.new(@articles, encoding: 'utf-8').to_csv, filename: 'articles.csv', type: 'text/csv'
+      return
+    end
+
     @articles = @articles.where('articles.name LIKE ?', "%#{params[:query]}%") unless params[:query].nil?
 
     @articles = @articles.page(params[:page]).per(@per_page)
@@ -33,6 +39,11 @@ class ArticlesController < ApplicationController
 
   def new
     @article = @supplier.articles.build(:tax => FoodsoftConfig[:tax_default])
+    render :layout => false
+  end
+
+  def copy
+    @article = @supplier.articles.find(params[:article_id]).dup
     render :layout => false
   end
 
@@ -181,13 +192,9 @@ class ArticlesController < ApplicationController
         has_error = true
       end
       # Update articles
-      @updated_articles.map{|a| a.save or has_error=true }
+      @updated_articles.each {|a| a.save or has_error=true }
       # Add new articles
-      @new_articles.each do |article|
-        article.availability = true if @supplier.shared_sync_method == 'all_available'
-        article.availability = false if @supplier.shared_sync_method == 'all_unavailable'
-        article.save or has_error=true
-      end
+      @new_articles.each {|a| a.save or has_error=true }
 
       raise ActiveRecord::Rollback if has_error
     end
@@ -208,10 +215,10 @@ class ArticlesController < ApplicationController
   #
   def shared
     # build array of keywords, required for ransack _all suffix
-    params[:q][:name_cont_all] = params[:q][:name_cont_all].split(' ') if params[:q]
-    # Build search with meta search plugin
-    @search = @supplier.shared_supplier.shared_articles.search(params[:q])
-    @articles = @search.result.page(params[:page]).per(10)
+    q = params.fetch(:q, {})
+    q[:name_cont_all] = params.fetch(:name_cont_all_joined, '').split(' ')
+    search = @supplier.shared_supplier.shared_articles.ransack(q)
+    @articles = search.result.page(params[:page]).per(10)
     render :layout => false
   end
 

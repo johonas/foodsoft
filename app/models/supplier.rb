@@ -1,5 +1,5 @@
 # encoding: utf-8
-class Supplier < ActiveRecord::Base
+class Supplier < ApplicationRecord
   include MarkAsDeletedWithName
   include CustomFields
 
@@ -8,16 +8,8 @@ class Supplier < ActiveRecord::Base
   has_many :orders
   has_many :deliveries
   has_many :invoices
-  belongs_to :shared_supplier  # for the sharedLists-App
-
-  def shared_supplier
-    # todo remove
-    nil
-  end
-
-  include ActiveModel::MassAssignmentSecurity
-  attr_accessible :name, :address, :phone, :phone2, :fax, :email, :url, :contact_person, :customer_number, :iban, :custom_fields,
-                  :delivery_days, :order_howto, :note, :shared_supplier_id, :min_order_quantity, :shared_sync_method
+  belongs_to :supplier_category
+  belongs_to :shared_supplier, optional: true  # for the sharedLists-App
 
   validates :name, :presence => true, :length => { :in => 4..30 }
   validates :phone, :presence => true, :length => { :in => 8..25 }
@@ -37,11 +29,13 @@ class Supplier < ActiveRecord::Base
   # also returns an array with new articles, which should be added (depending on shared_sync_method)
   def sync_all
     updated_article_pairs, outlisted_articles, new_articles = [], [], []
+    existing_articles = Set.new
     for article in articles.undeleted
       # try to find the associated shared_article
       shared_article = article.shared_article(self)
 
       if shared_article # article will be updated
+        existing_articles.add(shared_article.id)
         unequal_attributes = article.shared_article_changed?(self)
         unless unequal_attributes.blank? # skip if shared_article has not been changed
           article.attributes = unequal_attributes
@@ -55,11 +49,15 @@ class Supplier < ActiveRecord::Base
       end
     end
     # Find any new articles, unless the import is manual
-    unless shared_sync_method == 'import'
-      for shared_article in shared_supplier.shared_articles
-        unless articles.undeleted.find_by_order_number(shared_article.number)
-          new_articles << shared_article.build_new_article(self)
-        end
+    if ['all_available', 'all_unavailable'].include?(shared_sync_method)
+      # build new articles
+      shared_supplier
+        .shared_articles
+        .where.not(id: existing_articles.to_a)
+        .find_each { |new_shared_article| new_articles << new_shared_article.build_new_article(self) }
+      # make them unavailable when desired
+      if shared_sync_method == 'all_unavailable'
+        new_articles.each {|new_article| new_article.availability = false }
       end
     end
     return [updated_article_pairs, outlisted_articles, new_articles]
@@ -102,7 +100,7 @@ class Supplier < ActiveRecord::Base
       all_order_numbers << article.order_number if article
     end
     if options[:outlist_absent]
-      outlisted_articles += articles.undeleted.where.not(id: all_order_numbers+[nil])
+      outlisted_articles += articles.undeleted.where.not(order_number: all_order_numbers+[nil])
     end
     return [updated_article_pairs, outlisted_articles, new_articles]
   end
@@ -120,6 +118,7 @@ class Supplier < ActiveRecord::Base
   def mark_as_deleted
     transaction do
       super
+      update_column :iban, nil
       articles.each(&:mark_as_deleted)
     end
   end
@@ -129,7 +128,7 @@ class Supplier < ActiveRecord::Base
   # make sure the shared_sync_method is allowed for the shared supplier
   def valid_shared_sync_method
     if shared_supplier && !shared_supplier.shared_sync_methods.include?(shared_sync_method)
-      errors.add :name, :included
+      errors.add :shared_sync_method, :included
     end
   end
 

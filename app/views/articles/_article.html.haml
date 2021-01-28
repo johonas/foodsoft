@@ -23,7 +23,11 @@
         %li= link_to 'Anpassen', new_article_stock_change_path(article_id: article.id), remote: true
         %li= link_to 'Verlauf', journal_article_stock_changes_path(article_id: article.id), remote: true
 
-    = link_to t('ui.edit'), edit_supplier_article_path(@supplier, article), remote: true, class: 'btn btn-mini'
-
+  %td
+    = link_to t('ui.edit'), edit_supplier_article_path(@supplier, article),
+      remote: true, class: 'btn btn-mini'
+    = link_to t('ui.copy'), supplier_article_copy_path(@supplier, article),
+      remote: true, class: 'btn btn-mini'
     = link_to t('ui.delete'), [@supplier, article],
-        :method => :delete, :data => {:confirm => t('ui.confirm_delete', name: article.name)}, remote: true, class: 'btn btn-mini btn-danger'
+      method: :delete, data: {confirm: t('ui.confirm_delete', name: article.name)},
+      remote: true, class: 'btn btn-mini btn-danger'

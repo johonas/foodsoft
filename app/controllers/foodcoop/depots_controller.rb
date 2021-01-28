@@ -1,5 +1,5 @@
 class Foodcoop::DepotsController < ApplicationController
-  before_filter :authenticate_membership_or_admin,
+  before_action :authenticate_membership_or_admin,
                 :except => [:index]
 
   def index

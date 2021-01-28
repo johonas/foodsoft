@@ -34,19 +34,23 @@ class MessagesMailReceiver
 
     body.encode!(Encoding::default_internal)
     body = EmailReplyTrimmer.trim(body)
+    raise BlankBodyException if body.empty?
 
     message = @user.send_messages.new body: body,
       group: @message.group,
       private: @message.private,
-      received_email: data,
-      subject: mail.subject.gsub("[#{FoodsoftConfig[:name]}] ", "")
+      received_email: data
     if @message.reply_to
       message.reply_to_message = @message.reply_to_message
     else
       message.reply_to_message = @message
     end
-    message.add_recipients @message.recipients
-    message.add_recipients [@message.sender]
+    if mail.subject
+      message.subject = mail.subject.gsub("[#{FoodsoftConfig[:name]}] ", "")
+    else
+      message.subject = I18n.t('messages.model.reply_subject', subject: message.reply_to_message.subject)
+    end
+    message.add_recipients [@message.sender_id]
 
     message.save!
     Resque.enqueue(MessageNotifier, FoodsoftConfig.scope, "message_deliver", message.id)
@@ -66,6 +70,14 @@ class MessagesMailReceiver
       end
     end
     mail_part
+  end
+
+  class BlankBodyException < MidiSmtpServer::SmtpdException
+
+    def initialize(msg = nil)
+      super msg, 541, 'The recipient address rejected your message because of a blank plain body'
+    end
+
   end
 
 end

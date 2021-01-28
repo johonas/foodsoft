@@ -46,6 +46,14 @@ class OrderPdf < RenderPDF
     "#{number_to_currency(order_article_price(order_article))} / #{order_article.article.unit}"
   end
 
+  def group_order_article_quantity_with_tolerance(goa)
+    goa.tolerance > 0 ? "#{goa.quantity} + #{goa.tolerance}" : "#{goa.quantity}"
+  end
+
+  def group_order_article_result(goa)
+    number_with_precision goa.result, strip_insignificant_zeros: true
+  end
+
   def group_order_articles(ordergroup)
     GroupOrderArticle.
       includes(:group_order).
@@ -69,7 +77,7 @@ class OrderPdf < RenderPDF
       group('groups.id').
       offset(offset).
       limit(limit).
-      pluck('groups.name', 'SUM(group_orders.price)', 'groups.id')
+      pluck('groups.name', 'SUM(group_orders.price)', 'ordergroup_id')
 
     result.map do |item|
       [item.first || stock_ordergroup_name] + item[1..-1]
@@ -103,7 +111,7 @@ class OrderPdf < RenderPDF
       results = goa_records.group_by(&:first).transform_values do |value|
         grouped_value = value.group_by(&:second)
         group_ids.map do |group_id|
-          grouped_value[group_id].try(:first).try(:third)
+          number_with_precision grouped_value[group_id].try(:first).try(:third), strip_insignificant_zeros: true
         end
       end
 
@@ -125,10 +133,9 @@ class OrderPdf < RenderPDF
   end
 
   def stock_ordergroup_name
-    users = GroupOrder.
+    users = GroupOrder.stock.
       eager_load(:updated_by).
       where(order: @orders).
-      where(ordergroup: nil).
       map(&:updated_by).
       map{ |u| u.try(&:name) || '?' }
 

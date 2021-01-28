@@ -24,6 +24,8 @@
 
 - title t('.title', order: @order.name)
 
+%p!= t('.paragraph')
+
 = form_tag(receive_order_path(@order)) do
   %fieldset#results
     = render 'edit_amounts'

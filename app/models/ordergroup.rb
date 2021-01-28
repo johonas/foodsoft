@@ -43,6 +43,12 @@ class Ordergroup < Group
       .group('groups.id')
   end
 
+  def self.custom_fields
+    fields = FoodsoftConfig[:custom_fields] && FoodsoftConfig[:custom_fields][:ordergroup]
+    return [] unless fields
+    fields.map(&:deep_symbolize_keys)
+  end
+
   def last_user_activity
     last_active_user = users.order('users.last_activity DESC').first
     if last_active_user
@@ -87,18 +93,20 @@ class Ordergroup < Group
     account_balance - value_of_open_orders(exclude) - value_of_finished_orders(exclude)
   end
 
-  def account_balance_on(date)
-    financial_transactions.where('created_on <= ?', date.to_datetime.end_of_day).sum(:amount)
+  def financial_transaction_class_balance(klass)
+    financial_transactions
+      .joins(:financial_transaction_type)
+      .where(financial_transaction_types: {financial_transaction_class_id: klass})
+      .sum(:amount)
   end
 
   # Creates a new FinancialTransaction for this Ordergroup and updates the account_balance accordingly.
   # Throws an exception if it fails.
-  def add_financial_transaction!(amount, note, user, transaction_type, link = nil)
+  def add_financial_transaction!(amount, note, user, transaction_type, link = nil, group_order = nil)
     transaction do
-      t = FinancialTransaction.new(ordergroup: self, amount: amount, note: note, user: user, financial_transaction_type: transaction_type, financial_link: link)
+      t = FinancialTransaction.new(ordergroup: self, amount: amount, note: note, user: user, financial_transaction_type: transaction_type, financial_link: link, group_order: group_order)
       t.save!
-      self.account_balance = financial_transactions.sum('amount')
-      save!
+      update_balance!
       # Notify only when order group had a positive balance before the last transaction:
       if t.amount < 0 && self.account_balance < 0 && self.account_balance - t.amount >= 0
         Resque.enqueue(UserNotifier, FoodsoftConfig.scope, 'negative_balance', self.id, t.id)
@@ -121,6 +129,10 @@ class Ordergroup < Group
 
     @readonly = false # Dirty hack, avoid getting RecordReadOnly exception when called in task after_save callback. A rails bug?
     update_attribute(:stats, {:jobs_size => jobs, :orders_sum => orders_sum})
+  end
+
+  def update_balance!
+    update_attribute :account_balance, financial_transactions.sum('amount')
   end
 
   def avg_jobs_per_euro

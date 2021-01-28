@@ -1,5 +1,5 @@
 # encoding: utf-8
-class Article < ActiveRecord::Base
+class Article < ApplicationRecord
   include PriceCalculation
 
   # @!attribute name
@@ -58,7 +58,7 @@ class Article < ActiveRecord::Base
   # Validations
   validates_presence_of :name, :unit, :price, :tax, :deposit, :unit_quantity, :supplier_id, :article_category
   validates_length_of :name, :in => 4..60
-  validates_length_of :unit, :in => 2..15
+  validates_length_of :unit, :in => 1..15
   validates_numericality_of :price, :greater_than_or_equal_to => 0
   validates_numericality_of :unit_quantity, :greater_than => 0
   validates_numericality_of :deposit, :tax
@@ -168,7 +168,7 @@ class Article < ActiveRecord::Base
   # to get the correspondent shared article
   def shared_article(supplier = self.supplier)
     self.order_number.blank? and return nil
-    @shared_article ||= supplier.shared_supplier.shared_articles.find_by_number(self.order_number) rescue nil
+    @shared_article ||= supplier.shared_supplier.find_article_by_number(self.order_number) rescue nil
   end
 
   # convert units in foodcoop-size

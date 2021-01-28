@@ -1,12 +1,12 @@
 # An OrderArticle represents a single Article that is part of an Order.
-class OrderArticle < ActiveRecord::Base
+class OrderArticle < ApplicationRecord
   include FindEachWithOrder
 
   attr_reader :update_global_price
 
   belongs_to :order
   belongs_to :article
-  belongs_to :article_price
+  belongs_to :article_price, optional: true
   has_many :group_order_articles, :dependent => :destroy
 
   validates_presence_of :order_id, :article_id
@@ -144,13 +144,7 @@ class OrderArticle < ActiveRecord::Base
           else
             # Creates a new article_price if neccessary
             # Set created_at timestamp to order ends, to make sure the current article price isn't changed
-            create_article_price!(price_attributes.merge(created_at: order.ends)) and save
-            # TODO: The price_attributes do not include an article_id so that
-            #   the entry in the database will not "know" which article is
-            #   referenced. Let us check the effect of that and change it or
-            #   comment on the meaning.
-            #   Possibly this is the real reason why the global price is not
-            #   affected instead of the `created_at: order.ends` injection.
+            create_article_price!(price_attributes.merge(article_id: article_id, created_at: order.ends)) and save
           end
 
           # Updates ordergroup values

@@ -1,4 +1,4 @@
-Foodsoft::Application.routes.draw do
+Rails.application.routes.draw do
 
   get "order_comments/new"
 
@@ -31,6 +31,7 @@ Foodsoft::Application.routes.draw do
     ########### User specific
 
     get   '/home/profile', as: 'my_profile'
+    get   '/home/reference_calculator'
     patch '/home/update_profile', as: 'update_profile'
     get   '/home/ordergroup' => 'home#ordergroup', as: 'my_ordergroup'
     post  '/home/cancel_membership' => 'home#cancel_membership', as: 'cancel_membership'
@@ -108,8 +109,7 @@ Foodsoft::Application.routes.draw do
 
     resources :stock_takings do
       collection do
-        get :fill_new_stock_article_form
-        post :add_stock_article
+        get :new_on_stock_article_create
       end
     end
 
@@ -138,6 +138,7 @@ Foodsoft::Application.routes.draw do
       end
 
       resources :articles do
+        get :copy
         collection do
           post :update_selected
           get :edit_all
@@ -171,6 +172,8 @@ Foodsoft::Application.routes.draw do
           get :update_summary
           get :edit_note
           put :update_note
+          get :edit_transport
+          put :update_transport
 
           get :confirm
           post :close
@@ -179,6 +182,8 @@ Foodsoft::Application.routes.draw do
           get :new_on_order_article_create
           get :new_on_order_article_update
         end
+
+        post :close_all_direct_with_invoice, on: :collection
       end
 
       resources :invoices do
@@ -188,6 +193,9 @@ Foodsoft::Application.routes.draw do
       end
 
       resources :links, controller: 'financial_links', only: [:create, :show] do
+        collection do
+          get :incomplete
+        end
         member do
           get :index_bank_transaction
           put 'bank_transactions/:bank_transaction', action: 'add_bank_transaction', as: 'add_bank_transaction'
@@ -206,14 +214,18 @@ Foodsoft::Application.routes.draw do
       resources :ordergroups, only: [:index] do
         resources :financial_transactions, as: :transactions
       end
-      get 'transactions' => 'financial_transactions#index_collection'
+      resources :financial_transactions, as: :foodcoop_financial_transactions, path: 'foodcoop/financial_transactions', only: [:index, :new, :create]
+      get :transactions, controller: :financial_transactions, action: :index_collection
+      delete 'transactions/:id', controller: :financial_transactions, action: :destroy, as: :transaction
 
       get 'transactions/new_collection' => 'financial_transactions#new_collection', as: 'new_transaction_collection'
       post 'transactions/create_collection' => 'financial_transactions#create_collection', as: 'create_transaction_collection'
 
       resources :bank_accounts, only: [:index] do
         member do
+          get :assign_unlinked_transactions
           get :import
+          post :import
         end
 
         resources :bank_transactions, as: :transactions
@@ -271,9 +283,15 @@ Foodsoft::Application.routes.draw do
 
     namespace :api do
       namespace :v1 do
-        resource :user, only: [:show]
         resource :config, only: [:show]
         resource :navigation, only: [:show]
+
+        namespace :user do
+          root to: 'users#show'
+          resources :financial_transactions, only: [:index, :show]
+        end
+
+        resources :financial_transactions, only: [:index, :show]
       end
     end
 

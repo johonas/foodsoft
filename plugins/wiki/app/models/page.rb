@@ -1,9 +1,9 @@
-class Page < ActiveRecord::Base
+class Page < ApplicationRecord
   include ActsAsTree
 
   belongs_to :user, :foreign_key => 'updated_by'
 
-  acts_as_versioned version_column: :lock_version, limit: 20
+  acts_as_versioned version_column: :lock_version
   self.non_versioned_columns += %w(permalink created_at title)
 
   acts_as_tree :order => "title"
@@ -34,6 +34,10 @@ class Page < ActiveRecord::Base
 
   def self.public_front_page
     where(permalink: "Public_frontpage").first
+  end
+
+  def self.welcome_mail
+    where(permalink: "Welcome_mail").first
   end
 
   def set_permalink
