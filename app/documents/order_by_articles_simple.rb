@@ -16,7 +16,8 @@ class OrderByArticlesSimple < OrderPdf
               Article.human_attribute_name(:name),
               'Einheiten bestellt',
               'Aus Lager',
-              'Gebinde zu bestellen'
+              'Gebinde zu bestellen',
+              'Gebindegrösse',
             ]]
 
     dimrows = []
@@ -27,7 +28,8 @@ class OrderByArticlesSimple < OrderPdf
         order_article.article.name,
         order_article.quantity,
         order_article.quantity_from_stock,
-        order_article.units_to_order
+        order_article.units_to_order,
+        order_article.article.unit_quantity
       ]
 
       # dimrows << rows.length if order_article.units_to_order == 0
