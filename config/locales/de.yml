@@ -19,7 +19,7 @@ de:
         order_number: Bestellnummer
         order_number_short: Nr.
         origin: Herkunft
-        price: Nettopreis
+        d: Nettopreis
         supplier: Lieferantin
         tax: MwSt
         unit: Einheit
@@ -1682,6 +1682,7 @@ de:
     index:
       article_pdf: Artikel Bestellgruppen PDF
       article_simple_pdf: Artikel PDF
+      article_xls: Artikel XLS
       group_pdf: Gruppen PDF
       title: Abholtage
   sessions:
@@ -1722,6 +1723,7 @@ de:
     order_download_button:
       article_pdf: Artikel Bestellgruppen PDF
       article_simple_pdf: Artikel PDF
+      article_xls: Artikel XLS
       download_file: Download file
       fax_csv: Fax CSV
       fax_pdf: Fax PDF
