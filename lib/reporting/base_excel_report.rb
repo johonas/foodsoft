@@ -41,6 +41,12 @@ module Reporting
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     end
 
+    def self.friendly_filename(filename)
+      filename.strip.gsub(/[^\w\s_-]+/, '')
+        .gsub(/(^|\b\s)\s+($|\s?\b)/, '\\1\\2')
+        .gsub(/\s+/, '_').downcase
+    end
+
     protected
 
     # Remove all characters except letters and digits

@@ -6,6 +6,7 @@
     %li= order_pdf(order, :groups, t('.group_pdf'))
     %li= order_pdf(order, :articles, t('.article_pdf'))
     %li= order_pdf(order, :articles_simple, t('.article_simple_pdf'))
+    %li= link_to t('.article_xls'), order_path(order, document: :articles_xls, format: :xls)
     %li= order_pdf(order, :matrix, t('.matrix_pdf'))
     %li= order_pdf(order, :fax, t('.fax_pdf'))
     - unless order.stockit?

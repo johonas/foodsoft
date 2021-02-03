@@ -44,7 +44,6 @@ class OrdersController < ApplicationController
           DateTime.now.strftime('%Y%m%d')
         ].join('_').downcase
 
-
         pdf_zip = PdfZip.new(filename)
 
         orders = case params[:state]
@@ -65,6 +64,28 @@ class OrdersController < ApplicationController
         end
 
         send_data pdf_zip.data, filename: pdf_zip.zip_name, type: pdf_zip.content_type
+      end
+      format.xls do
+        filename = [
+          I18n.t('.navigation.orders.title'),
+          I18n.t(".orders.index.orders_#{params[:state]}"),
+          Reporting::BaseExcelReport.friendly_filename(I18n.t('shared.order_download_button.article_xls')),
+          DateTime.now.strftime('%Y%m%d')
+        ].join('_').downcase
+
+        xls_zip = XlsZip.new(filename)
+
+        orders = case params[:state]
+                 when 'open' then @open_orders
+                 when 'finished' then @finished_orders
+                 end
+
+        orders.each do |order|
+          xls = Reports::Order.new(order).generate
+          xls_zip.add_file(xls)
+        end
+
+        send_data xls_zip.data, filename: xls_zip.zip_name, type: xls_zip.content_type
       end
     end
   end
@@ -95,6 +116,9 @@ class OrdersController < ApplicationController
                 when 'matrix'          then OrderMatrix.new(@order)
               end
         send_data pdf.to_pdf, filename: pdf.filename, type: 'application/pdf'
+      end
+      format.xls do
+        Reports::Order.new(@order).generate.send(self)
       end
       format.csv do
         send_data OrderCsv.new(@order).to_csv, filename: @order.name+'.csv', type: 'text/csv'
