@@ -48,7 +48,7 @@ class Order < ActiveRecord::Base
   end
 
   def name
-    stockit? ? I18n.t('orders.model.stock') : supplier.name
+    stockit? ? I18n.t('orders.model.stock') : supplier.name.strip
   end
 
   def articles_for_ordering

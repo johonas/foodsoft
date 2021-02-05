@@ -77,8 +77,8 @@ module Reporting
       # ---------------------------------------------------------------
       # Total sum
       # ---------------------------------------------------------------
-      first_row_offset = sheet.rows.size + 1
-      last_row_offset = sheet.rows.size
+      first_row_offset = sheet.rows.size - data.size + 1
+      last_row_offset = sheet.rows.size + 1
 
       if total_sum
         row_data = []
@@ -87,7 +87,7 @@ module Reporting
         columns.each_with_index do |column, idx|
           if idx == 0
             # Total not allowed for first column
-            row_data << 'Grand Total:'
+            row_data << 'Gesamtpreis:'
           elsif column.options.total_sum
             row_data << "=SUBTOTAL(9,#{XLS_APHABET[idx]}#{first_row_offset}:#{XLS_APHABET[idx]}#{last_row_offset})"
           else
