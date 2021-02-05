@@ -846,6 +846,9 @@ de:
     order_by_articles:
       filename: Bestellung %{name}-%{date} - Artikelsortierung
       title: 'Artikelsortierung der Bestellung: %{name}, beendet am %{date}'
+    order:
+      filename: "Bestellung %{name}-%{date} - Artikel"
+      title: "Artikel der Bestellung: %{name}, beendet am %{date}"
     order_by_groups:
       filename: Bestellung %{name}-%{date} - Gruppensortierung
       sum: Summe

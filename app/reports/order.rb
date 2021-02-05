@@ -1,14 +1,14 @@
 module Reports
   class Order < Reporting::BaseExcelReport
-
     def initialize(order)
       @order = order
-      @filename = "#{self.class.friendly_filename(order.supplier.name)}.xlsx"
       super()
     end
 
     def filename
-      @filename
+
+      I18n.t('documents.order.filename', name: self.class.friendly_filename(@order.name),
+                                         date: @order.ends.to_date) + '.xlsx'
     end
 
     protected
@@ -32,15 +32,11 @@ module Reports
         column :article_stock_quantity, "Einheiten in\nLager\nverfügbar",          width: 10
         column :article_units_to_order, "Gebinde bei\nProduzent\nbestellt",        width: 10
         column :article_gross_price,    "Bruttopreis\npro\nGebinde",               width: 10
-        column :total_price,            "Total\nPreis",                           width: 10
+        column :total_price,            "Total\nPreis",                            width: 10, total_sum: true
       end
 
       def data
-        overall_total_price = 0
-
-        rows = @order.order_articles.map do |order_article|
-          total_gross_price = order_article.total_gross_price
-          overall_total_price += total_gross_price
+        @order.order_articles.map do |order_article|
           {
             order_number: order_article.article.order_number,
             article_name: order_article.article.name,
@@ -50,26 +46,30 @@ module Reports
             article_stock_quantity: order_article.stock_quantity,
             article_units_to_order: order_article.units_to_order,
             article_gross_price: order_article.price.gross_price,
-            total_price: total_gross_price
+            total_price: order_article.total_gross_price
           }
         end
+      end
 
-        rows << {
-          order_number: 'Gesamtpreis',
-          total_price: overall_total_price
-        }
+      def header
+        sheet.add_row [title], style: styles.title
+      end
 
-        rows
+      def title
+        I18n.t('documents.order.title', name: @order.name, date: @order.ends.strftime(I18n.t('date.formats.default')))
+      end
+
+      def footer
+        '&C&9&R&9&P / &N'
       end
 
       def post_process
-        sheet.auto_filter = 'A1:I1'
+        # sheet.auto_filter = 'A2:I2'
       end
     end
 
-
     def generate_xls
-      with_sheet @order.supplier.name, 9, :landscape, {} do |sheet|
+      with_sheet @order.supplier.name, 9, :portrait, {} do |sheet|
         sheet.sheet_view.zoom_scale = 100
         sheet.sheet_view.show_white_space = true
         sheet.page_setup.scale = 70
@@ -83,5 +83,4 @@ module Reports
       end
     end
   end
-
 end
