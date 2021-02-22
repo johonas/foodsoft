@@ -1,4 +1,4 @@
-class AddLastActivityToUser < ActiveRecord::Migration[4.2]
+class AddLastActivityToUser < ActiveRecord::Migration
   def change
     add_column :users, :last_activity, :datetime
   end

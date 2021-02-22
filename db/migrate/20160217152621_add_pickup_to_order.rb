@@ -1,4 +1,4 @@
-class AddPickupToOrder < ActiveRecord::Migration[4.2]
+class AddPickupToOrder < ActiveRecord::Migration
   def change
     add_column :orders, :pickup, :date
   end

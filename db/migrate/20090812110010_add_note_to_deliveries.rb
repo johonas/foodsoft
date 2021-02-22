@@ -1,4 +1,4 @@
-class AddNoteToDeliveries < ActiveRecord::Migration[4.2]
+class AddNoteToDeliveries < ActiveRecord::Migration
   def self.up
     add_column :deliveries, :note, :text
   end

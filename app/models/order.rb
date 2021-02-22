@@ -1,7 +1,7 @@
 # encoding: utf-8
 #
-class Order < ApplicationRecord
-  attr_accessor :ignore_warnings, :transport_distribution
+class Order < ActiveRecord::Base
+  attr_accessor :ignore_warnings
 
   # Associations
   has_many :order_articles, :dependent => :destroy
@@ -11,14 +11,13 @@ class Order < ApplicationRecord
   has_many :users_ordered, :through => :ordergroups, :source => :users
   has_many :comments, -> { order('created_at') }, :class_name => "OrderComment"
   has_many :stock_changes
-  belongs_to :invoice, optional: true
-  belongs_to :supplier, optional: true
+  belongs_to :invoice
+  belongs_to :supplier
   belongs_to :updated_by, :class_name => 'User', :foreign_key => 'updated_by_user_id'
   belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_user_id'
   belongs_to :bestellrunde
 
   enum end_action: { no_end_action: 0, auto_close: 1, auto_close_and_send: 2, auto_close_and_send_min_quantity: 3 }
-  enum transport_distribution: [:skip, :ordergroup, :price, :articles]
 
   # Validations
   validate :include_articles
@@ -28,19 +27,16 @@ class Order < ApplicationRecord
   # Callbacks
   after_save :save_order_articles, :update_price_of_group_orders
   before_validation :init_dates
-  before_validation :distribute_transport
 
   # Finders
-  scope :started, -> { where('starts <= ?', Time.now) }
-  scope :open, -> { where(state: 'open').order('ends DESC') }
-  scope :finished, -> { where("orders.state = 'finished' OR orders.state = 'closed'").order('ends DESC') }
-  scope :finished_not_closed, -> { where(state: 'finished').order('ends DESC') }
-  scope :closed, -> { where(state: 'closed').order('ends DESC') }
-  scope :stockit, -> { where(supplier_id: nil).order('ends DESC') }
+  scope :open, -> { where(state: 'open') }
+  scope :finished, -> { where("orders.state = 'finished' OR orders.state = 'closed'") }
+  scope :finished_not_closed, -> { where(state: 'finished') }
+  scope :closed, -> { where(state: 'closed') }
+  scope :stockit, -> { where(supplier_id: 0) }
   scope :recent, -> { order('starts DESC').limit(10) }
 
   scope :stock_group_order, -> { group_orders.where(ordergroup_id: nil).first }
-  scope :with_invoice, -> { where.not(invoice: nil) }
 
   # Allow separate inputs for date and time
   #   with workaround for https://github.com/einzige/date_time_attribute/issues/14
@@ -48,7 +44,7 @@ class Order < ApplicationRecord
   date_time_attribute :starts, :ends
 
   def stockit?
-    supplier_id.nil?
+    supplier_id == 0
   end
 
   def name
@@ -113,20 +109,6 @@ class Order < ApplicationRecord
     self.ends = bestellrunde.ends
   end
 
-  # fetch current Order scope's records and map the current user's GroupOrders in (if any)
-  # (performance enhancement as opposed to fetching each GroupOrder separately from the view)
-  def self.ordergroup_group_orders_map(ordergroup)
-    orders = includes(:supplier)
-    group_orders = GroupOrder.where(ordergroup_id: ordergroup.id, order_id: orders.map(&:id))
-    group_orders_hash = Hash[group_orders.collect {|go| [go.order_id, go]}]
-    orders.map do |order|
-      {
-        order: order,
-        group_order: group_orders_hash[order.id]
-      }
-    end
-  end
-
   # search GroupOrder of given Ordergroup
   def group_order(ordergroup)
     group_orders.where(:ordergroup_id => ordergroup.id).first
@@ -188,9 +170,9 @@ class Order < ApplicationRecord
         for goa in go.group_order_articles
           case type
             when :groups
-              total += goa.quantity * goa.order_article.price.fc_price
+              total += goa.result * goa.order_article.price.fc_price
             when :groups_without_markup
-              total += goa.quantity * goa.order_article.price.gross_price
+              total += goa.result * goa.order_article.price.gross_price
           end
         end
       end
@@ -239,8 +221,8 @@ class Order < ApplicationRecord
     transaction do                                        # Start updating account balances
       for group_order in gos
         if group_order.ordergroup
-          price = group_order.total * -1                  # decrease! account balance
-          group_order.ordergroup.add_financial_transaction!(price, transaction_note, user, transaction_type, nil, group_order)
+          price = group_order.price * -1                  # decrease! account balance
+          group_order.ordergroup.add_financial_transaction!(price, transaction_note, user, transaction_type)
         end
       end
 
@@ -263,9 +245,7 @@ class Order < ApplicationRecord
   end
 
   def send_to_supplier!(user)
-    Mailer.deliver_now_with_default_locale do
-      Mailer.order_result_supplier(user, self)
-    end
+    Mailer.order_result_supplier(user, self).deliver_now
     update!(last_sent_mail: Time.now)
   end
 
@@ -287,7 +267,7 @@ class Order < ApplicationRecord
       begin
         order.do_end_action!
       rescue => error
-        ExceptionNotifier.notify_exception(error, data: {foodcoop: FoodsoftConfig.scope, order_id: order.id})
+        ExceptionNotifier.notify_exception(error, data: {order_id: order.id})
       end
     end
   end
@@ -320,27 +300,6 @@ class Order < ApplicationRecord
   end
 
   private
-
-  def distribute_transport
-    return unless group_orders.any?
-    case transport_distribution.try(&:to_i)
-    when Order.transport_distributions[:ordergroup] then
-      amount = transport / group_orders.size
-      group_orders.each do |go|
-        go.transport = amount.ceil(2)
-      end
-    when Order.transport_distributions[:price] then
-      amount = transport / group_orders.sum(:price)
-      group_orders.each do |go|
-        go.transport = (amount * go.price).ceil(2)
-      end
-    when Order.transport_distributions[:articles] then
-      amount = transport / group_orders.includes(:group_order_articles).sum(:result)
-      group_orders.each do |go|
-        go.transport = (amount * go.group_order_articles.sum(:result)).ceil(2)
-      end
-    end
-  end
 
   # Updates the "price" attribute of GroupOrders or GroupOrderResults
   # This will be either the maximum value of a current order or the actual order value of a finished order.

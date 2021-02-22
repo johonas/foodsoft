@@ -5,15 +5,8 @@ require_relative 'support/coverage' # needs to be first
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'capybara/rails'
-require 'capybara/apparition'
 
-Capybara.server = :puma, { Silent: true }
-Capybara.javascript_driver = :apparition
-
-#TODO: Remove temporary fix to ignore JavaScript errors
-Capybara.register_driver :apparition do |app|
-  Capybara::Apparition::Driver.new(app, {js_errors: false})
-end
+Capybara.javascript_driver = :webkit
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -37,7 +30,6 @@ RSpec.configure do |config|
   # without messing up tests run after that
   config.before(:each) do
     FoodsoftConfig.init
-    FoodsoftConfig.init_mailing
   end
 
   # If true, the base class of anonymous controllers will be inferred
@@ -56,6 +48,16 @@ RSpec.configure do |config|
   # Automatically determine spec from directory structure, see:
   # https://www.relishapp.com/rspec/rspec-rails/v/3-0/docs/directory-structure
   config.infer_spec_type_from_file_location!
+end
+
+module Faker
+  class Unit
+    class << self
+      def unit
+        ['kg', '1L', '100ml', 'piece', 'bunch', '500g'].sample
+      end
+    end
+  end
 end
 
 # include default foodsoft scope in urls, so that *_path works

@@ -1,6 +1,5 @@
 - with_ordergroup = local_assigns[:with_ordergroup]
 - with_pdf = local_assigns[:with_pdf]
-- with_hidden = local_assigns[:with_hidden]
 - with_csv = local_assigns[:with_csv]
 .pull-right
   - if with_pdf
@@ -30,34 +29,21 @@
       - FinancialTransactionClass.sorted.each do |c|
         %th
           = sort_link_helper c.display, "amount"
-      - if with_hidden
-        %th
   %tbody
     - @financial_transactions.each do |t|
-      %tr{class: "#{'deleted_row' if t.hidden?}"}
+      %tr
         %td
           - if t.financial_link
             = link_to format_time(t.created_on), finance_link_path(t.financial_link)
           - else
             = format_time(t.created_on)
         - if with_ordergroup
-          %td= h link_to t.ordergroup_name, finance_group_transactions_path(t.ordergroup)
+          %td= h link_to t.ordergroup.name, finance_ordergroup_transactions_path(t.ordergroup)
         %td= h show_user(t.user)
         - if FinancialTransactionType.has_multiple_types
           %td= h t.financial_transaction_type.name
-        %td
-          - if t.group_order
-            = link_to t.note, t.group_order
-          - else
-            = t.note
+        %td= h t.note
         - FinancialTransactionClass.sorted.each do |c|
           %td.numeric{style: 'width:5em'}
             - if t.financial_transaction_type.financial_transaction_class == c
               = format_currency t.amount
-        - if with_hidden
-          %td.actions{style: 'width:1em'}
-            - unless t.hidden?
-              = link_to finance_transaction_path(t), method: :delete,
-                data: {confirm: t('.confirm_revert', name: t.note)}, title: t('.revert_title'),
-                class: 'btn btn-danger btn-mini' do
-                = glyph :remove

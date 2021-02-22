@@ -1,5 +1,5 @@
 class Finance::FinancialLinksController < Finance::BaseController
-  before_action :find_financial_link, except: [:create, :incomplete]
+  before_filter :find_financial_link, except: [:create]
 
   def show
     @items = @financial_link.bank_transactions.map do |bt|
@@ -16,13 +16,13 @@ class Finance::FinancialLinksController < Finance::BaseController
       {
         date: ft.created_on,
         type: t('activerecord.models.financial_transaction'),
-        description: "#{ft.ordergroup_name}: #{ft.note}",
+        description: "#{ft.ordergroup.name}: #{ft.note}",
         amount: ft.amount,
-        link_to: finance_group_transactions_path(ft.ordergroup),
+        link_to: finance_ordergroup_transactions_path(ft.ordergroup),
         remove_path: remove_financial_transaction_finance_link_path(@financial_link, ft)
       }
     end
-    @items += @financial_link.invoices.includes(:supplier).map do |invoice|
+    @items += @financial_link.invoices.map do |invoice|
       {
         date: invoice.date || invoice.created_at,
         type: t('activerecord.models.invoice'),
@@ -41,11 +41,7 @@ class Finance::FinancialLinksController < Finance::BaseController
       bank_transaction = BankTransaction.find(params[:bank_transaction])
       bank_transaction.update_attribute :financial_link, @financial_link
     end
-    redirect_to finance_link_url(@financial_link), notice: t('.notice')
-  end
-
-  def incomplete
-    @financial_links = FinancialLink.incomplete
+    redirect_to finance_link_url(@financial_link), notice: I18n.t('finance.bank_transactions.controller.create.notice')
   end
 
   def index_bank_transaction
@@ -55,45 +51,45 @@ class Finance::FinancialLinksController < Finance::BaseController
   def add_bank_transaction
     bank_transaction = BankTransaction.find(params[:bank_transaction])
     bank_transaction.update_attribute :financial_link, @financial_link
-    redirect_to finance_link_url(@financial_link), notice: t('.notice')
+    redirect_to finance_link_url(@financial_link), notice: I18n.t('finance.bank_transactions.controller.create.notice')
   end
 
   def remove_bank_transaction
     bank_transaction = BankTransaction.find(params[:bank_transaction])
     bank_transaction.update_attribute :financial_link, nil
-    redirect_to finance_link_url(@financial_link), notice: t('.notice')
+    redirect_to finance_link_url(@financial_link), notice: I18n.t('finance.bank_transactions.controller.destroy.notice')
   end
 
   def index_financial_transaction
-    @financial_transactions = FinancialTransaction.without_financial_link.includes(:financial_transaction_type, :ordergroup)
+    @financial_transactions = FinancialTransaction.without_financial_link
   end
 
   def add_financial_transaction
     financial_transaction = FinancialTransaction.find(params[:financial_transaction])
     financial_transaction.update_attribute :financial_link, @financial_link
-    redirect_to finance_link_url(@financial_link), notice: t('.notice')
+    redirect_to finance_link_url(@financial_link), notice: I18n.t('finance.financial_transactions.controller.create.notice')
   end
 
   def remove_financial_transaction
     financial_transaction = FinancialTransaction.find(params[:financial_transaction])
     financial_transaction.update_attribute :financial_link, nil
-    redirect_to finance_link_url(@financial_link), notice: t('.notice')
+    redirect_to finance_link_url(@financial_link), notice: I18n.t('finance.financial_transactions.controller.destroy.notice')
   end
 
   def index_invoice
-    @invoices = Invoice.without_financial_link.includes(:supplier)
+    @invoices = Invoice.without_financial_link
   end
 
   def add_invoice
     invoice = Invoice.find(params[:invoice])
     invoice.update_attribute :financial_link, @financial_link
-    redirect_to finance_link_url(@financial_link), notice: t('.notice')
+    redirect_to finance_link_url(@financial_link), notice: I18n.t('finance.financial_transactions.controller.create.notice')
   end
 
   def remove_invoice
     invoice = Invoice.find(params[:invoice])
     invoice.update_attribute :financial_link, nil
-    redirect_to finance_link_url(@financial_link), notice: t('.notice')
+    redirect_to finance_link_url(@financial_link), notice: I18n.t('finance.financial_transactions.controller.destroy.notice')
   end
 
 protected

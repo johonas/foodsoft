@@ -10,23 +10,9 @@ FactoryBot.define do
 
     factory :admin do
       sequence(:nick) { |n| "admin#{n}" }
-      first_name { 'Administrator' }
+      first_name 'Administrator'
       after :create do |user, evaluator|
         create :workgroup, role_admin: true, user_ids: [user.id]
-      end
-    end
-
-    trait :ordergroup do
-      after :create do |user, evaluator|
-        create :ordergroup, user_ids: [user.id]
-      end
-    end
-
-    [:ordergroup, :finance, :invoices, :article_meta, :suppliers, :pickups, :orders].each do |role|
-      trait "role_#{role}".to_sym do
-        after :create do |user, evaluator|
-          create :workgroup, "role_#{role}" => true, user_ids: [user.id]
-        end
       end
     end
   end
@@ -35,11 +21,11 @@ FactoryBot.define do
     sequence(:name) {|n| "Group ##{n}"}
 
     factory :workgroup do
-      type { '' }
+      type ''
     end
 
     factory :ordergroup do
-      type { 'Ordergroup' }
+      type 'Ordergroup'
       sequence(:name) {|n| "Order group ##{n}"}
       # workaround to avoid needing to save the ordergroup
       #   avoids e.g. error after logging in related to applebar

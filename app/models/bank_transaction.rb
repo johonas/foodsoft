@@ -1,4 +1,4 @@
-class BankTransaction < ApplicationRecord
+class BankTransaction < ActiveRecord::Base
 
   # @!attribute external_id
   #   @return [String] Unique Identifier of the transaction within the bank account.
@@ -18,9 +18,9 @@ class BankTransaction < ApplicationRecord
   #   @return [Binary] Optional PNG image for e.g. scan of paper receipt.
 
   belongs_to :bank_account
-  belongs_to :financial_link, optional: true
-  belongs_to :supplier, optional: true, foreign_key: 'iban', primary_key: 'iban'
-  belongs_to :user, optional: true, foreign_key: 'iban', primary_key: 'iban'
+  belongs_to :financial_link
+  belongs_to :supplier, foreign_key: 'iban', primary_key: 'iban'
+  belongs_to :user, foreign_key: 'iban', primary_key: 'iban'
 
   validates_presence_of :date, :amount, :bank_account_id
   validates_numericality_of :amount
@@ -32,49 +32,5 @@ class BankTransaction < ApplicationRecord
 
   def image_url
     'data:image/png;base64,' + Base64.encode64(self.image)
-  end
-
-  def assign_to_invoice
-    return false unless supplier
-
-    content = text
-    content += "\n" + reference if reference.present?
-    invoices = supplier.invoices.unpaid.select {|i| content.include? i.number}
-    invoices_sum = invoices.map(&:amount).sum
-    return false if amount != -invoices_sum
-
-    transaction do
-      link = FinancialLink.new
-      invoices.each {|i| i.update_attributes! financial_link: link, paid_on: date }
-      update_attribute :financial_link, link
-    end
-
-    return true
-  end
-
-  def assign_to_ordergroup
-    m = BankTransactionReference.parse(reference)
-    return unless m
-
-    return false if m[:parts].values.sum != amount
-    group = Ordergroup.find_by_id(m[:group])
-    return false unless group
-    usr = m[:user] ? User.find_by_id(m[:user]) : group.users.first
-    return false unless usr
-
-    transaction do
-      note = "ID=#{id} (#{amount})"
-      link = FinancialLink.new
-
-      m[:parts].each do |short, value|
-        ftt = FinancialTransactionType.find_by_name_short(short)
-        return false unless ftt
-        group.add_financial_transaction! value, note, usr, ftt, link if value > 0
-      end
-
-      update_attribute :financial_link, link
-    end
-
-    return true
   end
 end

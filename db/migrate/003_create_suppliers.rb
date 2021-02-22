@@ -1,4 +1,4 @@
-class CreateSuppliers < ActiveRecord::Migration[4.2]
+class CreateSuppliers < ActiveRecord::Migration
     SUPPLIER_SAMPLE = 'Sample Supplier'
   
   def self.up    

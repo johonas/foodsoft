@@ -2,7 +2,7 @@
 
 require 'digest/sha1'
 # specific user rights through memberships (see Group)
-class User < ApplicationRecord
+class User < ActiveRecord::Base
   include CustomFields
   #TODO: acts_as_paraniod ??
 
@@ -19,15 +19,15 @@ class User < ApplicationRecord
   has_many :send_messages, :class_name => "Message", :foreign_key => "sender_id"
   has_many :created_orders, :class_name => 'Order', :foreign_key => 'created_by_user_id', :dependent => :nullify
   has_many :mail_delivery_status, :class_name => 'MailDeliveryStatus', :foreign_key => 'email', :primary_key => 'email'
-
-  attr_accessor :create_ordergroup, :password, :send_welcome_mail, :settings_attributes
+  
+  attr_accessor :password, :settings_attributes
 
   scope :deleted, -> { where.not(deleted_at: nil) }
   scope :undeleted, -> { where(deleted_at: nil) }
 
   # makes the current_user (logged-in-user) available in models
   cattr_accessor :current_user
-
+  
   validates_presence_of :email
   validates_presence_of :password, :on => :create
   validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
@@ -51,38 +51,19 @@ class User < ApplicationRecord
     settings.defaults['messages'] = { 'send_as_email' => true }           unless settings.messages
     settings.defaults['notify']   = { 'upcoming_tasks' => true  }         unless settings.notify
   end
-
-  before_save do
-    if send_welcome_mail?
-      self.reset_password_token = new_random_password(16)
-      self.reset_password_expires = Time.now.advance(days: 2)
-    end
-  end
-
+  
   after_save do
     settings_attributes.each do |key, value|
       value.each do |k, v|
         case v
           when '1'
             value[k] = true
-          when '0'
+          when '0' 
             value[k] = false
         end
       end
       self.settings.merge!(key, value)
     end if settings_attributes
-
-    if ActiveModel::Type::Boolean.new.cast(create_ordergroup)
-      og = Ordergroup.new({name: name})
-      og.memberships.build({user: self})
-      og.save!
-    end
-
-    Mailer.welcome(self).deliver_now if send_welcome_mail?
-  end
-
-  def send_welcome_mail?
-    ActiveModel::Type::Boolean.new.cast(send_welcome_mail)
   end
 
   # sorted by display name
@@ -107,11 +88,11 @@ class User < ApplicationRecord
     end.reduce(:and)
     User.where(match_nick.or match_name)
   end
-
+  
   def locale
     settings.profile['language']
   end
-
+  
   def name
     [first_name, last_name].join(" ")
   end
@@ -119,7 +100,7 @@ class User < ApplicationRecord
   def receive_email?
     settings.messages['send_as_email'] && email.present?
   end
-
+  
   # Sets the user's password. It will be stored encrypted along with a random salt.
   def set_password
     unless password.blank?
@@ -127,12 +108,12 @@ class User < ApplicationRecord
       self.password_hash, self.password_salt = Digest::SHA1.hexdigest(password + salt), salt
     end
   end
-
+  
   # Returns true if the password argument matches the user's password.
   def has_password(password)
     Digest::SHA1.hexdigest(password + self.password_salt) == self.password_hash
   end
-
+  
   # Returns a random password.
   def new_random_password(size = 3)
     c = %w(b c d f g h j k l m n p qu r s t v w x z ch cr fr nd ng nk nt ph pr rd sh sl sp st th tr)
@@ -163,35 +144,35 @@ class User < ApplicationRecord
   def role_admin?
     groups.detect {|group| group.role_admin?}
   end
-
+  
   # Checks the finance role
   def role_finance?
-    FoodsoftConfig[:default_role_finance] || groups.detect {|group| group.role_finance?}
+    groups.detect {|group| group.role_finance?}
   end
 
   # Checks the invoices role
   def role_invoices?
-    FoodsoftConfig[:default_role_invoices] || groups.detect {|group| group.role_invoices?}
+    groups.detect {|group| group.role_invoices?}
   end
 
   # Checks the article_meta role
   def role_article_meta?
-    FoodsoftConfig[:default_role_article_meta] || groups.detect {|group| group.role_article_meta?}
+    groups.detect {|group| group.role_article_meta?}
   end
 
   # Checks the suppliers role
   def role_suppliers?
-    FoodsoftConfig[:default_role_suppliers] || groups.detect {|group| group.role_suppliers?}
+    groups.detect {|group| group.role_suppliers?}
   end
 
   # Checks the invoices role
   def role_pickups?
-    FoodsoftConfig[:default_role_pickups] || groups.detect {|group| group.role_pickups?}
+    groups.detect {|group| group.role_pickups?}
   end
 
   # Checks the orders role
   def role_orders?
-    FoodsoftConfig[:default_role_orders] || groups.detect {|group| group.role_orders?}
+    groups.detect {|group| group.role_orders?}
   end
 
   # Checks the orders role
@@ -231,17 +212,11 @@ class User < ApplicationRecord
 
   def self.authenticate(login, password)
     user = find_by_nick(login) || find_by_email(login)
-    if user && password && user.has_password(password)
+    if user && user.has_password(password)
       user
     else
       nil
     end
-  end
-
-  def self.custom_fields
-    fields = FoodsoftConfig[:custom_fields] && FoodsoftConfig[:custom_fields][:user]
-    return [] unless fields
-    fields.map(&:deep_symbolize_keys)
   end
 
   # XXX this is view-related; need to move out things like token_attributes
@@ -262,3 +237,4 @@ class User < ApplicationRecord
   end
 
 end
+

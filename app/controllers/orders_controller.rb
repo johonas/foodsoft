@@ -3,11 +3,10 @@
 # Controller for managing orders, i.e. all actions that require the "orders" role.
 # Normal ordering actions of members of order groups is handled by the OrderingController.
 class OrdersController < ApplicationController
-  include Concerns::SendOrderPdf
 
-  before_action :authenticate_pickups_or_orders
-  before_action :authenticate_orders, except: [:receive, :receive_on_order_article_create, :receive_on_order_article_update, :show]
-  before_action :remove_empty_article, only: [:create, :update]
+  before_filter :authenticate_pickups_or_orders
+  before_filter :authenticate_orders, except: [:receive, :receive_on_order_article_create, :receive_on_order_article_update, :show]
+  before_filter :remove_empty_article, only: [:create, :update]
 
   # List orders
   def index
@@ -109,7 +108,14 @@ class OrdersController < ApplicationController
         render :layout => false
       end
       format.pdf do
-        send_order_pdf @order, params[:document]
+        pdf = case params[:document]
+                when 'groups'          then OrderByGroups.new(@order)
+                when 'articles'        then OrderByArticles.new(@order)
+                when 'articles_simple' then OrderByArticlesSimple.new(@order)
+                when 'fax'             then OrderFax.new(@order)
+                when 'matrix'          then OrderMatrix.new(@order)
+              end
+        send_data pdf.to_pdf, filename: pdf.filename, type: 'application/pdf'
       end
       format.xls do
         Reports::Order.new(@order).generate.send(self)
@@ -125,23 +131,16 @@ class OrdersController < ApplicationController
 
   # Page to create a new order.
   def new
-    if params[:order_id]
-      old_order = Order.find(params[:order_id])
-      @order = Order.new(supplier_id: old_order.supplier_id).init_dates
-      @order.article_ids = old_order.article_ids
-    else
-      @order = Order.new(supplier_id: params[:supplier_id]).init_dates
-    end
-  rescue => error
-    redirect_to orders_url, alert: t('errors.general_msg', msg: error.message)
+    @order = Order.new(supplier_id: params[:supplier_id])
+    @order.article_ids = Order.find(params[:order_id]).article_ids if params[:order_id]
   end
 
   # Save a new order.
   # order_articles will be saved in Order.article_ids=()
   def create
     @order = Order.new(params[:order])
-    @order.created_by = current_user
-    @order.updated_by = current_user
+    @order.created_by = @current_user
+
     if @order.save
       flash[:notice] = I18n.t('orders.create.notice')
       redirect_to @order
@@ -160,7 +159,7 @@ class OrdersController < ApplicationController
   # Update an existing order.
   def update
     @order = Order.find params[:id]
-    if @order.update_attributes params[:order].merge(updated_by: current_user)
+    if @order.update_attributes params[:order]
       flash[:notice] = I18n.t('orders.update.notice')
       redirect_to :action => 'show', :id => @order
     else

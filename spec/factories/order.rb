@@ -6,16 +6,14 @@ FactoryBot.define do
     starts { Time.now }
     supplier { create :supplier, article_count: (article_count.nil? ? true : article_count) }
     article_ids { supplier.articles.map(&:id) unless supplier.nil? }
-    created_by { create :user }
-    updated_by { create :user }
 
     transient do
-      article_count { true }
+      article_count true
     end
 
     # for an order from stock; need to add articles
     factory :stock_order do
-      supplier_id { 0 }
+      supplier_id 0
       # article_ids needs to be supplied
     end
 

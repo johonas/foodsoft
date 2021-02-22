@@ -1,13 +1,11 @@
-# The chronologically order of the Ordergroup - activity are stored in GroupOrderArticleQuantity
-#
-class GroupOrderArticle < ApplicationRecord
+# A GroupOrderArticle stores the sum of how many items of an OrderArticle are ordered as part of a GroupOrder.
+class GroupOrderArticle < ActiveRecord::Base
 
   belongs_to :group_order
   belongs_to :order_article
 
   validates_presence_of :group_order, :order_article
   validates_uniqueness_of :order_article_id, :scope => :group_order_id    # just once an article per group order
-  validate :check_order_not_closed # don't allow changes to closed (aka settled) orders
 
   scope :ordered, -> { includes(:group_order => :ordergroup).order('groups.name') }
 
@@ -53,13 +51,5 @@ class GroupOrderArticle < ApplicationRecord
   # will be the value depending of the article results.
   def total_price(order_article = self.order_article)
     order_article.article.fc_price * quantity
-  end
-
-  private
-
-  def check_order_not_closed
-    if order_article.order.closed?
-      errors.add(:order_article, I18n.t('model.group_order_article.order_closed'))
-    end
   end
 end

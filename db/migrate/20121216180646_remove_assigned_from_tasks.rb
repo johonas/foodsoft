@@ -1,4 +1,4 @@
-class RemoveAssignedFromTasks < ActiveRecord::Migration[4.2]
+class RemoveAssignedFromTasks < ActiveRecord::Migration
   def up
     remove_column :tasks, :assigned
   end

@@ -1,4 +1,4 @@
-class AddParentToDocument < ActiveRecord::Migration[4.2]
+class AddParentToDocument < ActiveRecord::Migration
   def change
     add_reference :documents, :parent, index: true
   end

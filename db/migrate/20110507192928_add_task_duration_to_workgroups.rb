@@ -1,4 +1,4 @@
-class AddTaskDurationToWorkgroups < ActiveRecord::Migration[4.2]
+class AddTaskDurationToWorkgroups < ActiveRecord::Migration
   def self.up
     add_column :groups, :task_duration, :integer, :default => 1
   end

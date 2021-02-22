@@ -1,4 +1,4 @@
-class RemoveAccountUpdatedFromOrdergroups < ActiveRecord::Migration[4.2]
+class RemoveAccountUpdatedFromOrdergroups < ActiveRecord::Migration
   def up
     remove_column :groups, :account_updated
   end

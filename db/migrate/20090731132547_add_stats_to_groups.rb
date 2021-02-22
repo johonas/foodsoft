@@ -1,4 +1,4 @@
-class AddStatsToGroups < ActiveRecord::Migration[4.2]
+class AddStatsToGroups < ActiveRecord::Migration
   def self.up
     add_column :groups, :stats, :text
 

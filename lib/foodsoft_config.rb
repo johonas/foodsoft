@@ -73,12 +73,6 @@ class FoodsoftConfig
       setup_mailing
     end
 
-    def init_mailing
-      [:protocol, :host, :port, :script_name].each do |k|
-        ActionMailer::Base.default_url_options[k] = self[k] if self[k]
-      end
-    end
-
     # Set config and database connection for specific foodcoop.
     #
     # Only needed in multi coop mode.
@@ -232,6 +226,9 @@ class FoodsoftConfig
     end
 
     def setup_mailing
+      [:protocol, :host, :port, :script_name].each do |k|
+        ActionMailer::Base.default_url_options[k] = self[k] if self[k]
+      end
       ActionMailer::Base.default_url_options[:foodcoop] = scope
     end
 
@@ -261,7 +258,6 @@ class FoodsoftConfig
         contact: {}, # avoid errors when undefined
         tasks_period_days: 7,
         tasks_upfront_days: 49,
-        shared_supplier_article_sync_limit: 200,
         # The following keys cannot, by default, be set by foodcoops themselves.
         protected: {
           multi_coop_install: true,

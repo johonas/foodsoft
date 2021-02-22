@@ -1,5 +1,5 @@
 # Article category
-class ArticleCategory < ApplicationRecord
+class ArticleCategory < ActiveRecord::Base
 
   # @!attribute name
   #   @return [String] Title of the category.
@@ -40,3 +40,4 @@ class ArticleCategory < ApplicationRecord
   end
 
 end
+

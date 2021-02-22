@@ -1,4 +1,4 @@
-class AddBreakToGroup < ActiveRecord::Migration[4.2]
+class AddBreakToGroup < ActiveRecord::Migration
   def change
     add_column :groups, :break_start, :date
     add_column :groups, :break_end, :date

@@ -1,4 +1,4 @@
-class AddOrderIndexes < ActiveRecord::Migration[4.2]
+class AddOrderIndexes < ActiveRecord::Migration
   def self.up
     add_index :group_order_articles, :group_order_id
     add_index :group_order_articles, :order_article_id

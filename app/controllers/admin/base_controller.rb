@@ -1,5 +1,5 @@
 class Admin::BaseController < ApplicationController
-  before_action :authenticate_admin
+  before_filter :authenticate_admin
 
   def index
     @user = current_user

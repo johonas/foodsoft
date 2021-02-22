@@ -1,4 +1,4 @@
-class RemoveTableArticlePrices < ActiveRecord::Migration[4.2]
+class RemoveTableArticlePrices < ActiveRecord::Migration
   def self.up
      
     puts "create columns in articles ..."

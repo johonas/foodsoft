@@ -1,4 +1,4 @@
-class CreateArticleMeta < ActiveRecord::Migration[4.2]
+class CreateArticleMeta < ActiveRecord::Migration
   CATEGORY_SAMPLE = 'Sample Category'
   TAX_STANDARD = 'Standard'
   TAX_REDUCED = 'Reduced'

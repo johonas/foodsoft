@@ -1,4 +1,4 @@
-FROM ruby:2.6
+FROM ruby:2.3
 
 RUN supercronicUrl=https://github.com/aptible/supercronic/releases/download/v0.1.3/supercronic-linux-amd64 && \
     supercronicBin=/usr/local/bin/supercronic && \
@@ -30,25 +30,22 @@ RUN buildDeps='libmagic-dev' && \
     bundle exec whenever >crontab
 
 # compile assets with temporary mysql server
-RUN export DATABASE_URL=mysql2://localhost/temp?encoding=utf8 && \
+RUN export DATABASE_URL=mysql2://localhost/temp && \
     export SECRET_KEY_BASE=thisisnotimportantnow && \
     export DEBIAN_FRONTEND=noninteractive && \
     apt-get update && \
-    apt-get install -y mariadb-server && \
+    apt-get install -y mysql-server && \
     /etc/init.d/mysql start && \
-    mariadb -e "CREATE DATABASE temp" && \
     cp config/app_config.yml.SAMPLE config/app_config.yml && \
-    cp config/database.yml.MySQL_SAMPLE config/database.yml && \
     bundle exec rake db:setup assets:precompile && \
-    rm -Rf tmp/* && \
+    rm -Rf config/app_config.yml tmp/* && \
     /etc/init.d/mysql stop && \
     rm -Rf /run/mysqld /tmp/* /var/tmp/* /var/lib/mysql /var/log/mysql* && \
-    apt-get purge -y --auto-remove mariadb-server && \
+    apt-get purge -y --auto-remove mysql-server && \
     rm -Rf /var/lib/apt/lists/* /var/cache/apt/*
 
-# Make relevant dirs and files writable for app user
+# Make relevant dirs writable for app user
 RUN mkdir -p tmp && \
-    chown nobody config/app_config.yml && \
     chown nobody tmp
 
 # Run app as unprivileged user

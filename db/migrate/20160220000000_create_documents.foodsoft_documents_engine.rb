@@ -1,4 +1,4 @@
-class CreateDocuments < ActiveRecord::Migration[4.2]
+class CreateDocuments < ActiveRecord::Migration
   def self.up
     create_table :documents do |t|
       t.string :name

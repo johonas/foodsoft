@@ -50,9 +50,7 @@ feature Order, js: true do
     oa.update_results!
     # and close the order
     visit orders_path
-    accept_confirm do
-      click_link_or_button I18n.t('orders.index.action_end')
-    end
+    click_link_or_button I18n.t('orders.index.action_end')
     expect(page).to have_selector('.alert-success')
     order.reload
     oa.reload

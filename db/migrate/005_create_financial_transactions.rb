@@ -1,4 +1,4 @@
-class CreateFinancialTransactions < ActiveRecord::Migration[4.2]
+class CreateFinancialTransactions < ActiveRecord::Migration
   def self.up
     # Create Financial Transactions
     create_table :financial_transactions do |t|

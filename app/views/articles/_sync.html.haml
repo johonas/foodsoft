@@ -24,7 +24,7 @@
   %h2= t '.upnew.title'
   %p
     %i= t '.upnew.body_count', count: @new_articles.length
-  = render 'sync_table', articles: @new_articles, field: 'new_articles', hidden_fields: %w(shared_updated_on order_number availability)
+  = render 'sync_table', articles: @new_articles, field: 'new_articles', hidden_fields: %w(shared_updated_on order_number)
   %hr/
 
 - if ignored_article_count > 0

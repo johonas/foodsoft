@@ -1,4 +1,4 @@
-class CreateTasks < ActiveRecord::Migration[4.2]
+class CreateTasks < ActiveRecord::Migration
   def self.up
     create_table :tasks do |t|
       t.column :name, :string, :null => false

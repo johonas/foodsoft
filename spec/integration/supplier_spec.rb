@@ -9,7 +9,6 @@ feature 'supplier' do
     before { login user }
 
     it 'can be created' do
-      create :supplier_category
       visit suppliers_path
       click_on I18n.t('suppliers.index.action_new')
       supplier = build :supplier

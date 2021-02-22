@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -*-
-class Task < ApplicationRecord
+class Task < ActiveRecord::Base
   has_many :assignments, :dependent => :destroy
   has_many :users, :through => :assignments
-  belongs_to :workgroup, optional: true
-  belongs_to :periodic_task_group, optional: true
-  belongs_to :created_by, :class_name => 'User', :foreign_key => 'created_by_user_id', optional: true
+  belongs_to :workgroup
+  belongs_to :periodic_task_group
 
   scope :non_group, -> { where(workgroup_id: nil, done: false) }
   scope :done, -> { where(done: true) }
   scope :undone, -> { where(done: false) }
 
   attr_accessor :current_user_id
+
+  # form will send user in string. responsibilities will added later
+  include ActiveModel::MassAssignmentSecurity
+  attr_protected :users
 
   validates :name, :presence => true, :length => { :minimum => 3 }
   validates :required_users, :presence => true
@@ -94,7 +97,7 @@ class Task < ApplicationRecord
     list = ids.split(",").map(&:to_i)
     new_users = (list - users.collect(&:id)).uniq
     old_users = users.reject { |user| list.include?(user.id) }
-
+    
     self.class.transaction do
       # delete old assignments
       if old_users.any?
@@ -117,7 +120,7 @@ class Task < ApplicationRecord
       end
     end
   end
-
+  
   def user_list
     @user_list ||= users.collect(&:id).join(", ")
   end
@@ -131,3 +134,4 @@ class Task < ApplicationRecord
     true
   end
 end
+

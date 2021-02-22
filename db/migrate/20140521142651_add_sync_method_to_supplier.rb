@@ -1,4 +1,4 @@
-class AddSyncMethodToSupplier < ActiveRecord::Migration[4.2]
+class AddSyncMethodToSupplier < ActiveRecord::Migration
   def change
     add_column :suppliers, :shared_sync_method, :string
   end

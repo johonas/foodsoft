@@ -43,7 +43,7 @@ nl:
       index:
         title: Artikelen voor huishouden
       payment_bar:
-        account_balance: Tegoed
+        account_balance: Account balance
         new_pin: PIN
         new_transaction: Nieuwe transactie
         payment: ! 'Betaling:'

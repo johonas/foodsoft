@@ -1,4 +1,4 @@
-class CreateGroups < ActiveRecord::Migration[4.2]
+class CreateGroups < ActiveRecord::Migration
   GROUP_ADMIN = 'Administrators'
   GROUP_ORDER = 'Sample Order Group'
   

@@ -1,5 +1,5 @@
 class BestellrundenController < ApplicationController
-  before_action :authenticate_verteilen, :except => :for_depot
+  before_filter :authenticate_verteilen, :except => :for_depot
 
   def index
     @bestellrunden = Bestellrunde.where(id: Order.pluck(:bestellrunde_id)).order('id desc').all

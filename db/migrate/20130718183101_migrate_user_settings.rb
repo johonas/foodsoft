@@ -1,4 +1,4 @@
-class MigrateUserSettings < ActiveRecord::Migration[4.2]
+class MigrateUserSettings < ActiveRecord::Migration
   def up
     say_with_time 'Save old user settings in new RailsSettings module' do
 

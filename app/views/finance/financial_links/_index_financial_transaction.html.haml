@@ -1,6 +1,6 @@
 .modal-header
   = close_button :modal
-  %h3= t('.title')
+  %h3= t('.add_invoice')
 .modal-body
   %table.table.table-striped
     %thead
@@ -14,7 +14,7 @@
       - for t in @financial_transactions
         %tr
           %td= link_to format_time(t.created_on), add_financial_transaction_finance_link_path(@financial_link, financial_transaction: t.id), method: :put
-          %td= t.ordergroup_name
+          %td= t.ordergroup.name
           - if FinancialTransactionType.has_multiple_types
             %td= h t.financial_transaction_type.name
           %td= number_to_currency t.amount

@@ -1,4 +1,4 @@
-class ExtendComments < ActiveRecord::Migration[4.2]
+class ExtendComments < ActiveRecord::Migration
   def self.up
     change_column :comments, :comment, :text, :default => ""
   end

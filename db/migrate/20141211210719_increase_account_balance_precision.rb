@@ -1,4 +1,4 @@
-class IncreaseAccountBalancePrecision < ActiveRecord::Migration[4.2]
+class IncreaseAccountBalancePrecision < ActiveRecord::Migration
   def up
     change_column :groups, :account_balance, :decimal, precision: 12, scale: 2
   end

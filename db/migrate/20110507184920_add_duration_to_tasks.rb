@@ -1,4 +1,4 @@
-class AddDurationToTasks < ActiveRecord::Migration[4.2]
+class AddDurationToTasks < ActiveRecord::Migration
   def self.up
     add_column :tasks, :duration, :integer, :default => 1
   end

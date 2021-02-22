@@ -1,4 +1,4 @@
-class AddCreatedByUserIdToOrders < ActiveRecord::Migration[4.2]
+class AddCreatedByUserIdToOrders < ActiveRecord::Migration
   def self.up
     add_column :orders, :created_by_user_id, :integer
   end

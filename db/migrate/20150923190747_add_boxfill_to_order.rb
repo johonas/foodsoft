@@ -1,4 +1,4 @@
-class AddBoxfillToOrder < ActiveRecord::Migration[4.2]
+class AddBoxfillToOrder < ActiveRecord::Migration
   def change
     add_column :orders, :boxfill, :datetime
   end

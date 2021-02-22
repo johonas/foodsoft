@@ -2,15 +2,13 @@
 # Management actions that require the "orders" role are handled by the OrdersController.
 class GroupOrdersController < ApplicationController
   # Security
-  before_action :ensure_ordergroup_member
-  before_action :ensure_open_order, :only => [:new, :create, :edit, :update, :order, :stock_order, :saveOrder]
-  before_action :ensure_my_group_order, only: [:show, :edit, :update]
-  before_action :enough_apples?, only: [:new, :create]
+  before_filter :ensure_ordergroup_member
+  before_filter :ensure_open_order, :only => [:new, :create, :edit, :update, :order, :stock_order, :saveOrder]
+  before_filter :ensure_my_group_order, only: [:show, :edit, :update]
+  before_filter :enough_apples?, only: [:new, :create]
 
   # Index page.
   def index
-    @closed_orders_including_group_order = Order.closed.limit(5).ordergroup_group_orders_map(@ordergroup)
-    @finished_not_closed_orders_including_group_order = Order.finished_not_closed.ordergroup_group_orders_map(@ordergroup)
   end
 
   def new
@@ -42,7 +40,6 @@ class GroupOrdersController < ApplicationController
 
   def update
     @group_order.attributes = params[:group_order]
-    @group_order.updated_by = current_user
     begin
       @group_order.save_ordering!
       redirect_to group_order_url(@group_order), :notice => I18n.t('group_orders.update.notice')
@@ -58,10 +55,9 @@ class GroupOrdersController < ApplicationController
   # if selected, it shows all orders of the foodcoop
   def archive
     # get only orders belonging to the ordergroup
+    @closed_orders = Order.closed.order('id desc').page(params[:page]).per(10)
+
     @bestellrunden = Bestellrunde.all.order('id desc').page(params[:page]).per(10)
-    @closed_orders = Order.closed.page(params[:page]).per(10)
-    @closed_orders_including_group_order = @closed_orders.ordergroup_group_orders_map(@ordergroup)
-    @finished_not_closed_orders_including_group_order = Order.finished_not_closed.ordergroup_group_orders_map(@ordergroup)
 
     respond_to do |format|
       format.html # archive.html.haml
@@ -72,7 +68,7 @@ class GroupOrdersController < ApplicationController
   private
 
   # Returns true if @current_user is member of an Ordergroup.
-  # Used as a :before_action by OrdersController.
+  # Used as a :before_filter by OrdersController.
   def ensure_ordergroup_member
     @ordergroup = @current_user.ordergroup
     if @ordergroup.nil?

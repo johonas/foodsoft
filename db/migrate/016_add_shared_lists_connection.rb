@@ -1,4 +1,4 @@
-class AddSharedListsConnection < ActiveRecord::Migration[4.2]
+class AddSharedListsConnection < ActiveRecord::Migration
   def self.up
     add_column :suppliers, :shared_supplier_id, :integer
     add_column :articles, :manufacturer , :string

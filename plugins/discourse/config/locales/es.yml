@@ -1,5 +1,0 @@
-es:
-  discourse:
-    callback:
-      invalid_signature: Firma inválida
-      logged_in: Estás adentro!

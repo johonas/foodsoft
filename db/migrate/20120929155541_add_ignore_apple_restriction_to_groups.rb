@@ -1,4 +1,4 @@
-class AddIgnoreAppleRestrictionToGroups < ActiveRecord::Migration[4.2]
+class AddIgnoreAppleRestrictionToGroups < ActiveRecord::Migration
   def self.up
     add_column :groups, :ignore_apple_restriction, :boolean, default: false
   end

@@ -1,4 +1,4 @@
-class AddDepositDefaults < ActiveRecord::Migration[4.2]
+class AddDepositDefaults < ActiveRecord::Migration
   def self.up
     change_column_default :articles, :deposit, 0.0
     change_column_default :order_article_results, :net_price, 0.0

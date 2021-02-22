@@ -1,6 +1,4 @@
 class Api::V1::BaseController < ApplicationController
-  include Concerns::AuthApi
-
   protect_from_forgery with: :null_session
 
   before_action :skip_session
@@ -13,6 +11,16 @@ class Api::V1::BaseController < ApplicationController
 
   private
 
+  def authenticate
+    doorkeeper_authorize!
+    super if current_user
+  end
+
+  # @return [User] Current user, or +nil+ if no valid token.
+  def current_user
+    @current_user ||= User.undeleted.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+  end
+
   # @return [Ordergroup] Current user's ordergroup, or +nil+ if no valid token or user has no ordergroup.
   def current_ordergroup
     current_user.try(:ordergroup)
@@ -20,9 +28,7 @@ class Api::V1::BaseController < ApplicationController
 
   def require_ordergroup
     authenticate
-    unless current_ordergroup.present?
-      raise Api::Errors::PermissionRequired.new('Forbidden, must be in an ordergroup')
-    end
+    raise Api::Errors::PermissionRequired unless current_user.ordergroup.present?
   end
 
   def skip_session
@@ -36,15 +42,10 @@ class Api::V1::BaseController < ApplicationController
   end
 
   def not_acceptable_handler(e)
-    msg = e.message || 'Data not acceptable'
-    render status: 422, json: {error: 'not_acceptable', error_description: msg}
+    render status: 422, json: {error: 'not_acceptable', error_description: e.message || 'Data not acceptable' }
   end
 
   def doorkeeper_unauthorized_render_options(error:)
-    {json: {error: error.name, error_description: error.description}}
-  end
-
-  def doorkeeper_forbidden_render_options(error:)
     {json: {error: error.name, error_description: error.description}}
   end
 
@@ -57,4 +58,5 @@ class Api::V1::BaseController < ApplicationController
   def show_user(user = current_user, **options)
     user.display
   end
+
 end

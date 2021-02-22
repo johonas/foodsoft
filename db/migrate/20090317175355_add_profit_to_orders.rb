@@ -1,4 +1,4 @@
-class AddProfitToOrders < ActiveRecord::Migration[4.2]
+class AddProfitToOrders < ActiveRecord::Migration
   def self.up
     add_column :orders, :foodcoop_result, :decimal, :precision => 8, :scale => 2
     

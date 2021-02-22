@@ -33,21 +33,8 @@ en:
         price: Price (net)
         tax: VAT
         unit_quantity: Unit quantity
-      bank_account:
-        balance: Balance
-        description: Description
-        iban: IBAN
-        name: Name
-      bank_transaction:
-        amount: Amount
-        date: Date
-        external_id: External ID
-        financial_link: Financial link
-        iban: IBAN
-        reference: Referenz
-        text: Description
       delivery:
-        date: Delivery date
+        delivered_on: Delivery date
         note: Note
         supplier: Supplier
       document:
@@ -59,15 +46,12 @@ en:
       financial_transaction:
         amount: Amount
         created_on: Date
-        financial_transaction_class: Financial transaction class
-        financial_transaction_type: Financial transaction type
         note: Note
         ordergroup: Ordergroup
         user: Entered by
       financial_transaction_class:
         name: Name
       financial_transaction_type:
-        bank_account: Bank Account
         name: Name
         financial_transaction_class: Financial transaction class
         name_short: Short Name
@@ -93,7 +77,6 @@ en:
         deliveries: Delivery
         deposit: Deposit charged
         deposit_credit: Deposit returned
-        financial_link: Financial link
         net_amount: Amount adjusted for refund
         note: Note
         number: Number
@@ -104,6 +87,28 @@ en:
         created_at: Time
         email: Email
         message: Message
+      message:
+        body: Body
+        group_id: Group
+        messagegroup_id: Messagegroup
+        order_id: Order
+        ordergroup_id: Ordergroup
+        private: Private
+        recipient_tokens: "(Additional) recipients"
+        send_method:
+          all: Send to all members
+          messagegroup: Send to members of a messagegroup
+          order: Send to members, who participated at an order
+          ordergroup: Send to members of a ordergroup
+          recipients: Send to specific members
+          workgroup: Send to members of a workgroup
+        send_to_all: Send to all members
+        subject: Subject
+        workgroup_id: Workgroup
+      messagegroup:
+        description: Description
+        name: Name
+        user_tokens: Members
       order:
         closed_by: Settled by
         created_by: Created by
@@ -120,13 +125,6 @@ en:
         starts: Starts at
         status: Status
         supplier: Supplier
-        transport: Transport costs
-        transport_distribution: Transport costs distribution
-        transport_distributions:
-          articles: Distribute the costs among the number of received articles
-          ordergroup: Every ordergroup pays the same amount
-          price: Distribute the costs among the order sum
-          skip: Do not distribute the costs
         updated_by: Last edited by
       order_article:
         article: Article
@@ -157,6 +155,10 @@ en:
         last_user_activity: Last activity
         name: Name
         user_tokens: Members
+      page:
+        body: Body
+        parent_id: Parent page
+        title: Title
       stock_article:
         available: Available
         price: Price
@@ -187,8 +189,6 @@ en:
         shared_sync_method: How to synchronize
         url: Homepage
       task:
-        created_by: Created by
-        created_on: Created at
         description: Description
         done: Done?
         due_date: Due date
@@ -250,6 +250,8 @@ en:
       financial_transaction_class: Financial transaction class
       financial_transaction_type: Financial transaction type
       invoice: Invoice
+      message: Message
+      messagegroup: Message group
       order: Order
       order_article: Order article
       order_comment: Order comment
@@ -296,9 +298,6 @@ en:
         emails_title: Sending email
       tab_payment:
         schedule_title: Ordering schedule
-      tab_security:
-        default_roles_title: Access to
-        default_roles_paragraph: By default every member of the foodcoop has access to the following areas.
       tab_tasks:
         periodic_title: Periodic tasks
       tabs:
@@ -308,12 +307,9 @@ en:
     confirm: Are you sure?
     finances:
       index:
-        bank_accounts: Bank accounts
         first_paragraph: Here you can manage the financial transaction classes and the corresponding financial transaction types. Every financial transaction has a type, which you have to select at every transaction, if you created more than one type. The financial transaction classes can be use to group the financial transaction types and will be shown as additional columns in the account overview, if there have been created more than one.
-        new_bank_account: Add new bank account
         new_financial_transaction_class: Add new financial transaction class
         title: Finances
-        transaction_types: Financial transaction types
       transaction_types:
         name: Name
         new_financial_transaction_type: Add new financial transaction type
@@ -323,7 +319,6 @@ en:
         title_new: Add new financial transaction class
     financial_transaction_types:
       form:
-        name_short_desc: The short name is mandatory for financial transaction types which should be automatically assignable in bank transactions. If there are multiple bank accounts, the preferred target account for bank transfers can be selected.
         title_edit: Edit financial transaction type
         title_new: Add new financial transaction type
     mail_delivery_status:
@@ -332,6 +327,23 @@ en:
       index:
         destroy_all: Delete all email problems
         title: Email problems
+    messagegroups:
+      destroy:
+        error: 'Message group could not be deleted: %{error}'
+        notice: Message group was deleted
+      edit:
+        title: Edit message group
+      index:
+        first_paragraph: Here you can create %{url}, edit and delete them.
+        new_messagegroup: Create new message group
+        new_messagegroups: new message groups
+        second_paragraph: A message group is like a mailing-list. Members can subscribe to (and unsubscribe from) the lists they're interested in, from their profile.
+        title: Message groups
+      new:
+        title: Create message group
+      show:
+        send_message: Send message
+        title: Message group %{name}
     ordergroups:
       destroy:
         error: 'Ordergroup could not be marked as deleted: %{error}'
@@ -353,8 +365,9 @@ en:
       show:
         confirm: Are you sure?
         edit: Edit group/members
+        send_message: Send message
         title: Ordergroup %{name}
-    search_placeholder: name ...
+    search_placeholder: name ..
     users:
       controller:
         sudo_done: You are now logged in as %{user}. Be careful, and do not forget to log out when done!
@@ -363,9 +376,6 @@ en:
         notice: User was deleted
       edit:
         title: Edit user
-      form:
-        create_ordergroup: Create ordergroup with the same name and add user.
-        send_welcome_mail: Send a welcome mail to the user.
       index:
         first_paragraph: Here you can %{url}, edit and delete users.
         new_user: Create new user
@@ -383,6 +393,7 @@ en:
         member_since: Member since %{time}
         person: Person
         preference: Preferences
+        send_message: Send message
         show_email_problems: Show email problems
         sudo: Take on identity
       users:
@@ -485,7 +496,6 @@ en:
       not_found: No articles found
     index:
       change_supplier: Change supplier ...
-      download: Download articles
       edit_all: Edit all
       ext_db:
         import: Import article
@@ -552,14 +562,6 @@ en:
       text_1: 'Here you can upload a spreadsheet to update the articles of %{supplier}. Excel (xls, xlsx) and OpenOffice (ods) spreadsheets are accepted, as well as comma-separated files (csv, columns separated by ";" with utf-8 encoding). Only the first sheet will be imported, and columns must be in the following order:'
       text_2: The rows shown here are examples. When there is an "x" in the first column, the article is outlisted and will be removed. This allows you to edit the spreadsheet and quickly remove many articles at once, for example when articles become unavailable with the supplier. The category will be matched to your Foodsoft category list (both by category name and import names).
       title: Upload articles of %{supplier}
-  bank_account_connector:
-    confirm: Please confirum the code %{code}.
-    fields:
-      email: E-Mail
-      pin: PIN
-      password: Password
-      tan: TAN
-      username: Username
   config:
     hints:
       applepear_url: Website where the apple and pear system for tasks is explained.
@@ -570,12 +572,15 @@ en:
       currency_space: Whether to add whitespace after the currency symbol.
       currency_unit: Currency symbol for displaying prices.
       custom_css: To modify the layout of this site, you can enter style modifications using the cascading stylesheets (CSS) language. Leave blank for the default style.
+      documents_allowed_extension: A list of allowed filename extensions separated by spaces.
       email_from: Emails will appear to be from this email address. Leave empty to use the foodcoop's contact address.
       email_replyto: Set this when you want to receive replies from emails sent by Foodsoft on a different address than the above.
       email_sender: Emails will appear to be sent from this email address. To avoid emails sent being classified as spam, the webserver may need to be registered in the SPF record of the email address's domain.
       help_url: Documentation website.
       homepage: Website of your foodcoop.
       ignore_browser_locale: Ignore the language of user's computer when the user has not chosen a language yet.
+      mailing_list: Mailing-list email address to use instead of the messaging system for mail to all members.
+      mailing_list_subscribe: Email address where members can send an email to for subscribing.
       minimum_balance: Members can only order when their account balance is above or equal to this amount.
       name: The name of your foodcoop.
       order_schedule:
@@ -598,9 +603,10 @@ en:
       use_apple_points: When the apple point system is enabled, members are required to do some tasks to be able to keep ordering.
       use_current_orders: Enable the current_orders plugin. Allows members with the order permission to change member amounts in multiple orders, using three new screens in the Orders menu. Especially useful for pick-up days.
       use_documents: Add a basic document sharing page to the foodcoop menu.
-      use_boxfill: When enabled, near end of an order, members are only able to change their order when increases the total amount ordered. This helps to fill any remaining boxes. You still need to set a box-fill date for the orders.
       use_iban: When enabled, supplier and user provide an additonal field for storing the international bank account number.
+      use_messages: Allow members to communicate with each other within Foodsoft.
       use_nick: Show and use nicknames instead of real names. When enabling this, please check that each user has a nickname.
+      use_wiki: Enable editable wiki pages.
       webstats_tracking_code: Tracking code for web analytics (like Piwik or Google analytics). Leave empty for no tracking.
     keys:
       applepear_url: Apple system help URL
@@ -616,19 +622,16 @@ en:
       currency_unit: Currency
       custom_css: Custom CSS
       default_locale: Default language
-      default_role_article_meta: Articles
-      default_role_finance: Finance
-      default_role_invoices: Invoices
-      default_role_orders: Orders
-      default_role_pickups: Pickup days
-      default_role_suppliers: Suppliers
       disable_invite: Disable invites
+      documents_allowed_extension: Allowed extensions
       email_from: From address
       email_replyto: Reply-to address
       email_sender: Sender address
       help_url: Documentation URL
       homepage: Homepage
       ignore_browser_locale: Ignore browser language
+      mailing_list: Mailing-list
+      mailing_list_subscribe: Mailing-list subscribe
       minimum_balance: Minimum balance
       name: Name
       order_schedule:
@@ -650,9 +653,10 @@ en:
       use_apple_points: Apple points
       use_current_orders: Extra distribute screens
       use_documents: Enable documents
-      use_boxfill: Box-fill phase
       use_iban: Use IBAN
+      use_messages: Messages
       use_nick: Use nicknames
+      use_wiki: Enable wiki
       webstats_tracking_code: Tracking code
     tabs:
       applications: Apps
@@ -663,7 +667,6 @@ en:
       messages: Messages
       others: Other
       payment: Finances
-      security: Security
       tasks: Tasks
   bestellrunden:
     start: Start
@@ -761,7 +764,34 @@ en:
     suppliers_overview: Supplier overview
     update:
       notice: Delivery was updated.
+  discourse:
+    callback:
+      invalid_nonce: Invalid nonce
+      invalid_signature: Invalid signature
+      logged_in: Logged in!
   documents:
+    create:
+      error: 'Document or folder could not be created: %{error}'
+      not_allowed_mime: The filetype "%{mime}" is not allowed. Please contact an administrator to whitelist it.
+      notice: Document or folder was created
+    destroy:
+      error: 'Document or folder could not be deleted: %{error}'
+      no_right: You do not have enough rights to delete the document or folder
+      notice: Document or folder was deleted
+    form:
+      new: New Document
+      new_folder: new Folder
+      submit: Create
+    index:
+      new: Upload new document
+      new_folder: Create new folder
+      title: Documents
+    multiple_orders_by_articles:
+      filename: Current orders sorted by article
+      title: Current orders - by article
+    multiple_orders_by_groups:
+      filename: Current orders sorted by group
+      title: Current orders - by group
     order_by_articles:
       filename: Order %{name}-%{date} - by articles
       title: 'Order sorted by articles: %{name}, closed at %{date}'
@@ -816,8 +846,6 @@ en:
       close:
         alert: 'An error occured while accounting: %{message}'
         notice: Order was settled succesfully, the balance of the account was updated.
-      close_all_direct_with_invoice:
-        notice: '%{count} orders have been settled.'
       close_direct:
         alert: 'Order can not be settled: %{message}'
         notice: Order was settled.
@@ -826,23 +854,17 @@ en:
         first_paragraph: 'When the order is settled, all group accounts will be updated.<br />The accounts will be charged as follows:'
         or_cancel: or back to accounting
         title: Settle order
-      edit_note:
-        title: Edit order note
       edit_results_by_articles:
         add_article: Add article
         amount: Amount
-        edit_transport: Edit transport
         gross: Gross
         net: Net
-      edit_transport:
-        title: Distribute transport costs
       group_order_articles:
         add_group: Add group
         total: Total costs
         total_fc: Sum (FC-price)
         units: Units
       index:
-        close_all_direct_with_invoice: Close all with invoice
         title: Closed orders
       invoice:
         edit: Edit invoice
@@ -867,7 +889,7 @@ en:
         edit_order: Edit order
         groups_overview: Overview of groups
         invoice: Invoice
-        notes_and_journal: Order Notes
+        notes_and_journal: Notes/Protocol
         summary: Summary
         title: Accounting %{name}
         view_options: Viewing options
@@ -893,61 +915,25 @@ en:
         with_extra_charge: 'with extra charge:'
         without_extra_charge: 'without extra charge:'
     bank_accounts:
-      assign_unlinked_transactions:
-        notice: '%{count} transactions have been assigned'
-      import:
-        notice: '%{count} new transactions have been imported'
-        no_import_method: For this bank account no import method is configured.
-        submit: Import
-        title: Import bank transactions for %{name}
+      controller:
+        import:
+          notice: '%{count} new transactions have been imported'
       index:
         account_statement: Account statement
         year_statement: Year statement
         title: Bank Accounts
     bank_transactions:
       index:
-        assign_unlinked_transactions: Assign transactions
-        import_transactions: Import
         title: Bank transactions for %{name} (%{balance})
       show:
-        add_financial_link: Add financial link
         belongs_to_supplier: belongs to supplier
         belongs_to_user: belongs to user
         in_ordergroup: in ordergroup
-      transactions:
-        add_financial_link: Add link
     create:
       notice: Invoice was created.
     financial_links:
-      add_bank_transaction:
-        notice: Link to the bank transaction has been added.
-      add_financial_transaction:
-        notice: Link to the financial transaction has been added.
-      add_invoice:
-        notice: Link to the invoice has been added.
-      create:
-        notice: A new financial link has been created.
-      index_bank_transaction:
-        title: Add bank transaction
-      index_financial_transaction:
-        title: Add financial transaction
-      index_invoice:
-        title: Add invoice
-      remove_bank_transaction:
-        notice: Link to the bank transaction has been removed.
-      remove_financial_transaction:
-        notice: Link to the financial transaction has been removed.
-      remove_invoice:
-        notice: Link to the invoice has been removed.
       show:
-        add_bank_transaction: Add bank transaction
-        add_financial_transaction: Add financial transaction
-        add_invoice: Add invoice
-        amount: Amount
-        date: Date
-        description: Description
         title: Financial link %{number}
-        type: Type
     financial_transactions:
       controller:
         create:
@@ -956,8 +942,6 @@ en:
           alert: 'An error occured: %{error}'
           error_note_required: Note is required!
           notice: All transactions were saved.
-        destroy:
-          notice: The transaction has been removed.
       index:
         balance: 'Balance of account: %{balance}'
         last_updated_at: "(last updated %{when} ago)"
@@ -968,26 +952,18 @@ en:
         title: Financial transactions
       new:
         paragraph: Here you can credit and debit money for the ordergroup <b>%{name}</b>.
-        paragraph_foodcoop: Here you can credit and debit money for the <b>foodcoop</b>.
         title: New transaction
       new_collection:
         add_all_ordergroups: Add all ordergroups
-        add_all_ordergroups_custom_field: Add all ordergoups with %{label}
-        create_financial_link: Create a common financial link for the new transactions.
-        create_foodcoop_transaction: Create a transaction with the inverted sum for the foodcoop (in the case of "double-entry accounting")
         new_ordergroup: Add new ordergroup
         save: Save transaction
-        set_balance: Set the balance of the ordergroup to the entered amount.
         sidebar: Here you can update more accounts at the same time. For example all transfers of the ordergroup from one account statement.
         title: Updating more accounts
       ordergroup:
         remove: Remove
         remove_group: Remove group
-      transactions:
-        confirm_revert: Do you really want to revert %{name}? In this case a new transaction with an inverted amount will be created and in combination with the original transaction hidden. These hidden transaction are only visibe via the 'Show hidden' option and are not visible to normal users at all.
-        revert_title: Revert the transaction, which will hide it from normal users.
       transactions_search:
-        show_hidden: Show hidden transactions
+        search_placeholder: Search note ...
     index:
       amount_fc: Amount(FC)
       end: End
@@ -1004,7 +980,6 @@ en:
         attachment_hint: Only JPEG and PDF are allowed.
       index:
         action_new: Create new invoice
-        show_unpaid: Show unpaid invoices
         title: Invoices
       new:
         title: Create new invoice
@@ -1017,8 +992,8 @@ en:
     ordergroups:
       index:
         new_transaction: Add new transactions
+        search_placeholder: Search ...
         show_all: All transactions
-        show_foodcoop: Foodcoop transaktions
         title: Manage accounts
       ordergroups:
         account_statement: Account statement
@@ -1144,9 +1119,15 @@ en:
       role_suppliers: Suppliers
       show_google_maps: Show it on Google maps
       sort_by: Sort by %{text}
+    current_orders:
+      pay_amount: To pay %{amount}
+      pay_done: Fully paid
+      pay_none: Nothing to pay
     deliveries:
       new_invoice: New invoice
       show_invoice: Show invoice
+    messages:
+      write_message: Write message
     orders:
       old_price: Old price
       option_choose: Choose supplier/stock
@@ -1155,6 +1136,8 @@ en:
     submit:
       invite:
         create: send invitation
+      message:
+        create: send message
     tasks:
       required_users: "%{count} members are still needed!"
       task_title: "%{name} (%{duration}h)"
@@ -1170,6 +1153,12 @@ en:
     changes_saved: Changes saved.
     index:
       due_date_format: "%A %d %B"
+      messages:
+        title: Newest messages
+        view_all:
+          messages: all messages
+          text: Show %{messages} or %{threads}
+          threads: threads
       my_ordergroup:
         last_update: Last update was %{when} ago
         title: My ordergroup
@@ -1204,12 +1193,6 @@ en:
       user:
         since: "(member for %{when})"
         title: "%{user}"
-    reference_calculator:
-      placeholder: Please enter the amounts you want to tranfser in every field first, to see the reference you should use for that transaction.
-      text0: Please transfer
-      text1: with the reference
-      text2: to the bank account
-      title: Reference Calculator
     start_nav:
       admin: Administration
       finances:
@@ -1231,6 +1214,7 @@ en:
         title: Products
       tasks: My tasks
       title: Directly to ...
+      write_message: Write message
   invites:
     errors:
       already_member: is already in use. Person is already a member of this Foodcoop.
@@ -1242,6 +1226,11 @@ en:
       body: "<p>Here you can add a person to the group <b>%{group}</b>, who is not yet a member of the foodcoop.</p>"
     success: User was invited successfully.
   js:
+    current_orders:
+      articles:
+        above: "%{count} more<br>than available"
+        below: "%{count} left over"
+        equal: all distributed
     ordering:
       confirm_change: Modifications to this order will be lost when you change the order. Do you want to lose the changes you made and continue?
   layouts:
@@ -1261,7 +1250,6 @@ en:
       logout: Logout
       ordergroup: My ordergroup
       profile: Edit profile
-      reference_calculator: Reference Calculator
     logo: "<span>food</span>soft"
   lib:
     render_pdf:
@@ -1339,11 +1327,8 @@ en:
         Dear %{ordergroup},
 
         The order for "%{order}" has been closed by %{user} on %{when}.
-      text1: |
-        It can be presumable be picked up on %{pickup}.
-      text2: |
         The following articles have been ordered for your ordergroup:
-      text3: |-
+      text1: |-
         o Total sum: %{sum}
 
         You can view the order online: %{order_url}
@@ -1386,32 +1371,85 @@ en:
 
 
         Kind regards from %{foodcoop}.
-    welcome:
-      subject: Welcome to the Foodcoop
-      text0: |
-        Dear %{user},
-
-        a new Foodsoft account has been created for you.
-      text1: |
-        In order to choose a new password follow this link: %{link}
-        This link works only once and expires on %{expires}.
-        You can always use "Forgot password?" to get an new link.
-
-
-        Kind regards from %{foodcoop}.
+  message_threads:
+    groupmessage_threads:
+      show_message_threads: show all
+    index:
+      general: General
+      title: Message threads
+    message_threads:
+      last_reply_at: Last replied at
+      last_reply_by: Last replied by
+      started_at: Started at
+      started_by: Started by
+    show: General
+  messagegroups:
+    index:
+      body: 'A message group is like a mailing-list: you can join (or leave) any of them to receive the updates sent to that group.'
+      title: Message groups
+    join:
+      error: 'Could not join message group: %{error}'
+      notice: Joined message group
+    leave:
+      error: 'Messagegroup could not be left: %{error}'
+      notice: Left message group
+    messagegroup:
+      join: Join message group
+      leave: Leave message group
+  messages:
+    actionbar:
+      message_threads: Show as threads
+      messagegroups: Subscribe to groups
+      messages: Show as list
+      new: New message
+    create:
+      notice: Message is saved and will be sent.
+    index:
+      new: New message
+      title: Messages
+    messages:
+      reply: Reply
+    model:
+      reply_header: "%{user} wrote on %{when}:"
+      reply_indent: "> %{line}"
+      reply_subject: 'Re: %{subject}'
+    new:
+      error_private: Sorry, this message is private.
+      hint_private: Message doesn’t show in Foodsoft mail inbox
+      list:
+        desc: 'Please send messages to all using the mailing-list: %{list}'
+        mail: for example with an email to %{email}.
+        subscribe: You can find more about the mailing-list at %{link}.
+        subscribe_msg: You may have to subscribe to the mailing-list first.
+        wiki: Wiki (page Mailing-List)
+      message: message
+      no_user_found: No user found
+      reply_to: This message is an reply to an other %{link}.
+      search: Search ...
+      search_user: Search user
+      title: New message
+    show:
+      all_messages: All messages
+      from: 'From:'
+      group: 'Group:'
+      reply: Reply
+      reply_to: 'Reply to:'
+      sent_on: 'Sent:'
+      subject: 'Subject:'
+      title: Show message
+      to: 'To:'
+    thread:
+      all_message_threads: All message threads
+      reply: Reply
   messages_mailer:
     foodsoft_message:
       footer: |
         Reply: %{reply_url}
         See message online: %{msg_url}
         Messaging options: %{profile_url}
-      footer_group: |
-        Sent to group: %{group}
   model:
     delivery:
       each_stock_article_must_be_unique: Each stock article must not be listed more than once.
-    financial_transaction:
-      foodcoop_name: Foodcoop
     financial_transaction_type:
       no_delete_last: At least one financial transaction type must exist.
     group_order:
@@ -1422,16 +1460,17 @@ en:
       no_admin_delete: Membership can not be withdrawn as you are the last administrator.
     order_article:
       error_price: must be specified and have a current price price
+    page:
+      redirect: Redirect to [[%{title}]]...
     user:
       no_ordergroup: no ordergroup
-    group_order_article:
-      order_closed: Order is closed and cannot be modified
   navigation:
     admin:
       config: Configuration
       finance: Finances
       home: Overview
       mail_delivery_status: Email problems
+      messagegroups: Message groups
       ordergroups: Ordergroups
       title: Administration
       users: Users
@@ -1442,6 +1481,7 @@ en:
       suppliers: Suppliers/articles
       title: Articles
     dashboard: Dashboard
+    documents: Documents
     finances:
       accounts: Manage accounts
       balancing: Account orders
@@ -1451,6 +1491,7 @@ en:
       title: Finances
     foodcoop: Foodcoop
     members: Members
+    messages: Messages
     ordergroups: Ordergroups
     orders:
       archive: My Orders
@@ -1459,6 +1500,10 @@ en:
       pickups: Pickup days
       title: Orders
     tasks: Tasks
+    wiki:
+      all_pages: All Pages
+      home: Home
+      title: Wiki
     workgroups: Workgroups
   number:
     percentage:
@@ -1537,7 +1582,6 @@ en:
       consider_member_tolerance: consider tolerance
       notice: 'Order received: %{msg}'
       notice_none: No new articles to receive
-      paragraph: If the ordered and received amount are the same, the corresponding fields can be empty. It's still good practice to enter all fields, since this provides an easy way to verify that all articles have been checked.
       rest_to_stock: rest to stock
       submit: Receive order
       surplus_options: 'Distribution options:'
@@ -1587,6 +1631,92 @@ en:
       msg1: "%{count} articles (%{units} units) updated"
       msg2: "%{count} (%{units}) using tolerance"
       msg4: "%{count} (%{units}) left over"
+  pages:
+    all:
+      new_page: Create new page
+      recent_changes: Recent changes
+      search:
+        action: Search
+        placeholder: Page title ...
+      site_map: Sitemap
+      title: All Wiki pages
+      title_list: List of pages
+    body:
+      title_toc: Content
+      wikicloth_exception: 'I''m sorry to report that an error occured when interpreting the wiki page: %{msg}. Please try to fix it, and save the page again.'
+    create:
+      notice: Page was created
+    cshow:
+      error_noexist: Page doesn’t exist!
+      redirect_notice: Redirected from %{page} ...
+    destroy:
+      notice: The page '%{page}' and all subpages have been deleted successfully.
+    diff:
+      title: "%{title} - changes from version %{old} to %{new}"
+    edit:
+      title: Edit page
+    error_stale_object: Warning, the page has just been edited by someone else. Please try again.
+    form:
+      help:
+        bold: bold
+        external_link_ex: External link
+        external_links: External
+        heading: level %{level}
+        headings: Heading
+        image_link_title: Image title
+        image_links: Images
+        italic: italic
+        link_lists: More on lists
+        link_table: Table formatting
+        link_templates: Templates
+        link_variables: Foodsoft variables
+        list_item_1: First list item
+        list_item_2: Second list item
+        noformat: No formatting
+        ordered_list: Numbered list
+        section_block: Block formatting
+        section_character: Character formatting
+        section_link: Link formatting
+        section_more: More topics
+        section_table: Table formatting
+        see_tables: see %{tables_link}
+        tables_link: Tables
+        text: text
+        title: Quick formatting help
+        unordered_list: Item list
+        wiki_link_ex: Foodsoft Wiki Page
+        wiki_links: Wiki-links
+      preview: Preview
+    last_updated: Last updated
+    new:
+      title: Create new wiki page
+    page_list_item:
+      date_format: "%a, %d %B %Y %H:%M:%S"
+    show:
+      date_format: "%d-%m-%y %H:%M"
+      delete: Delete page
+      delete_confirm: 'Warning: all subpages will be deleted as well. Are you sure?'
+      diff: Compare versions
+      edit: Edit page
+      last_updated: Last updated by <b>%{user}</b> on %{when}
+      subpages: subpages
+      title_versions: Versions
+      versions: Versions (%{count})
+    title: Title
+    update:
+      notice: Page was updated
+    variables:
+      description: Variables return information from somewhere else. When you use the variable, it will be replaced by its value when displayed. Foodsoft has a number of pre-defined variables, such as the name and address of your foodcoop, the software version, and the number of members and suppliers. See the table below for all variables. You can use these in wiki pages as well as in the footer (from the configuration screen).
+      title: Foodsoft variables
+      value: Current value
+      variable: Variable
+    version:
+      author: 'Author: %{user}'
+      date_format: "%a, %d-%m-%Y, %H:%M"
+      revert: Revert to this version
+      title: "%{title} - version %{version}"
+      title_version: Version
+      view_current: See current version
   pickups:
     document:
       empty_selection: At least one order must be selected.
@@ -1680,6 +1810,8 @@ en:
       tax: In percentage, standard is 7,0
     labels:
       settings:
+        messages:
+          send_as_email: Receive messages as emails.
         notify:
           negative_balance: Inform me when my ordergroup has a negative balance.
           order_finished: Inform me about my order result (when the order is closed).
@@ -1888,7 +2020,6 @@ en:
     marks:
       close: "&times;"
       success: <i class="icon icon-ok"></i>
-    move: Move
     or_cancel: or cancel
     please_wait: Please wait...
     restore: Restore

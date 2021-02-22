@@ -1,6 +1,6 @@
 # Foodcoop-specific styling
 class StylesController < ApplicationController
-  skip_before_action :authenticate
+  skip_before_filter :authenticate_role
 
   # renders foodcoop css, or 404 if not configured
   #
@@ -9,10 +9,10 @@ class StylesController < ApplicationController
   def foodcoop
     css = FoodsoftConfig[:custom_css]
     if css.blank?
-      render body: nil, content_type: 'text/css', status: 404
+      render text: nil, content_type: 'text/css', status: 404
     else
       expires_in 1.week, public:true if params[:md5].present?
-      render body: css, content_type: 'text/css'
+      render text: css, content_type: 'text/css'
     end
   end
 end

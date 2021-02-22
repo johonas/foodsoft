@@ -1,4 +1,4 @@
-class AddRequiredUserForTask < ActiveRecord::Migration[4.2]
+class AddRequiredUserForTask < ActiveRecord::Migration
   def self.up
     add_column :tasks, :required_users, :integer, :default => 1
     add_column :groups, :task_required_users, :integer, :default => 1

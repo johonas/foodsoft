@@ -1,4 +1,4 @@
-class ArticlePrice < ApplicationRecord
+class ArticlePrice < ActiveRecord::Base
   include PriceCalculation
 
   # @!attribute price

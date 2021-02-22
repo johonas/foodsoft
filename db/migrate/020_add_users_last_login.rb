@@ -1,4 +1,4 @@
-class AddUsersLastLogin < ActiveRecord::Migration[4.2]
+class AddUsersLastLogin < ActiveRecord::Migration
   def self.up
     add_column :users, :last_login, :datetime
   end

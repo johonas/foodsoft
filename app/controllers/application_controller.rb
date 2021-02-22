@@ -3,14 +3,13 @@ class ApplicationController < ActionController::Base
   include Concerns::FoodcoopScope
   include Concerns::Auth
   include Concerns::Locale
-  include PathHelper
   helper_method :current_user
   helper_method :available_locales
 
   protect_from_forgery
-  before_action  :authenticate, :set_user_last_activity, :store_controller, :items_per_page
-  after_action  :remove_controller
-  around_action :set_time_zone, :set_currency
+  before_filter :authenticate_role, :set_user_last_activity, :store_controller, :items_per_page
+  after_filter  :remove_controller
+  around_filter :set_time_zone, :set_currency
 
   # Returns the controller handling the current request.
   def self.current
@@ -59,7 +58,6 @@ class ApplicationController < ActionController::Base
       when "orders" then current_user.role_orders?
       when "verteilen" then current_user.role_verteilen?
       when "finance_or_orders" then (current_user.role_finance? || current_user.role_orders?)
-      when "finance_or_invoices" then (current_user.role_finance? || current_user.role_invoices?)
       when "any" then true        # no role required
       else false                  # any unknown role will always fail
       end
@@ -131,7 +129,7 @@ class ApplicationController < ActionController::Base
   # To disable a controller in the plugin, you can use this as a `before_action`:
   #
   #     class MypluginController < ApplicationController
-  #       before_action -> { require_plugin_enabled FoodsoftMyplugin }
+  #       before_filter -> { require_plugin_enabled FoodsoftMyplugin }
   #     end
   #
   def require_plugin_enabled(plugin)

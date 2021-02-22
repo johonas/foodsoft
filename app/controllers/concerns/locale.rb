@@ -2,7 +2,7 @@ module Concerns::Locale
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_locale
+    before_filter :set_locale
   end
 
   def explicitly_requested_language
