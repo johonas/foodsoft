@@ -37,7 +37,7 @@ class OrderArticle < ActiveRecord::Base
   # Count quantities of belonging group_orders.
   # In balancing this can differ from ordered (by supplier) quantity for this article.
   def group_orders_sum
-    quantity = group_order_articles.collect(&:quantity).sum
+    quantity = group_order_articles.collect(&:result).sum
     {:quantity => quantity, :price => quantity * price.fc_price}
   end
 

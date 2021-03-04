@@ -174,6 +174,7 @@ ActiveRecord::Schema.define(version: 20210117162929) do
     t.integer  "order_article_id", limit: 4, default: 0, null: false
     t.integer  "quantity",         limit: 4, default: 0, null: false
     t.datetime "updated_on",                             null: false
+    t.integer  "result",           limit: 4
   end
 
   add_index "group_order_articles", ["group_order_id", "order_article_id"], name: "goa_index", unique: true, using: :btree

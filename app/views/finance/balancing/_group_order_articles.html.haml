@@ -24,7 +24,7 @@
             = link_to t('ui.delete'), group_order_article_path(group_order_article), method: :delete,
               remote: true, class: 'btn btn-mini btn-danger'
           %td
-        - totals[:result] += group_order_article.result
+        - totals[:result] += group_order_article.quantity
     %tfoot
       %tr
         %td

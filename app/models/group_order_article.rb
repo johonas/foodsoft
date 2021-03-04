@@ -38,11 +38,10 @@ class GroupOrderArticle < ActiveRecord::Base
   end
 
   # Returns order result,
-  # either calcualted on the fly or fetched from result attribute
-  # Result is set when finishing the order.
-  def result(type = :total)
-    fail 'Depricated: Use quantity instead'
-    # self[:result] || calculate_result[type]
+  # either quantity or result
+  # result is set when finishing the order.
+  def result
+    self[:result] || quantity
   end
 
   # Returns total price for this individual article
@@ -50,6 +49,6 @@ class GroupOrderArticle < ActiveRecord::Base
   # the minimum price depending on configuration. When the order is finished it
   # will be the value depending of the article results.
   def total_price(order_article = self.order_article)
-    order_article.article.fc_price * quantity
+    order_article.article.fc_price * result
   end
 end
