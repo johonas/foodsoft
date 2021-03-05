@@ -5,11 +5,12 @@
       %th= heading_helper Article, :unit
       %th.center
         %acronym{:title => t('shared.articles.ordered_desc')}= t 'shared.articles.ordered'
+      %th.center
+        %acronym{:title => t('shared.articles.received_desc')}= t 'shared.articles.received'
       %th.symbol
       %th= heading_helper Article, :fc_price, short: true
       %th.symbol
       %th= t 'shared.articles_by.price'
-      %th= #heading_helper Article, :unit_quantity, short: true
 
   - for group_order in order.group_orders.ordered
     - next unless group_order.group_order_articles.any?
