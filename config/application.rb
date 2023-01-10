@@ -71,6 +71,8 @@ module Foodsoft
         resource %r{\A/[-a-zA-Z0-9_]+/api/v1/}, headers: :any, methods: :any
       end
     end
+
+    require 'axlsx'
   end
 
   # Foodsoft version

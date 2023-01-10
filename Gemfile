@@ -56,8 +56,8 @@ gem 'ruby-filemagic'
 gem 'midi-smtp-server'
 gem 'rubyzip'
 
-gem 'axlsx', git: 'https://github.com/randym/axlsx.git', ref: 'c8ac844'
-gem 'axlsx_rails'
+gem 'caxlsx'
+gem 'caxlsx_rails'
 
 # we use the git version of acts_as_versioned, and need to include it in this Gemfile
 gem 'acts_as_versioned', git: 'https://github.com/technoweenie/acts_as_versioned.git'

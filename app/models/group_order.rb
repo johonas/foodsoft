@@ -69,10 +69,12 @@ class GroupOrder < ActiveRecord::Base
 
   # Updates the "price" attribute.
   def update_price!
-    total = group_order_articles.includes(:order_article => [:article, :article_price]).to_a.sum(&:total_price)
-    update_attribute(:price, total)
+    update_attribute(:price, total_price)
   end
 
+  def total_price
+    group_order_articles.includes(:order_article => [:article, :article_price]).to_a.sum(&:total_price)
+  end
 
   # Save GroupOrder and updates group_order_articles/quantities accordingly
   def save_ordering!
@@ -93,7 +95,7 @@ class GroupOrder < ActiveRecord::Base
 
     return articles
   end
-  
+
   def ordergroup_name
     ordergroup ? ordergroup.name : I18n.t('model.group_order.stock_ordergroup_name', :user => updated_by.try(:name) || '?')
   end
