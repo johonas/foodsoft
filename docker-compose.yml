@@ -1,0 +1,51 @@
+services:
+  db:
+    image: mariadb:10.1
+    restart: always
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+      - '3308:3306'
+
+  foodsoft:
+    tty: true
+    stdin_open: true
+    command: ./proc-start web
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - bundle:/home/app/bundle
+      - .:/home/app/src:delegated
+    environment:
+      - DATABASE_URL=mysql2://root:@db/production?encoding=utf8
+      - RAILS_FORCE_SSL=false
+      - REDIS_URL=redis://redis:6379
+      - QUEUE=foodsoft_notifier
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      - SMTP_ADDRESS=${SMTP_ADDRESS}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER_NAME=${SMTP_USER_NAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SMTP_AUTHENTICATION=${SMTP_AUTHENTICATION}
+      - SMTP_ENABLE_STARTTLS_AUTO=${SMTP_ENABLE_STARTTLS_AUTO}
+
+#  mailcatcher:
+#    image: aboutsource/mailcatcher
+#    ports:
+#      - "1080:1080"
+
+  redis:
+    image: redis:3.2-alpine
+
+volumes:
+  bundle:
+  db:
+#  app:

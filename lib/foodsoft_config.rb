@@ -213,7 +213,9 @@ class FoodsoftConfig
     private
 
     def set_config(foodcoop)
-      raise "No config for this environment (#{foodcoop}) available!" if APP_CONFIG[foodcoop].nil?
+      if APP_CONFIG[foodcoop].nil?
+        raise "No config for this environment (#{foodcoop}) available! Available: #{APP_CONFIG.keys}"
+      end
       self.config = APP_CONFIG[foodcoop]
       self.scope = foodcoop
       set_missing
