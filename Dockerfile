@@ -22,8 +22,7 @@ RUN bundle install --without development test -j 4
 #    rm -Rf /var/lib/apt/lists/* /var/cache/apt/* ~/.gemrc ~/.bundle
 
 # compile assets with temporary mysql server
-RUN export SECRET_KEY_BASE=thisisnotimportantnow && \
-    bundle exec rake assets:precompile
+# RUN bundle exec rake assets:precompile
 
 
 ## Make relevant dirs writable for app user
