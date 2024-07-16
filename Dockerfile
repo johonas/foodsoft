@@ -1,12 +1,12 @@
 FROM rubylang/ruby:2.3.8-bionic
 
-ENV PORT=3000 \
-    SMTP_SERVER_PORT=2525 \
-    RAILS_ENV=production \
-    RAILS_LOG_TO_STDOUT=true \
-    RAILS_SERVE_STATIC_FILES=true \
-    BUNDLE_PATH=/home/app/bundle \
-    BUNDLE_APP_CONFIG=/home/app/bundle/config
+ENV PORT=3000
+ENV SMTP_SERVER_PORT=2525
+ENV RAILS_ENV=production
+ENV RAILS_LOG_TO_STDOUT=true
+ENV RAILS_SERVE_STATIC_FILES=true
+ENV BUNDLE_PATH=/home/app/bundle
+ENV BUNDLE_APP_CONFIG=/home/app/bundle/config
 
 WORKDIR /home/app/src
 
@@ -17,24 +17,10 @@ RUN buildDeps='libmagic-dev shared-mime-info build-essential g++ sqlite3 libsqli
     apt-get update && \
     apt-get install --no-install-recommends -y $buildDeps
 
-RUN bundle install --without development test -j 4
-#    apt-get purge -y --auto-remove $buildDeps && \
-#    rm -Rf /var/lib/apt/lists/* /var/cache/apt/* ~/.gemrc ~/.bundle
-
-# compile assets with temporary mysql server
-# RUN bundle exec rake assets:precompile
-
-
-## Make relevant dirs writable for app user
-#RUN mkdir -p tmp && \
-#    chown nobody tmp
-
-## Run app as unprivileged user
-#USER nobody
+RUN bundle install # --without development test -j 4
 
 EXPOSE 3000
 
 ## cleanup, and by default start web process from Procfile
 ENTRYPOINT ["./docker-entrypoint.sh"]
-CMD ["./proc-start", "web"]
-CMD ["./proc-start", "worker"]
+#CMD ["./proc-start", "web"]
