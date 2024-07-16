@@ -2,7 +2,6 @@ services:
   foodsoft:
     tty: true
     stdin_open: true
-    command: ./proc-start web
     depends_on:
       - db
     build:
