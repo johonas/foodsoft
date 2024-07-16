@@ -1,4 +1,4 @@
-FROM ruby:2.3.8
+FROM ruby:2.3.8-jessie
 
 RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list
 
@@ -16,9 +16,7 @@ COPY . ./
 
 # install dependencies and generate crontab
 RUN apt-get update
-RUN apt-get install --no-install-recommends -y 'libmagic-dev'
-
-
+RUN apt-get install --no-install-recommends -y libmagic-dev libv8-dev
 RUN bundle install --without development test
 
 EXPOSE 3000
