@@ -6,8 +6,9 @@ gem "rails", '~> 4.2'
 gem 'sass-rails'
 gem 'less-rails'
 gem 'uglifier', '>= 1.0.3'
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-gem 'therubyracer', platforms: :ruby
+
+gem 'libv8', '3.16.14.7'
+gem 'therubyracer', '0.12.2', platforms: :ruby
 
 
 gem 'jquery-rails'

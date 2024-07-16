@@ -13,10 +13,12 @@ ENV BUNDLE_APP_CONFIG=/home/app/bundle/config
 WORKDIR /home/app/src
 
 COPY . ./
+COPY Gemfile ./
+COPY Gemfile.lock ./
 
 # install dependencies and generate crontab
 RUN apt-get update
-RUN apt-get install --no-install-recommends -y libmagic-dev libv8-dev
+RUN apt-get install --no-install-recommends -y libmagic-dev libv8-dev node.js
 RUN bundle install --without development test
 
 EXPOSE 3000
