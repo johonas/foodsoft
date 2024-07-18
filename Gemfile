@@ -4,12 +4,7 @@ source "https://rubygems.org"
 gem "rails", '~> 4.2'
 
 gem 'sass-rails'
-gem 'less-rails'
 gem 'uglifier', '>= 1.0.3'
-
-gem 'libv8', '3.16.14.7'
-gem 'therubyracer', '0.12.2', platforms: :ruby
-
 
 gem 'jquery-rails'
 gem 'select2-rails'

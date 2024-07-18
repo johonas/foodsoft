@@ -1,25 +1,29 @@
-@import "twitter/bootstrap/bootstrap";
-@import "twitter/bootstrap/responsive";
-@import "delta_input";
+/*
+  =require twitter-bootstrap-static/bootstrap
+
+  Use Font Awesome icons (default)
+  To use Glyphicons sprites instead of Font Awesome, replace with "require twitter-bootstrap-static/sprites"
+  =require twitter-bootstrap-static/fontawesome
+  */
+
 
 body {
   padding-top: 10px;
 }
 
 // Set the correct sprite paths
-@iconSpritePath: image-url('twitter/bootstrap/glyphicons-halflings.png');
-@iconWhiteSpritePath: image-url('twitter/bootstrap/glyphicons-halflings-white.png');
+$iconSpritePath: image-url('twitter/bootstrap/glyphicons-halflings.png');
+$iconWhiteSpritePath: image-url('twitter/bootstrap/glyphicons-halflings-white.png');
 
 // Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
-@fontAwesomeEotPath: asset-url('fontawesome-webfont.eot');
-@fontAwesomeEotPath_iefix: asset-url('fontawesome-webfont.eot?#iefix');
-@fontAwesomeWoffPath: asset-url('fontawesome-webfont.woff');
-@fontAwesomeTtfPath: asset-url('fontawesome-webfont.ttf');
-@fontAwesomeSvgPath: asset-url('fontawesome-webfont.svg#fontawesomeregular');
-@import 'fontawesome/font-awesome';
+$fontAwesomeEotPath: asset-url('fontawesome-webfont.eot');
+$fontAwesomeEotPath_iefix: asset-url('fontawesome-webfont.eot?#iefix');
+$fontAwesomeWoffPath: asset-url('fontawesome-webfont.woff');
+$fontAwesomeTtfPath: asset-url('fontawesome-webfont.ttf');
+$fontAwesomeSvgPath: asset-url('fontawesome-webfont.svg#fontawesomeregular');
 
 // Glyphicons
-//@import "twitter/bootstrap/sprites.less";
+//@import "twitter/bootstrap/sprites.scss";
 
 // Your custom LESS stylesheets goes here
 //
@@ -30,27 +34,31 @@ body {
 // See http://twitter.github.com/bootstrap/customize.html#variables for their names and documentation
 //
 // Example:
-// @linkColor: #ff0000;
+$linkColor: #ff0000;
+$tableBackgroundAccent: #f9f9f9;
+$successBackground: #dff0d8;
+$textColor: #333;
+$inputDisabledBackground: #eee;
 
 
 // main ui colours
-@mainRedColor: #ED0606;
+$mainRedColor: #ED0606;
 
 // article status
-@articleUsedColor: green;
-@articlePartusedColor: #d50;
-@articleUnusedColor: red;
-@articleUnavailColor: #999;
-@articleUpdatedColor: #468847;
+$articleUsedColor: green;
+$articlePartusedColor: #d50;
+$articleUnusedColor: red;
+$articleUnavailColor: #999;
+$articleUpdatedColor: #468847;
 
 // dim colors by this amount when the information is less important
-@nonessentialDim: 35%;
+$nonessentialDim: 35%;
 
 
 // Fix empty dd tags in horizontal dl, see https://github.com/twitter/bootstrap/issues/4062
-.dl-horizontal {
-    dd { .clearfix(); }
-}
+//.dl-horizontal {
+//  dd { .clearfix(); }
+//}
 
 // Do not use additional margin for input in table
 .form-horizontal .control-group.control-group-intable,
@@ -76,12 +84,12 @@ body {
   font-size: 35px;
   font-weight: bold;
   display: block;
-  color: @mainRedColor;
+  color: $mainRedColor;
 
   span {
     padding: 2px 4px;
     color: #ffffff;
-    background-color: @mainRedColor;
+    background-color: $mainRedColor;
   }
 }
 
@@ -100,7 +108,7 @@ footer {
   border-top: 1px solid #e4e4e4;
 
   a {
-    color: mix(#888, @linkColor, 70%);
+    color: mix(#888, $linkColor, 70%);
   }
 }
 
@@ -127,7 +135,7 @@ table {
     text-align: right;
   }
   td.odd {
-    background-color: @tableBackgroundAccent;
+    background-color: $tableBackgroundAccent;
   }
   th.left, td.left     { text-align: left; }
   th.right, td.right   { text-align: right; }
@@ -138,7 +146,7 @@ table {
   }
 
   tr.selected td {
-    background-color: @successBackground;
+    background-color: $successBackground;
   }
 }
 
@@ -191,21 +199,21 @@ table {
     display: none;
   }
   .mw-headline a {
-    color: @textColor;
+    color: $textColor;
     text-decoration: none;
   }
 }
 
 // ordering
 .used {
-  color: @articleUsedColor;
+  color: $articleUsedColor;
 }
 .unused {
-  color: @articleUnusedColor;
+  color: $articleUnusedColor;
   margin-right: 0.5em;
 }
 .partused {
-  color: @articlePartusedColor;
+  color: $articlePartusedColor;
 }
 .btn-ordering, .btn-group .btn-ordering {
   font-size: 10px;
@@ -274,11 +282,11 @@ tr.order-article:hover .article-info {
 // ********* Articles
 
 tr.just-updated {
-  color: @articleUpdatedColor;
+  color: $articleUpdatedColor;
 }
 
 tr.unavailable {
-  color: @articleUnavailColor;
+  color: $articleUnavailColor;
 }
 
 // articles edit all
@@ -304,11 +312,11 @@ td.symbol, th.symbol {
   padding-right: 0;
   text-align: center;
 }
-.symbol              { color: tint(@textColor, @nonessentialDim); }
-.used        .symbol { color: tint(@articleUsedColor, @nonessentialDim); }
-.unused      .symbol { color: tint(@articleUnusedColor, @nonessentialDim); }
-.partused    .symbol { color: tint(@articlePartusedColor, @nonessentialDim); }
-.unavailable .symbol { color: @articleUnavailColor; }
+.symbol              { color: tint($textColor, $nonessentialDim); }
+.used        .symbol { color: tint($articleUsedColor, $nonessentialDim); }
+.unused      .symbol { color: tint($articleUnusedColor, $nonessentialDim); }
+.partused    .symbol { color: tint($articlePartusedColor, $nonessentialDim); }
+.unavailable .symbol { color: $articleUnavailColor; }
 
 // hide symbols completely on small screens to save space
 @media (max-width: 768px) {
@@ -398,20 +406,20 @@ label {
 }
 
 // show package icon after amount of wholesale units
-.package-image (@align) {
+@mixin package-image($align) {
   background-image: image-url('package-bg.png');
   background-repeat: no-repeat;
-  background-position: @align center;
+  background-position: $align center;
 }
 input.package {
-  .package-image(right);
+  @include package-image(right);
   // disabled and readonly definitions though
   &[disabled], &[readonly] {
-    background-color: @inputDisabledBackground;
+    background-color: $inputDisabledBackground;
   }
 }
 i.package {
-  .package-image(left);
+  @include package-image(left);
   min-width: 18px;
   min-height: 18px;
   vertical-align: baseline;
@@ -424,11 +432,11 @@ i.package.icon-only {
   background-position: right;
   display: inline-block;
 }
-.package              { color: tint(@textColor, @nonessentialDim); }
-.used        .package { color: tint(@articleUsedColor, @nonessentialDim); }
-.unused      .package { color: tint(@articleUnusedColor, @nonessentialDim); }
-.partused    .package { color: tint(@articlePartusedColor, @nonessentialDim); }
-.unavailable .package { color: @articleUnavailColor; }
+.package              { color: tint($textColor, $nonessentialDim); }
+.used        .package { color: tint($articleUsedColor, $nonessentialDim); }
+.unused      .package { color: tint($articleUnusedColor, $nonessentialDim); }
+.partused    .package { color: tint($articlePartusedColor, $nonessentialDim); }
+.unavailable .package { color: $articleUnavailColor; }
 
 // very small inputs - need !important for responsive selectors
 .input-nano {

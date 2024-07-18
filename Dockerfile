@@ -18,7 +18,7 @@ COPY Gemfile.lock ./
 
 # install dependencies and generate crontab
 RUN apt-get update
-RUN apt-get install --no-install-recommends -y libmagic-dev libv8-dev node.js
+RUN apt-get install --no-install-recommends -y libmagic-dev node.js
 RUN bundle install --without development test
 
 EXPOSE 3000
