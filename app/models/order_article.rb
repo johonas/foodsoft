@@ -117,7 +117,7 @@ class OrderArticle < ActiveRecord::Base
     ArticleStockChange.where(order_article: self).destroy_all
 
     # if there's anything left, move to stock if wanted
-    if items_ordered != items_received
+    if items_received > items_ordered
       ArticleStockChange.create!(article: self.article, order_article: self,
                                  quantity: items_received - items_ordered,
                                  change_type: :restock)
